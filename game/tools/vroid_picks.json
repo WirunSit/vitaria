@@ -103,10 +103,90 @@
   "name": "NPC_ProfLyso",
   "dir": "NPCs",
   "file": "ProfLyso.vrm",
-  "title": "加持慎也 白衣 ver",
-  "author": "八峰アドミン",
+  "title": "Ciel",
+  "author": "白黑燐音",
+  "license": "VRoid Hub · ห้ามแก้ไข · ห้ามใช้หารายได้",
+  "src": "VRoid Hub",
+  "url": "https://hub.vroid.com/characters/1891437088692958341/models/2559850780658924211"
+ },
+ {
+  "name": "NPC_SageLinnara",
+  "dir": "NPCs",
+  "file": "SageLinnara.vrm",
+  "title": "アバター＊無料DL",
+  "author": "藤依ひな",
+  "license": "VRoid Hub",
+  "src": "VRoid Hub",
+  "url": "https://hub.vroid.com/characters/2878129923101138674/models/80963258769705464"
+ },
+ {
+  "name": "NPC_AuntieGolgi",
+  "dir": "NPCs",
+  "file": "AuntieGolgi.vrm",
+  "title": "デイヴィス家のメアリー",
+  "author": "歩留マリ",
+  "license": "VRoid Hub",
+  "src": "VRoid Hub",
+  "url": "https://hub.vroid.com/characters/4332181192017932171/models/8221630384582996054"
+ },
+ {
+  "name": "NPC_LostTwin",
+  "dir": "NPCs",
+  "file": "LostTwin.vrm",
+  "title": "VRoidダーク恍惚なる闇",
+  "author": "クランク",
+  "license": "VRoid Hub · ห้ามใช้หารายได้",
+  "src": "VRoid Hub",
+  "url": "https://hub.vroid.com/characters/6984475036783114177/models/3705415764528957479"
+ },
+ {
+  "name": "NPC_VillagerRosa",
+  "dir": "NPCs",
+  "file": "VillagerRosa.vrm",
+  "title": "ピンクのチロルめいど",
+  "author": "餅丸よう",
+  "license": "VRoid Hub",
+  "src": "VRoid Hub",
+  "url": "https://hub.vroid.com/characters/6216046191932128492/models/5911351483580173040"
+ },
+ {
+  "name": "NPC_SageHookia",
+  "dir": "NPCs",
+  "file": "SageHookia.vrm",
+  "title": "光莉",
+  "author": "あわ",
+  "license": "VRoid Hub",
+  "src": "VRoid Hub",
+  "url": "https://hub.vroid.com/characters/7574619046991064867/models/4411539083619763989"
+ },
+ {
+  "name": "NPC_QueenHarvena",
+  "dir": "NPCs",
+  "file": "QueenHarvena.vrm",
+  "title": "Geminiちゃん",
+  "author": "マユラ",
+  "license": "VRoid Hub · ห้ามใช้หารายได้",
+  "src": "VRoid Hub",
+  "url": "https://hub.vroid.com/characters/7622872635463746057/models/5323304641621732925"
+ },
+ {
+  "name": "NPC_SageCajalis",
+  "dir": "NPCs",
+  "file": "SageCajalis.vrm",
+  "title": "グノーム",
+  "author": "ネセネセ",
   "license": "VRoid Hub · ต้องระบุเครดิต",
   "src": "VRoid Hub",
-  "url": "https://hub.vroid.com/characters/8747966844276951485/models/4960580404592588996"
+  "url": "https://hub.vroid.com/characters/1714810747070456300/models/5082804560147350271"
+ },
+ {
+  "name": "NPC_VillagerLens",
+  "dir": "NPCs",
+  "file": "VillagerLens.vrm",
+  "title": "黄頃（cokoro）",
+  "author": "赤山みんと",
+  "license": "VRoid Hub · ต้องระบุเครดิต",
+  "src": "VRoid Hub",
+  "url": "https://hub.vroid.com/characters/6863244548031129764/models/7140789147839144914"
  }
 ]

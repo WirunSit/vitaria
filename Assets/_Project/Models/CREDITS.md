@@ -154,7 +154,15 @@
 | `NPC_RangerLila` | Actor4 魔法使い | つあ a.k.a 開星 ヨキ | VRoid Hub | [VRoid Hub](https://hub.vroid.com/characters/1544837030744498397/models/7881216394337592558) |
 | `NPC_CityGuard` | Actor1 アルケミスト | つあ a.k.a 開星 ヨキ | VRoid Hub | [VRoid Hub](https://hub.vroid.com/characters/6546391280923613832/models/3517193298699033227) |
 | `NPC_Paimon` | Paimon 0.1 (แฟนเมดจาก Genshin Impact — ลิขสิทธิ์ตัวละคร HoYoverse) | zero | VRoid Hub · ห้ามแจกต่อ | [VRoid Hub](https://hub.vroid.com/characters/4663497166806139528/models/2110905384497128098) |
-| `NPC_ProfLyso` | 加持慎也 白衣 ver | 八峰アドミン | VRoid Hub · ต้องระบุเครดิต | [VRoid Hub](https://hub.vroid.com/characters/8747966844276951485/models/4960580404592588996) |
+| `NPC_ProfLyso` | Ciel | 白黑燐音 | VRoid Hub · ห้ามแก้ไข · ห้ามใช้หารายได้ | [VRoid Hub](https://hub.vroid.com/characters/1891437088692958341/models/2559850780658924211) |
+| `NPC_SageLinnara` | アバター＊無料DL | 藤依ひな | VRoid Hub | [VRoid Hub](https://hub.vroid.com/characters/2878129923101138674/models/80963258769705464) |
+| `NPC_AuntieGolgi` | デイヴィス家のメアリー | 歩留マリ | VRoid Hub | [VRoid Hub](https://hub.vroid.com/characters/4332181192017932171/models/8221630384582996054) |
+| `NPC_LostTwin` | VRoidダーク恍惚なる闇 | クランク | VRoid Hub · ห้ามใช้หารายได้ | [VRoid Hub](https://hub.vroid.com/characters/6984475036783114177/models/3705415764528957479) |
+| `NPC_VillagerRosa` | ピンクのチロルめいど | 餅丸よう | VRoid Hub | [VRoid Hub](https://hub.vroid.com/characters/6216046191932128492/models/5911351483580173040) |
+| `NPC_SageHookia` | 光莉 | あわ | VRoid Hub | [VRoid Hub](https://hub.vroid.com/characters/7574619046991064867/models/4411539083619763989) |
+| `NPC_QueenHarvena` | Geminiちゃん | マユラ | VRoid Hub · ห้ามใช้หารายได้ | [VRoid Hub](https://hub.vroid.com/characters/7622872635463746057/models/5323304641621732925) |
+| `NPC_SageCajalis` | グノーム | ネセネセ | VRoid Hub · ต้องระบุเครดิต | [VRoid Hub](https://hub.vroid.com/characters/1714810747070456300/models/5082804560147350271) |
+| `NPC_VillagerLens` | 黄頃（cokoro） | 赤山みんと | VRoid Hub · ต้องระบุเครดิต | [VRoid Hub](https://hub.vroid.com/characters/6863244548031129764/models/7140789147839144914) |
 | `BGM ทุ่งหญ้า (กลางวัน 1)` | Relaxing Orchestra / Ambient beat / Initiate landing | migfus20, Tausdei, Alexandr Zhelanov | CC BY 4.0 | [OpenGameArt](https://opengameart.org/content/relaxing-orchestra-ambient-beat-and-initiate-landing-migfus20-vs-tausdei-vs-zhelanov) |
 | `BGM ทุ่งหญ้า (กลางวัน 2)` | Forest Ambience | TinyWorlds | CC0 | [OpenGameArt](https://opengameart.org/content/forest-ambience) |
 | `BGM กลางคืน` | Mysterious Ambience (song21) | cynicmusic / pixelsphere.org | CC0 | [OpenGameArt](https://opengameart.org/content/mysterious-ambience-song21) |
