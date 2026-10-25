@@ -327,6 +327,18 @@ def characters():
         save_webp(trim(remove_bg(first)), out("characters", "CHR_Amoeby_Portrait_Neutral.webp"))
 
 
+def companion():
+    """The floating companion: portraits rendered from her VRoid model (tools/companion-portraits.js)."""
+    d = ART / "Characters" / "Companion"
+    icon = load("Characters/Companion/CHR_Companion_Icon.png")
+    if icon:
+        bg = Image.new("RGBA", icon.size, (207, 227, 245, 255))
+        bg.alpha_composite(icon)
+        save_png(bg, out("characters", "CHR_Companion_Icon.png"))
+    for f in sorted(d.glob("CHR_Companion_Portrait_*.png")) if d.exists() else []:
+        save_webp(trim(Image.open(f).convert("RGBA")), out("characters", f.stem + ".webp"))
+
+
 def npcs():
     for f in sorted((ART / "Characters" / "NPC").glob("NPC_*_Sheet.png")):
         name = f.stem.replace("NPC_", "").replace("_Sheet", "")
@@ -526,6 +538,7 @@ def main():
         print("ไม่พบโฟลเดอร์ภาพ:", ART)
         return
     characters()
+    companion()
     npcs()
     ui()
     items()

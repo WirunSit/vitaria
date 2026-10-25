@@ -15,7 +15,7 @@ import { Aquorra, AQU, AQU_RADIUS, aquHeightLocal, inAquorra } from './Aquorra';
 import { Neurion, NEU, NEU_RADIUS, neuHeightLocal, inNeurion } from './Neurion';
 import { Roots, ARB, ARB_RADIUS, arbHeightLocal, inRoots } from './Roots';
 import { WATER_ENV } from '../render/Water';
-import { applyDetailTexture, hasProp, propSlot } from '../models/PropModels';
+import { applyDetailTexture, chestLid, hasProp, propLevels, propSlot } from '../models/PropModels';
 import { PAINTED_TREES, hasFlora, plantFlora, plantTiled, updateFlora, type FloraSet, type FloraSpot } from './Flora';
 import { fitToHeight, hasModel, loadGLBAnimated, loadVRM, toonify } from '../models/ModelLibrary';
 import { VrmCharacterModel } from '../models/CharacterModels';
@@ -28,6 +28,9 @@ import { Backdrop } from '../render/Backdrop';
 function mergeGeos(list: THREE.BufferGeometry[]): THREE.BufferGeometry {
   return mergeGeometries(list.map((g) => g.toNonIndexed()))!;
 }
+
+/** Chest models whose lid swings open, with the height (fraction) where the lid starts. */
+const CHEST_SEAM: Record<string, [number, 'auto' | 'cut']> = { PRP_Chest: [0.55, 'auto'], PRP_Chest_Silver: [0.55, 'cut'] };
 
 export interface Collider { x: number; z: number; r: number; id?: string }
 export interface Interactable {
@@ -81,7 +84,7 @@ export class World {
   /** far mountain ranges on the horizon (look v2) */
   backdrop: Backdrop | null = null;
   orbs = new Map<string, THREE.Object3D>();
-  chests = new Map<string, { def: ChestDef; obj: THREE.Group; lid: THREE.Object3D }>();
+  chests = new Map<string, { def: ChestDef; obj: THREE.Group; lid: THREE.Object3D; hinges?: THREE.Object3D[]; openT?: number }>();
   waypoints = new Map<string, { obj: THREE.Group; orb: THREE.Mesh; pos: THREE.Vector3; name: string }>();
   door!: THREE.Object3D;
   doorOpenT = 0;
@@ -1249,6 +1252,7 @@ export class World {
       this.root.add(g);
       this.chests.set(c.id, { def: c, obj: g, lid: lidPivot });
       const model = c.tier === 3 ? 'PRP_Chest_Gold' : c.tier === 2 && hasProp('PRP_Chest_Silver') ? 'PRP_Chest_Silver' : 'PRP_Chest';
+      g.userData.chestModel = model;
       void propSlot(g, model, { w: 1.6 });
     }
   }
@@ -1257,8 +1261,24 @@ export class World {
     const c = this.chests.get(id);
     if (!c) return;
     c.lid.userData.open = true;
+    c.openT = instant ? 1 : c.openT ?? 0;
     if (instant) c.lid.rotation.x = -1.6;
-    void propSlot(c.obj, 'PRP_Chest_Open', { w: 1.6 });
+  }
+
+  /** Swing the lid of an opened chest (the model's own lid, split off on first use; procedural lid as fallback). */
+  private updateChestLid(c: { lid: THREE.Object3D; obj: THREE.Group; hinges?: THREE.Object3D[]; openT?: number }, dt: number) {
+    if (c.lid.rotation.x > -1.6) c.lid.rotation.x = Math.max(-1.6, c.lid.rotation.x - dt * 3);
+    if (!c.hinges) {
+      const levels = propLevels(c.obj);
+      if (!levels.length) return; // model still loading
+      // where each model's lid starts (fraction of its height); the glass chest is modelled with its lid already up
+      const seam = CHEST_SEAM[c.obj.userData.chestModel as string];
+      c.hinges = seam ? levels.map((o) => chestLid(o, ...seam)).filter((x): x is THREE.Group => !!x) : [];
+    }
+    const t = c.openT = Math.min(1, (c.openT ?? 0) + dt * 1.6);
+    // ease out with a little overshoot, like a lid flung open that settles back on its hinge
+    const k = 1 + 2.2 * Math.pow(t - 1, 3) + 1.2 * Math.pow(t - 1, 2);
+    for (const hgt of c.hinges) hgt.rotation.x = -1.75 * k;
   }
 
   // ---------------------------------------------------------------- per-frame
@@ -1303,7 +1323,7 @@ export class World {
     }
     if (this.statueCore) this.statueCore.rotation.y += dt;
     for (const c of this.chests.values()) {
-      if (c.lid.userData.open && c.lid.rotation.x > -1.6) c.lid.rotation.x = Math.max(-1.6, c.lid.rotation.x - dt * 3);
+      if (c.lid.userData.open && (c.openT ?? 0) < 1 || (c.lid.userData.open && !c.hinges)) this.updateChestLid(c, dt);
     }
     if (this.doorOpen && this.doorOpenT < 1) {
       this.doorOpenT = Math.min(1, this.doorOpenT + dt * 0.4);

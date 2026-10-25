@@ -16,6 +16,13 @@ const GRAVITY = -24;
 const RUN = 6.2;
 const SPRINT = 9.5;
 const DASH = 15;
+/** uphill slope (rise/run) from which walking turns into climbing (~40°) */
+const CLIMB_GRADE = 0.85;
+/** climbing: at most this fast sideways, and about this fast upward however steep it is */
+const CLIMB_SPEED = 2.6;
+const CLIMB_UP = 2.1;
+/** stamina per second while climbing */
+const CLIMB_COST = 10;
 
 export class PlayerController {
   pos = new THREE.Vector3();
@@ -29,6 +36,11 @@ export class PlayerController {
   maxStamina = 120;
   private staminaIdle = 0;
   gliding = false;
+  /** hand-over-hand up a steep slope or cliff */
+  climbing = false;
+  private climbGrade = 0;
+  /** body lean into the slope while climbing (radians, smoothed) */
+  private climbLean = 0;
   private dashT = 0;
   iframeT = 0;
   private attackT = -1;
@@ -118,6 +130,7 @@ export class PlayerController {
     this.attackT = -1;
     this.combo = 0;
     this.showActive();
+    this.sparkle(this.pos.clone().add(new THREE.Vector3(0, 1, 0))); // the outgoing character vanishes in a puff of light
     bus.emit('PartyChanged', {});
     this.onSwitchIn?.(this.active);
     sfx.ui();
@@ -169,7 +182,7 @@ export class PlayerController {
   }
 
   update(dt: number, input: Input, camera: THREE.PerspectiveCamera, sens = 1) {
-    const m = this.active;
+    let m = this.active;
     for (const p of this.party) p.update(dt);
     if (this.switchCd > 0) this.switchCd -= dt;
     if (this.iframeT > 0) this.iframeT -= dt;
@@ -190,6 +203,7 @@ export class PlayerController {
 
     // ----- party switching
     if (ctl) for (let i = 0; i < 4; i++) if (input.pressed(`Digit${i + 1}`)) this.switchTo(i);
+    m = this.active; // a switch above changes who is out — the rest of the frame must drive the new character
 
     // ----- movement input
     const mv = new THREE.Vector3();
@@ -239,6 +253,20 @@ export class PlayerController {
       if (this.attackT >= 0) speed *= 0.25;
     }
     const skillDashing = !!this.skillDash;
+    // steep ground ahead: climb it (slower, costs stamina) — with no stamina left the slope limit stops you again
+    this.climbing = false;
+    if (moving && speed > 0 && this.onGround && !skillDashing && this.dashT <= 0 && this.attackT < 0 && !this.inWater && this.stamina > 0) {
+      const probe = 0.5;
+      const grade = (this.world.groundH(this.pos.x + mv.x * probe, this.pos.z + mv.z * probe) - this.world.groundH(this.pos.x, this.pos.z)) / probe;
+      if (grade > CLIMB_GRADE) {
+        this.climbing = true;
+        this.climbGrade = grade;
+        this.sprinting = false;
+        speed = Math.min(CLIMB_SPEED, CLIMB_UP / grade);
+        this.stamina -= CLIMB_COST * dt;
+        this.staminaIdle = 0;
+      }
+    }
     if (this.sprinting) { this.stamina -= 18 * dt; this.staminaIdle = 0; }
 
     // facing
@@ -257,7 +285,7 @@ export class PlayerController {
       const h0 = this.world.groundH(this.pos.x, this.pos.z);
       const h1 = this.world.groundH(nx, nz);
       const step = Math.hypot(nx - this.pos.x, nz - this.pos.z);
-      const tooSteep = this.onGround && !skillDashing && step > 0 && (h1 - h0) / step > 1.35;
+      const tooSteep = this.onGround && !skillDashing && !this.climbing && step > 0 && (h1 - h0) / step > 1.35;
       if (!tooSteep) { this.pos.x = nx; this.pos.z = nz; }
     }
 
@@ -298,7 +326,7 @@ export class PlayerController {
 
     // stamina regen
     this.staminaIdle += dt;
-    if (this.staminaIdle > 1 && this.onGround && !this.sprinting) this.stamina = Math.min(this.maxStamina, this.stamina + 28 * dt);
+    if (this.staminaIdle > 1 && this.onGround && !this.sprinting && !this.climbing) this.stamina = Math.min(this.maxStamina, this.stamina + 28 * dt);
     this.stamina = Math.max(0, this.stamina);
 
     // ----- combat input
@@ -367,8 +395,13 @@ export class PlayerController {
     this.moveSpeed = speed > 0 && this.dashT <= 0 ? speed / RUN : 0;
     const model = this.models.get(m.id);
     if (model) {
+      // lean the body toward the slope (parallel to a cliff face, less on gentler slopes)
+      const lean = this.climbing ? Math.min(0.55, (Math.PI / 2 - Math.atan(this.climbGrade)) * 0.75 + 0.12) : 0;
+      this.climbLean += (lean - this.climbLean) * Math.min(1, dt * 10);
       model.root.position.copy(this.pos);
+      model.root.rotation.order = 'YXZ';
       model.root.rotation.y = this.yaw;
+      model.root.rotation.x = this.climbLean;
       model.setWeapon?.(m.weaponInst()?.id ?? null);
       model.update(dt, {
         speed: this.moveSpeed,
@@ -377,6 +410,7 @@ export class PlayerController {
         attackT: this.attackT >= 0 ? Math.min(1, this.attackT / this.attackDur) : -1,
         attackKind: this.attackKind,
         dashing: this.dashT > 0,
+        climb: this.climbing,
         swing: this.swingIdx,
         swingLast: this.swingLast,
       });

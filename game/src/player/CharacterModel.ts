@@ -14,6 +14,8 @@ export interface AnimState {
   attackT: number;    // 0..1 progress of current swing, -1 none
   attackKind: 'normal' | 'skill' | 'burst' | 'charged';
   dashing: boolean;
+  /** climbing a steep slope / cliff (hand-over-hand) */
+  climb?: boolean;
   swing?: number;     // index of the current normal-attack swing in the combo
   swingLast?: boolean; // current swing is the combo finisher
 }

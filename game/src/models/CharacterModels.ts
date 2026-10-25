@@ -66,7 +66,7 @@ export class VrmCharacterModel implements CharModel {
 
   /** Which clip fits the controller state (null = gliding, use the procedural pose). */
   private pick(s: AnimState): AnimKey | null {
-    if (s.glide) return null;
+    if (s.glide || s.climb) return null;
     // a skill / burst / charged attack plays out at its own pace unless the player moves or attacks again
     if (this.showT > 0 && this.curKey && s.attackT < 0 && s.speed <= 0.05 && !s.dashing && !s.air) return this.curKey;
     if (s.attackT >= 0) {
@@ -181,6 +181,8 @@ export class VrmCharacterModel implements CharModel {
   private set(name: VRMHumanBoneName, x: number, y: number, z: number, k: number) {
     const b = this.bone(name);
     if (!b) return;
+    // VRM 0.x models are turned 180° on load, which mirrors the bones' x/z axes
+    if (this.vrm.meta?.metaVersion === '0') { x = -x; z = -z; }
     b.rotation.x += (x - b.rotation.x) * k;
     b.rotation.y += (y - b.rotation.y) * k;
     b.rotation.z += (z - b.rotation.z) * k;
@@ -216,26 +218,30 @@ export class VrmCharacterModel implements CharModel {
     if (s.air && !s.glide) { lLeg = -0.5; rLeg = 0.2; lKnee = 0.9; rKnee = 0.4; lArmZ = -0.7; rArmZ = 0.7; }
     if (s.glide) { lArmZ = -0.1; rArmZ = 0.1; lArmX = 0; rArmX = 0; lLeg = 0.1; rLeg = 0.2; spine = 0.35; bob = 0; }
     if (s.dashing) { spine = 0.45; lLeg = -0.6; rLeg = 0.6; }
-    if (s.attackT >= 0) {
-      const p = s.attackT;
-      if (this.weapon === 'BOW') { lArmZ = -0.2; lArmX = -1.4; rArmZ = 0.3; rArmX = -1.3; }
-      else if (this.weapon === 'CATALYST') { rArmZ = 0.4; rArmX = s.attackKind === 'burst' ? -2.6 : -1.4; }
-      else {
-        const heavy = this.weapon === 'CLAYMORE' ? 1.2 : 1;
-        rArmX = THREE.MathUtils.lerp(-2.5 * heavy, 0.5, 1 - (1 - p) * (1 - p));
-        rArmZ = THREE.MathUtils.lerp(0.5, 1.0, p);
-        spine += Math.sin(p * Math.PI) * 0.15;
-      }
+    let lFore = -0.15, rFore = 0.15, chest = 0;
+    if (s.climb) {
+      // hand-over-hand: one arm reaches up the slope while the other pulls down, the opposite knee steps up
+      // (the controller already leans the whole body toward the slope)
+      const c = Math.sin(this.phase * 0.8), up = (v: number) => (v + 1) / 2;
+      // (rest pose is a T-pose: z raises/lowers an arm, x then swings it forward)
+      lArmZ = 0.95 + 0.5 * up(c); rArmZ = -0.95 - 0.5 * up(-c);
+      lArmX = 0.35; rArmX = 0.35;
+      lFore = 0.25 * up(-c); rFore = -0.25 * up(c);
+      lLeg = -0.25 - 0.8 * up(-c); rLeg = -0.25 - 0.8 * up(c);
+      lKnee = 0.35 + 1.0 * up(-c); rKnee = 0.35 + 1.0 * up(c);
+      spine = 0.15; chest = 0.05;
+      bob = Math.abs(c) * 0.03;
     }
     this.set('leftUpperArm', lArmX, 0, lArmZ, k);
     this.set('rightUpperArm', rArmX, 0, rArmZ, k);
-    this.set('leftLowerArm', 0, 0, -0.15, k);
-    this.set('rightLowerArm', 0, 0, 0.15, k);
+    this.set('leftLowerArm', 0, 0, lFore, k);
+    this.set('rightLowerArm', 0, 0, rFore, k);
     this.set('leftUpperLeg', lLeg, 0, 0, k);
     this.set('rightUpperLeg', rLeg, 0, 0, k);
     this.set('leftLowerLeg', lKnee, 0, 0, k);
     this.set('rightLowerLeg', rKnee, 0, 0, k);
     this.set('spine', spine, 0, 0, k);
+    this.set('chest', chest, 0, 0, k);
     this.holder.position.y = bob;
     this.face(dt);
   }
