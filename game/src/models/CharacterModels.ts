@@ -4,11 +4,14 @@ import type { Appearance, Element, WeaponType } from '../core/types';
 import { ELEMENT_COLOR } from '../core/types';
 import { CharacterModel, type AnimState, type CharModel } from '../player/CharacterModel';
 import { glow, toon } from '../world/Materials';
-import { fitToHeight, hasModel, loadGLB, loadGLBAnimated, loadVRM, toonify } from './ModelLibrary';
+import { fitToHeight, hasModel, loadGLB, loadGLBAnimated, loadVRM, refreshSkins, toonify } from './ModelLibrary';
 import { holdQuat, idleAim, WeaponSlot } from './WeaponModels';
 import { clipSetFor, loadMixamoClips, type AnimKey } from './MixamoAnims';
 import { WeaponTrail } from './WeaponTrail';
 import { SamaraGlider } from './Glider';
+
+/** How deep a worn hat's crown sits over the top of the hair (fraction of the crown height): deeper and spiky hair pokes through. */
+const HAT_SINK = 0.5;
 
 /**
  * VRoid (.vrm) character — same interface as the placeholder, so the rest of the game doesn't care which one it gets.
@@ -178,6 +181,7 @@ export class VrmCharacterModel implements CharModel {
       obj.updateMatrixWorld(true);
       const box = new THREE.Box3().setFromObject(obj), size = box.getSize(new THREE.Vector3());
       const hat = new THREE.Group();
+      hat.name = `headProp:${prop}`;
       obj.scale.multiplyScalar(0.62 / Math.max(size.x, size.z, 1e-3));
       obj.updateMatrixWorld(true);
       // seat it by its widest part (the crown/brim), not by straps or ribbons hanging below
@@ -187,16 +191,16 @@ export class VrmCharacterModel implements CharModel {
         const b = new THREE.Box3().setFromObject(o), s = b.getSize(new THREE.Vector3());
         if (s.x * s.z > best) { best = s.x * s.z; main = b; }
       });
-      const c = main.getCenter(new THREE.Vector3());
+      const c = main.getCenter(new THREE.Vector3()), crownH = main.max.y - main.min.y;
       obj.position.sub(new THREE.Vector3(c.x, main.min.y, c.z));
       hat.add(obj);
       // place it in the model's own space, then hand it to the head bone keeping that pose
       this.root.updateWorldMatrix(true, true);
-      const local = (o: THREE.Object3D) => this.root.worldToLocal(o.getWorldPosition(new THREE.Vector3()));
-      const at = local(head), neckBone = H.getRawBoneNode('neck');
-      const headLen = neckBone ? Math.max(0.08, at.y - local(neckBone).y) : 0.1;
-      // the crown sinks a little into the hair so the brim sits around the top of the forehead
-      hat.position.set(at.x, at.y + headLen * 1.55, at.z + 0.01);
+      const at = this.root.worldToLocal(head.getWorldPosition(new THREE.Vector3()));
+      // the top of the hair (the model's highest point) pushes up into the crown, so the brim comes down to the forehead
+      refreshSkins(this.vrm.scene);
+      const top = this.root.worldToLocal(new THREE.Box3().setFromObject(this.vrm.scene).max.clone()).y;
+      hat.position.set(at.x, top - crownH * HAT_SINK, at.z + 0.01);
       this.root.add(hat);
       this.root.updateWorldMatrix(false, true);
       head.attach(hat);
