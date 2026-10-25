@@ -59,7 +59,7 @@ export class VrmCharacterModel implements CharModel {
       this.mixer = new THREE.AnimationMixer(vrm.scene);
       for (const [k, c] of clips) {
         const a = this.mixer.clipAction(c);
-        if (k !== 'idle' && k !== 'ready' && k !== 'run') { a.setLoop(THREE.LoopOnce, 1); a.clampWhenFinished = true; }
+        if (k !== 'idle' && k !== 'ready' && k !== 'run' && k !== 'climb' && k !== 'climbWall') { a.setLoop(THREE.LoopOnce, 1); a.clampWhenFinished = true; }
         this.actions.set(k, a);
       }
     });
@@ -67,7 +67,9 @@ export class VrmCharacterModel implements CharModel {
 
   /** Which clip fits the controller state (null = gliding, use the procedural pose). */
   private pick(s: AnimState): AnimKey | null {
-    if (s.glide || s.climb) return null;
+    if (s.glide) return null;
+    // Mixamo climbing clips when loaded (cliff face vs steep slope); otherwise the procedural climb pose
+    if (s.climb) return s.climbSteep && this.actions.has('climbWall') ? 'climbWall' : this.actions.has('climb') ? 'climb' : null;
     // a skill / burst / charged attack plays out at its own pace unless the player moves or attacks again
     if (this.showT > 0 && this.curKey && s.attackT < 0 && s.speed <= 0.05 && !s.dashing && !s.air) return this.curKey;
     if (s.attackT >= 0) {
@@ -120,6 +122,7 @@ export class VrmCharacterModel implements CharModel {
       next.timeScale = 0;
       next.time = s.attackT * next.getClip().duration * 0.8;
     } else if (key === 'run') next.timeScale = THREE.MathUtils.clamp(s.speed, 0.6, 1.4);
+    else if (key === 'climb' || key === 'climbWall') next.timeScale = s.speed > 0.05 ? 1 : 0; // hold still when not climbing
     this.mixer.update(dt);
     return true;
   }

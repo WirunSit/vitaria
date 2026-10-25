@@ -154,6 +154,7 @@
 | `NPC_RangerLila` | Actor4 魔法使い | つあ a.k.a 開星 ヨキ | VRoid Hub | [VRoid Hub](https://hub.vroid.com/characters/1544837030744498397/models/7881216394337592558) |
 | `NPC_CityGuard` | Actor1 アルケミスト | つあ a.k.a 開星 ヨキ | VRoid Hub | [VRoid Hub](https://hub.vroid.com/characters/6546391280923613832/models/3517193298699033227) |
 | `NPC_Paimon` | Paimon 0.1 (แฟนเมดจาก Genshin Impact — ลิขสิทธิ์ตัวละคร HoYoverse) | zero | VRoid Hub · ห้ามแจกต่อ | [VRoid Hub](https://hub.vroid.com/characters/4663497166806139528/models/2110905384497128098) |
+| `NPC_ProfLyso` | 学者風老人モデル「PMD2202」 プロフェッサー・アルベド | アツコ☆DYNAMIX | VRoid Hub · ห้ามแจกต่อ · ห้ามใช้ในนามองค์กร | [VRoid Hub](https://hub.vroid.com/characters/4611574337663622165/models/4131627596541535819) |
 | `BGM ทุ่งหญ้า (กลางวัน 1)` | Relaxing Orchestra / Ambient beat / Initiate landing | migfus20, Tausdei, Alexandr Zhelanov | CC BY 4.0 | [OpenGameArt](https://opengameart.org/content/relaxing-orchestra-ambient-beat-and-initiate-landing-migfus20-vs-tausdei-vs-zhelanov) |
 | `BGM ทุ่งหญ้า (กลางวัน 2)` | Forest Ambience | TinyWorlds | CC0 | [OpenGameArt](https://opengameart.org/content/forest-ambience) |
 | `BGM กลางคืน` | Mysterious Ambience (song21) | cynicmusic / pixelsphere.org | CC0 | [OpenGameArt](https://opengameart.org/content/mysterious-ambience-song21) |

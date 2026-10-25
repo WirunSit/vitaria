@@ -9,12 +9,12 @@ import type { WeaponType } from '../core/types';
  * charged attack, skill, burst) and characters can swap in their own skill/burst to match their element's kit.
  * FBX files load lazily and once; each VRM gets its own retargeted clips (track names point at its bones).
  */
-export const ANIM_KEYS = ['idle', 'ready', 'run', 'jump', 'dodge', 'atk1', 'atk2', 'atk3', 'atk4', 'heavy', 'skill', 'burst'] as const;
+export const ANIM_KEYS = ['idle', 'ready', 'run', 'jump', 'dodge', 'atk1', 'atk2', 'atk3', 'atk4', 'heavy', 'skill', 'burst', 'climb', 'climbWall'] as const;
 export type AnimKey = (typeof ANIM_KEYS)[number];
 type ClipSet = Partial<Record<AnimKey, string>>;
 
-/** shared by everyone: relaxed standing idle, jump, dodge roll */
-const BASE: ClipSet = { idle: 'relax_idle', jump: 'sword_jump', dodge: 'sword_dodge' };
+/** shared by everyone: relaxed standing idle, jump, dodge roll, climbing (up a steep slope / up a cliff face) */
+const BASE: ClipSet = { idle: 'relax_idle', jump: 'sword_jump', dodge: 'sword_dodge', climb: 'climb_slope', climbWall: 'climb_wall' };
 
 /** 'ready' = combat stance held for a few seconds after fighting */
 const WEAPON_SETS: Record<WeaponType, ClipSet> = {
@@ -63,6 +63,8 @@ const RIG: Record<string, VRMHumanBoneName> = {
 
 /** Clips where the game already moves the body: drop the clip's own lift (travel is always dropped). */
 const NO_LIFT = new Set<string>(['sword_jump', 'sword_dodge', 'ax_jump']);
+/** Looping clips that still rise over a cycle (climbing): remove the drift so each loop starts where the last ended. */
+const DETREND = new Set<string>(['climb_slope', 'climb_wall']);
 
 const loader = new FBXLoader();
 const files = new Map<string, Promise<THREE.Group | null>>();
@@ -106,7 +108,10 @@ function retarget(asset: THREE.Group, vrm: VRM, key: AnimKey, file: string): THR
     } else if (track instanceof THREE.VectorKeyframeTrack && rigName === 'mixamorigHips' && prop === 'position') {
       const v = track.values.slice();
       const y0 = v[1];
+      const drift = DETREND.has(file) ? v[v.length - 2] - y0 : 0;
+      const T = track.times[track.times.length - 1] || 1;
       for (let i = 0; i < v.length; i += 3) {
+        if (drift) v[i + 1] -= drift * (track.times[i / 3] / T);
         // the controller moves the character; keep only the hips' up/down
         v[i] = restHips?.[0] ?? 0;
         v[i + 2] = restHips?.[2] ?? 0;

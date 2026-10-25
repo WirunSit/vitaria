@@ -17,6 +17,8 @@ export interface AnimState {
   dashing: boolean;
   /** climbing a steep slope / cliff (hand-over-hand) */
   climb?: boolean;
+  /** …and it is near-vertical (cliff face rather than a steep slope) */
+  climbSteep?: boolean;
   swing?: number;     // index of the current normal-attack swing in the combo
   swingLast?: boolean; // current swing is the combo finisher
 }

@@ -411,6 +411,7 @@ export class PlayerController {
         attackKind: this.attackKind,
         dashing: this.dashT > 0,
         climb: this.climbing,
+        climbSteep: this.climbing && this.climbGrade > 1.8,
         swing: this.swingIdx,
         swingLast: this.swingLast,
       });
