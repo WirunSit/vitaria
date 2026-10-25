@@ -414,6 +414,7 @@ export class Game {
         root.add(new AmoebyModel().root);
       }
       if (model) root.add(model.root);
+      if (model && def.wear) model.wearOnHead?.(def.wear);
       // NPCs at the same location stand side by side
       const sameLoc = this.npcs.filter((n) => data.npcs.get(n.id)?.location === def.location).length;
       const pos = new THREE.Vector3(loc.x + sameLoc * 2.2, 0, loc.z + (def.id === 'NPC_ALVI' ? 0 : 0));

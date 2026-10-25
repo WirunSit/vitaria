@@ -1777,6 +1777,17 @@
       "author": "PatriciaDobbins",
       "license": "CC BY 4.0",
       "url": "https://sketchfab.com/3d-models/0698dad7bd1547e38ecd8e0d8080e329"
+    },
+    {
+      "code": "PR-HAT",
+      "dir": "Props",
+      "name": "PRP_StrawHat",
+      "faces": 3500,
+      "src": "Sketchfab",
+      "title": "Asian Conical Hat",
+      "author": "MushyDay",
+      "license": "CC BY 4.0",
+      "url": "https://sketchfab.com/3d-models/4eed68df8fb84284a91f42a6c6e4569c"
     }
   ]
 }

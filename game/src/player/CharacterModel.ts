@@ -31,6 +31,8 @@ export interface CharModel {
   castPoint(out: THREE.Vector3): THREE.Vector3;
   /** Show the equipped weapon (weapon id from weapons.json, null = default look). */
   setWeapon?(id: string | null): void;
+  /** Put a prop model (props/<name>.glb) on the head, e.g. a hat. */
+  wearOnHead?(prop: string): void;
   dispose(): void;
 }
 

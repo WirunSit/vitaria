@@ -137,6 +137,8 @@ export interface NpcDef {
   appearance?: Appearance;
   showFlag?: string; hideFlag?: string;
   art?: string;
+  /** prop worn on the head of the NPC's VRoid model (props/<name>.glb), e.g. "PRP_StrawHat" */
+  wear?: string;
   talkDialogue?: string;
 }
 

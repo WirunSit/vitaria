@@ -155,6 +155,7 @@
 | `PRP_RockArch` | ['-X-']═Rock_Arch═['Southside'] | -X-ScornGames | CC BY 4.0 | [Sketchfab](https://sketchfab.com/3d-models/eeb2888f84c5432b83cbf4c3333481ff) |
 | `PRP_DNA` | DNA Ribbon Molecular Model | S.Duce | CC BY 4.0 | [Sketchfab](https://sketchfab.com/3d-models/e3f82ab0c50a490bbace8d5ccc4698b8) |
 | `PRP_Bookshelf` | Closet of Young Warrior | PatriciaDobbins | CC BY 4.0 | [Sketchfab](https://sketchfab.com/3d-models/0698dad7bd1547e38ecd8e0d8080e329) |
+| `PRP_StrawHat` | Asian Conical Hat | MushyDay | CC BY 4.0 | [Sketchfab](https://sketchfab.com/3d-models/4eed68df8fb84284a91f42a6c6e4569c) |
 | `CHR_Alvi` | Hiiragi Yu1 ファンタジー | しーぜ | VRoid Hub · ห้ามแจกต่อ | [VRoid Hub](https://hub.vroid.com/characters/6415961155302263873/models/2417131184333170844) |
 | `CHR_Chloren` | 妖精ちゃん 森の妖精 | 田中 | VRoid Hub · ห้ามใช้เชิงพาณิชย์ | [VRoid Hub](https://hub.vroid.com/characters/2551658023389611705/models/7886204033965452427) |
 | `CHR_Hema` | エフェニ・エトワール Efffrene/ver.000 | Fou8A | VRoid Hub · ต้องระบุเครดิต | [VRoid Hub](https://hub.vroid.com/characters/7720110230278329206/models/7597316024053104803) |

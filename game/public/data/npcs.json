@@ -367,7 +367,8 @@
     },
     "talkDialogue": "DLG_VIL_DIMPLE_IDLE",
     "showFlag": "genovia_unlocked",
-    "art": "VillagerFoss"
+    "art": "VillagerFoss",
+    "wear": "PRP_StrawHat"
   },
   {
     "id": "NPC_CHIMERA2",

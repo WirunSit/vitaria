@@ -4,7 +4,7 @@ import type { Appearance, Element, WeaponType } from '../core/types';
 import { ELEMENT_COLOR } from '../core/types';
 import { CharacterModel, type AnimState, type CharModel } from '../player/CharacterModel';
 import { glow, toon } from '../world/Materials';
-import { fitToHeight, hasModel, loadGLBAnimated, loadVRM, toonify } from './ModelLibrary';
+import { fitToHeight, hasModel, loadGLB, loadGLBAnimated, loadVRM, toonify } from './ModelLibrary';
 import { holdQuat, idleAim, WeaponSlot } from './WeaponModels';
 import { clipSetFor, loadMixamoClips, type AnimKey } from './MixamoAnims';
 import { WeaponTrail } from './WeaponTrail';
@@ -164,6 +164,43 @@ export class VrmCharacterModel implements CharModel {
     this.weaponObj = g;
     this.baseQ.copy(q);
     this.slot = new WeaponSlot(w, hand, [g], (o) => o.quaternion.copy(q));
+  }
+
+  /** A hat (or other head prop) sized to the head and hung on the head bone so it follows nods and turns. */
+  wearOnHead(prop: string) {
+    const H = this.vrm.humanoid;
+    const head = H.getRawBoneNode('head');
+    if (!head) return;
+    void loadGLB(`props/${prop}.glb`).then((obj) => {
+      if (!obj) return;
+      toonify(obj);
+      // brim about 62 cm across
+      obj.updateMatrixWorld(true);
+      const box = new THREE.Box3().setFromObject(obj), size = box.getSize(new THREE.Vector3());
+      const hat = new THREE.Group();
+      obj.scale.multiplyScalar(0.62 / Math.max(size.x, size.z, 1e-3));
+      obj.updateMatrixWorld(true);
+      // seat it by its widest part (the crown/brim), not by straps or ribbons hanging below
+      let main = new THREE.Box3().setFromObject(obj), best = 0;
+      obj.traverse((o) => {
+        if (!(o as THREE.Mesh).isMesh) return;
+        const b = new THREE.Box3().setFromObject(o), s = b.getSize(new THREE.Vector3());
+        if (s.x * s.z > best) { best = s.x * s.z; main = b; }
+      });
+      const c = main.getCenter(new THREE.Vector3());
+      obj.position.sub(new THREE.Vector3(c.x, main.min.y, c.z));
+      hat.add(obj);
+      // place it in the model's own space, then hand it to the head bone keeping that pose
+      this.root.updateWorldMatrix(true, true);
+      const local = (o: THREE.Object3D) => this.root.worldToLocal(o.getWorldPosition(new THREE.Vector3()));
+      const at = local(head), neckBone = H.getRawBoneNode('neck');
+      const headLen = neckBone ? Math.max(0.08, at.y - local(neckBone).y) : 0.1;
+      // the crown sinks a little into the hair so the brim sits around the top of the forehead
+      hat.position.set(at.x, at.y + headLen * 1.55, at.z + 0.01);
+      this.root.add(hat);
+      this.root.updateWorldMatrix(false, true);
+      head.attach(hat);
+    });
   }
 
   /** Samara wings on the back: hung on the chest bone so they follow the body's lean. */
@@ -333,6 +370,7 @@ export class SwappableModel implements CharModel {
   private cur: CharModel;
   private disposed = false;
   private weaponId: string | null = null;
+  private headProp: string | null = null;
 
   constructor(fallback: CharModel, pending: Promise<CharModel | null> | null) {
     this.weapon = fallback.weapon;
@@ -345,8 +383,11 @@ export class SwappableModel implements CharModel {
       this.cur = m;
       this.root.add(m.root);
       m.setWeapon?.(this.weaponId);
+      if (this.headProp) m.wearOnHead?.(this.headProp);
     });
   }
+  /** the placeholder already draws its own hat; the prop goes on once the real model is in */
+  wearOnHead(prop: string) { this.headProp = prop; if (this.isReal) this.cur.wearOnHead?.(prop); }
   get isReal() { return !(this.cur instanceof CharacterModel); }
   update(dt: number, s: AnimState) { this.cur.update(dt, s); }
   castPoint(out: THREE.Vector3) { return this.cur.castPoint(out); }
