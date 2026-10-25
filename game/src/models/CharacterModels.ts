@@ -4,7 +4,7 @@ import type { Appearance, Element, WeaponType } from '../core/types';
 import { ELEMENT_COLOR } from '../core/types';
 import { CharacterModel, type AnimState, type CharModel } from '../player/CharacterModel';
 import { glow, toon } from '../world/Materials';
-import { fitToHeight, hasModel, loadVRM } from './ModelLibrary';
+import { fitToHeight, hasModel, loadGLBAnimated, loadVRM, toonify } from './ModelLibrary';
 import { holdQuat, idleAim, WeaponSlot } from './WeaponModels';
 import { clipSetFor, loadMixamoClips, type AnimKey } from './MixamoAnims';
 import { WeaponTrail } from './WeaponTrail';
@@ -354,9 +354,59 @@ export class SwappableModel implements CharModel {
   dispose() { this.disposed = true; this.cur.dispose(); }
 }
 
+/**
+ * Ready-made rigged character from Sketchfab (.glb) used as an NPC: cel-shaded like the rest of the game and
+ * playing its own idle clip (or a gentle breathing sway when the file has no usable animation).
+ */
+export class GlbCharacterModel implements CharModel {
+  root = new THREE.Group();
+  readonly weapon: WeaponType = 'CATALYST';
+  private mixer: THREE.AnimationMixer | null = null;
+  private body: THREE.Object3D;
+  private t = Math.random() * 10;
+
+  constructor(obj: THREE.Object3D, clips: THREE.AnimationClip[], height: number) {
+    this.body = obj;
+    // display stands that come with showcase models (a flat disc or plate at the feet) are not part of the character
+    obj.updateMatrixWorld(true);
+    const all = new THREE.Box3().setFromObject(obj), tall = all.max.y - all.min.y;
+    const stands: THREE.Object3D[] = [];
+    obj.traverse((o) => {
+      if (!(o as THREE.Mesh).isMesh || (o as THREE.SkinnedMesh).isSkinnedMesh) return;
+      const b = new THREE.Box3().setFromObject(o);
+      if (b.max.y - b.min.y < tall * 0.06 && b.min.y - all.min.y < tall * 0.04) stands.push(o);
+    });
+    for (const o of stands) o.removeFromParent();
+    toonify(obj);
+    fitToHeight(obj, height);
+    // no inverted-hull outline: the skinned hull scales wrongly on many downloaded rigs (a dark ghost behind them)
+    this.root.add(obj);
+    const usable = clips.filter((c) => c.duration > 0.1 && !/t-?pose/i.test(c.name));
+    const idle = usable.find((c) => /idle|breath|stand|wait/i.test(c.name)) ?? usable[0];
+    if (idle) {
+      this.mixer = new THREE.AnimationMixer(obj);
+      this.mixer.clipAction(idle).play();
+    }
+  }
+
+  update(dt: number) {
+    this.t += dt;
+    if (this.mixer) { this.mixer.update(dt); return; }
+    this.body.scale.y = this.body.scale.x * (1 + Math.sin(this.t * 1.8) * 0.012);
+  }
+  castPoint(out: THREE.Vector3) { return this.root.localToWorld(out.set(0, 1.3, 0.3)); }
+  dispose() { this.root.removeFromParent(); }
+}
+
 /** Factory used everywhere a character/NPC body is needed. `file` e.g. "characters/CHR_Sira.vrm". */
 export function createCharacterModel(file: string | null, app: Appearance, element: Element, weapon: WeaponType, animFor: string | null = null): CharModel {
   const fallback = new CharacterModel(app, element, weapon);
+  // a ready-made .glb with the same name stands in when there is no VRoid model
+  const glb = file?.replace(/\.vrm$/, '.glb');
+  if (file && !hasModel(file) && glb && hasModel(glb)) {
+    const pending = loadGLBAnimated(glb).then((r) => (r ? new GlbCharacterModel(r.obj, r.clips, 1.68 * app.height) : null));
+    return new SwappableModel(fallback, pending);
+  }
   if (!file || !hasModel(file)) return fallback;
   const pending = loadVRM(file).then((vrm) => (vrm ? new VrmCharacterModel(vrm, app, element, weapon, animFor) : null));
   return new SwappableModel(fallback, pending);

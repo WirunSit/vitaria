@@ -1660,6 +1660,36 @@
       "author": "TopNotch Assets",
       "license": "Sketchfab Free Standard",
       "url": "https://sketchfab.com/3d-models/angel-wings-a575b36467d840be84d8f91d5074d7d4"
+    },
+    {
+      "code": "KRE-S1",
+      "dir": "NPCs",
+      "name": "NPC_SageKrebion",
+      "faces": 20000,
+      "pack": true,
+      "src": "Sketchfab",
+      "title": "The Noble Craftsman",
+      "author": "NORBERTO-3D",
+      "license": "CC BY-SA 4.0",
+      "url": "https://sketchfab.com/3d-models/a6eb544c300b4683b4d7241ca6a89d13",
+      "drop": [
+        "Plane001"
+      ]
+    },
+    {
+      "code": "DAR-S3",
+      "dir": "NPCs",
+      "name": "NPC_SageDarwyn",
+      "faces": 20000,
+      "pack": true,
+      "src": "Sketchfab",
+      "title": "Explorer",
+      "author": "Bento",
+      "license": "CC BY 4.0",
+      "url": "https://sketchfab.com/3d-models/0c702359f0594f08b2a1e7b8d1f01d67",
+      "drop": [
+        "Cylinder001"
+      ]
     }
   ]
 }
