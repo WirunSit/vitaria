@@ -273,7 +273,9 @@ export class Aquorra {
     for (let i = 0; i < 10; i++) {
       const a = (i / 10) * Math.PI * 2;
       const col = this.placeholder(new THREE.CylinderGeometry(0.45, 0.55, 6, 10), '#f0ebe0', 3);
+      col.rotation.y = -a;
       this.add(col, cx + Math.cos(a) * 8.4, cz + Math.sin(a) * 8.4, 0.5);
+      void propSlot(col, 'PRP_Column', { h: 6.5, outline: 0 });
       this.col(cx + Math.cos(a) * 8.4, cz + Math.sin(a) * 8.4, 0.6);
     }
     const heart = this.placeholder(new THREE.SphereGeometry(2.4, 18, 14), '#d84a5a', 3.2);

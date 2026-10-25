@@ -186,21 +186,32 @@ export class City {
       seg.rotation.y = -a + Math.PI / 2;
       W.add(seg);
       if (i % 5 === 0) {
+        // stone drum + gold cap, swapped for the downloaded tower (PRP_WallTower) when present
+        const tg = new THREE.Group();
+        tg.position.set(Math.cos(a) * R, 0, Math.sin(a) * R);
+        tg.rotation.y = -a - Math.PI / 2; // door faces the city
         const tw = new THREE.Mesh(new THREE.CylinderGeometry(2, 2.4, 11, 6), stone);
-        tw.position.set(Math.cos(a) * R, 5.5, Math.sin(a) * R);
+        tw.position.y = 5.5;
         const cap = new THREE.Mesh(new THREE.ConeGeometry(2.6, 3, 6), gold);
-        cap.position.set(Math.cos(a) * R, 12.5, Math.sin(a) * R);
-        W.add(tw, cap);
+        cap.position.y = 12.5;
+        tg.add(tw, cap);
+        W.add(tg);
+        void propSlot(tg, 'PRP_WallTower', { h: 15, outline: 0 });
       }
     }
     // south gate (the membrane "channel")
     const gz = CITY_RADIUS + 3;
     for (const sx of [-1, 1]) {
+      const tg = new THREE.Group();
+      tg.position.set(sx * 7, 0, gz);
+      tg.rotation.y = Math.PI;
       const tw = new THREE.Mesh(new THREE.CylinderGeometry(2.4, 2.8, 14, 6), stone);
-      tw.position.set(sx * 7, 7, gz);
+      tw.position.y = 7;
       const cap = new THREE.Mesh(new THREE.ConeGeometry(3, 4, 6), gold);
-      cap.position.set(sx * 7, 16, gz);
-      W.add(tw, cap);
+      cap.position.y = 16;
+      tg.add(tw, cap);
+      W.add(tg);
+      void propSlot(tg, 'PRP_WallTower', { h: 18, outline: 0 });
       this.col(sx * 7, gz, 3);
     }
     const arch = new THREE.Mesh(new THREE.TorusGeometry(6, 0.8, 8, 12, Math.PI), gold);

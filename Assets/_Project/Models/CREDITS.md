@@ -147,6 +147,15 @@
 | `PRP_Glider` | Angel wings | TopNotch Assets | Sketchfab Free Standard | [Sketchfab](https://sketchfab.com/3d-models/angel-wings-a575b36467d840be84d8f91d5074d7d4) |
 | `NPC_SageKrebion` | The Noble Craftsman | NORBERTO-3D | CC BY-SA 4.0 | [Sketchfab](https://sketchfab.com/3d-models/a6eb544c300b4683b4d7241ca6a89d13) |
 | `NPC_SageDarwyn` | Explorer | Bento | CC BY 4.0 | [Sketchfab](https://sketchfab.com/3d-models/0c702359f0594f08b2a1e7b8d1f01d67) |
+| `PRP_WallTower` | Potion Shop Tower | Batuhan13 | CC BY 4.0 | [Sketchfab](https://sketchfab.com/3d-models/cd6eb556d29e4c81b087c59e27d76aad) |
+| `PRP_Column` | Gothic style Monument | Samuel F. Angrick-Johanns (Oneironauticus) | CC BY 4.0 | [Sketchfab](https://sketchfab.com/3d-models/4a0f210b18bd42fea402a343409bd4f2) |
+| `PRP_GemRock` | Gem in a rock | Akiko.Tomiyoshi | CC BY 4.0 | [Sketchfab](https://sketchfab.com/3d-models/18887f3feaf94be887287c211c253fa1) |
+| `PRP_Obelisk` | obelisk stylized | MattDonlan | CC BY 4.0 | [Sketchfab](https://sketchfab.com/3d-models/3f3ba2b746044e1ab84a272805e4688f) |
+| `PRP_StoneGate` | Stylized Ancient Archway | Vladyslav Yakovenko | CC BY 4.0 | [Sketchfab](https://sketchfab.com/3d-models/c0ce836f20054484850866c7385b750c) |
+| `PRP_Flask` | Mermaid Potion | Sharon Kunne | CC BY 4.0 | [Sketchfab](https://sketchfab.com/3d-models/2363db11631045dea8f84c8421578002) |
+| `PRP_RockArch` | ['-X-']═Rock_Arch═['Southside'] | -X-ScornGames | CC BY 4.0 | [Sketchfab](https://sketchfab.com/3d-models/eeb2888f84c5432b83cbf4c3333481ff) |
+| `PRP_DNA` | DNA Ribbon Molecular Model | S.Duce | CC BY 4.0 | [Sketchfab](https://sketchfab.com/3d-models/e3f82ab0c50a490bbace8d5ccc4698b8) |
+| `PRP_Bookshelf` | Closet of Young Warrior | PatriciaDobbins | CC BY 4.0 | [Sketchfab](https://sketchfab.com/3d-models/0698dad7bd1547e38ecd8e0d8080e329) |
 | `CHR_Alvi` | Hiiragi Yu1 ファンタジー | しーぜ | VRoid Hub · ห้ามแจกต่อ | [VRoid Hub](https://hub.vroid.com/characters/6415961155302263873/models/2417131184333170844) |
 | `CHR_Chloren` | 妖精ちゃん 森の妖精 | 田中 | VRoid Hub · ห้ามใช้เชิงพาณิชย์ | [VRoid Hub](https://hub.vroid.com/characters/2551658023389611705/models/7886204033965452427) |
 | `CHR_Hema` | エフェニ・エトワール Efffrene/ver.000 | Fou8A | VRoid Hub · ต้องระบุเครดิต | [VRoid Hub](https://hub.vroid.com/characters/7720110230278329206/models/7597316024053104803) |

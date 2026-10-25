@@ -102,6 +102,7 @@ export class Sites {
     dna.scale.setScalar(1.4);
     addOutline(dna, 0.03);
     this.place(dna, c.x + 2, c.z + 10);
+    void propSlot(dna, 'PRP_DNA', { h: 10.5 / 1.4, outline: 0 });
     // fatty acid: zig-zag carbon tail on a glycerol head
     const fa: [number, number, number, string][] = [[0, 5, 0, '#ff5a4a']];
     const bonds: [number, number][] = [];
@@ -328,11 +329,16 @@ export class Sites {
     for (let i = 0; i < 6; i++) {
       const ang = (i / 6) * Math.PI * 2;
       const px = a.x + Math.cos(ang) * 18.5, pz = a.z + Math.sin(ang) * 18.5;
+      const og = new THREE.Group();
+      og.position.set(px, this.h(px, pz), pz);
+      og.rotation.y = -ang + Math.PI / 2; // gem faces the arena
       const p = new THREE.Mesh(new THREE.CylinderGeometry(0.6, 0.9, 6, 6), rock);
-      p.position.set(px, this.h(px, pz) + 3, pz);
+      p.position.y = 3;
       const c = new THREE.Mesh(new THREE.OctahedronGeometry(0.9, 0), crystal);
-      c.position.set(px, this.h(px, pz) + 6.8, pz);
-      this.root.add(p, c);
+      c.position.y = 6.8;
+      og.add(p, c);
+      this.root.add(og);
+      void propSlot(og, 'PRP_Obelisk', { h: 7.5, outline: 0 });
       this.colliders.push({ x: px, z: pz, r: 1 });
     }
     const probe = new THREE.Object3D();

@@ -368,6 +368,7 @@ export class Genovia {
       shelf.position.set(sx * (6 + k * 5), 0, 3 + k * 1.5);
       shelf.rotation.y = -sx * 0.25;
       g.add(shelf);
+      void propSlot(shelf, 'PRP_Bookshelf', { h: 3.4, outline: 0 });
       this.col(x + sx * (6 + k * 5), z + 3 + k * 1.5, 2);
     }
     addOutline(g, 0.04);
@@ -387,9 +388,13 @@ export class Genovia {
     const g = new THREE.Group();
     // rock arch tunnel
     for (let i = 0; i < 5; i++) {
-      const arch = new THREE.Mesh(new THREE.TorusGeometry(6, 1.6, 6, 10, Math.PI), i % 2 ? rockM : rock2);
-      arch.position.set(0, 0, -6 + i * 3);
-      g.add(arch);
+      const ag = new THREE.Group();
+      ag.position.set(0, 0, -6 + i * 3);
+      ag.add(new THREE.Mesh(new THREE.TorusGeometry(6, 1.6, 6, 10, Math.PI), i % 2 ? rockM : rock2));
+      g.add(ag);
+      // natural rock arches at the two mouths and the middle (they are thick: the ones between would merge into a lump)
+      if (i % 2 === 0) void propSlot(ag, 'PRP_RockArch', { h: 9, yaw: i === 2 ? Math.PI + 0.1 : 0, outline: 0 });
+      else if (hasProp('PRP_RockArch')) ag.visible = false;
     }
     // three pairs of X-shaped chromosome crystals
     const pairCols = [['#ff9ad0', '#ff9ad0'], ['#7ab8ff', '#ff9ad0'], ['#9be06a', '#9be06a']];

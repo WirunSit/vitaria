@@ -1690,6 +1690,105 @@
       "drop": [
         "Cylinder001"
       ]
+    },
+    {
+      "code": "PR-TWR",
+      "dir": "Props",
+      "name": "PRP_WallTower",
+      "faces": 10000,
+      "src": "Sketchfab",
+      "title": "Potion Shop Tower",
+      "author": "Batuhan13",
+      "license": "CC BY 4.0",
+      "url": "https://sketchfab.com/3d-models/cd6eb556d29e4c81b087c59e27d76aad"
+    },
+    {
+      "code": "PR-COL",
+      "dir": "Props",
+      "name": "PRP_Column",
+      "faces": 8000,
+      "src": "Sketchfab",
+      "title": "Gothic style Monument",
+      "author": "Samuel F. Angrick-Johanns (Oneironauticus)",
+      "license": "CC BY 4.0",
+      "url": "https://sketchfab.com/3d-models/4a0f210b18bd42fea402a343409bd4f2"
+    },
+    {
+      "code": "PR-SPK",
+      "dir": "Props",
+      "name": "PRP_GemRock",
+      "faces": 10000,
+      "src": "Sketchfab",
+      "title": "Gem in a rock",
+      "author": "Akiko.Tomiyoshi",
+      "license": "CC BY 4.0",
+      "url": "https://sketchfab.com/3d-models/18887f3feaf94be887287c211c253fa1"
+    },
+    {
+      "code": "PR-OBL",
+      "dir": "Props",
+      "name": "PRP_Obelisk",
+      "faces": 10000,
+      "src": "Sketchfab",
+      "title": "obelisk stylized",
+      "author": "MattDonlan",
+      "license": "CC BY 4.0",
+      "url": "https://sketchfab.com/3d-models/3f3ba2b746044e1ab84a272805e4688f"
+    },
+    {
+      "code": "PR-GTE",
+      "dir": "Props",
+      "name": "PRP_StoneGate",
+      "faces": 10000,
+      "src": "Sketchfab",
+      "title": "Stylized Ancient Archway",
+      "author": "Vladyslav Yakovenko",
+      "license": "CC BY 4.0",
+      "url": "https://sketchfab.com/3d-models/c0ce836f20054484850866c7385b750c"
+    },
+    {
+      "code": "PR-FLK",
+      "dir": "Props",
+      "name": "PRP_Flask",
+      "faces": 12000,
+      "src": "Sketchfab",
+      "title": "Mermaid Potion",
+      "author": "Sharon Kunne",
+      "license": "CC BY 4.0",
+      "url": "https://sketchfab.com/3d-models/2363db11631045dea8f84c8421578002"
+    },
+    {
+      "code": "PR-ARC",
+      "dir": "Props",
+      "name": "PRP_RockArch",
+      "faces": 12000,
+      "src": "Sketchfab",
+      "title": "['-X-']═Rock_Arch═['Southside']",
+      "author": "-X-ScornGames",
+      "license": "CC BY 4.0",
+      "url": "https://sketchfab.com/3d-models/eeb2888f84c5432b83cbf4c3333481ff"
+    },
+    {
+      "code": "PR-DNA",
+      "dir": "Props",
+      "name": "PRP_DNA",
+      "faces": 10000,
+      "src": "Sketchfab",
+      "title": "DNA Ribbon Molecular Model",
+      "author": "S.Duce",
+      "license": "CC BY 4.0",
+      "url": "https://sketchfab.com/3d-models/e3f82ab0c50a490bbace8d5ccc4698b8"
+    },
+    {
+      "code": "PR-BKS",
+      "dir": "Props",
+      "name": "PRP_Bookshelf",
+      "faces": 15000,
+      "src": "Sketchfab",
+      "title": "Closet of Young Warrior",
+      "author": "PatriciaDobbins",
+      "license": "CC BY 4.0",
+      "url": "https://sketchfab.com/3d-models/0698dad7bd1547e38ecd8e0d8080e329"
     }
   ]
 }

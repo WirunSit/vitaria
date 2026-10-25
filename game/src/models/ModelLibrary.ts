@@ -101,6 +101,8 @@ export function toonify(root: THREE.Object3D, tint?: THREE.ColorRepresentation, 
         color, map: src.map ?? null, gradientMap: toonGradient(), transparent: src.transparent, opacity: src.opacity,
         alphaTest: src.alphaTest, alphaMap: src.alphaMap ?? null, depthWrite: src.depthWrite, // cut-out leaves stay cut out
         emissive: src.emissive ?? new THREE.Color(0), emissiveMap: src.emissiveMap ?? null, side: src.side,
+        // models coloured per vertex (no texture) keep those colours
+        vertexColors: !!src.vertexColors || (!src.map && !!mesh.geometry.attributes.color),
       });
       if (t.map) t.map.colorSpace = THREE.SRGBColorSpace;
       return t;

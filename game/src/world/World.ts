@@ -837,6 +837,8 @@ export class World {
     addOutline(grp, 0.05);
     this.root.add(grp);
     this.colliders.push({ x, z, r: 1.3 * scale });
+    // the violet clusters by the arena: crystals bursting from a rock
+    if (color === '#d7b2ff') void propSlot(grp, 'PRP_GemRock', { h: 3.6 * scale, yaw: rand() * 6.28, outline: 0 });
     return grp;
   }
 
@@ -969,11 +971,15 @@ export class World {
     emblem.userData.noOutline = true;
     const doorSlab = new THREE.Mesh(new THREE.BoxGeometry(4.4, 6.2, 0.8), toon('#9d927c'));
     doorSlab.position.set(0, 3.1, 0);
+    // the slab slides open in the quest and the emblem glows: both stay when the stone archway model replaces the frame
+    doorSlab.userData.keep = true;
+    emblem.userData.keep = true;
     arch.add(pillarL, pillarR, lintel, emblem, doorSlab);
     arch.traverse((o) => { if ((o as THREE.Mesh).isMesh) o.castShadow = true; });
     addOutline(arch, 0.05);
     arch.position.set(x, y, z - 6);
     this.root.add(arch);
+    void propSlot(arch, 'PRP_StoneGate', { w: 9.5, h: 8.4, outline: 0 });
     this.door = doorSlab;
     this.colliders.push({ x: x - 3, z: z - 6, r: 1.2 }, { x: x + 3, z: z - 6, r: 1.2 }, { x, z: z - 6, r: 2.3, id: 'door' });
     // chest behind door
@@ -1154,7 +1160,9 @@ export class World {
       flask.add(body, liquid, neck);
       flask.position.set(Math.cos(a) * (DOMAIN_RADIUS - 1.5), 0, Math.sin(a) * (DOMAIN_RADIUS - 1.5));
       flask.scale.setScalar(1.4);
+      flask.rotation.y = -a;
       g.add(flask);
+      void propSlot(flask, 'PRP_Flask', { h: 3.6, outline: 0 });
     }
     // exit pedestal
     const exit = new THREE.Group();
