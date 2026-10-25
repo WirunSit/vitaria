@@ -164,7 +164,6 @@
 | `NPC_RangerLila` | Actor4 魔法使い | つあ a.k.a 開星 ヨキ | VRoid Hub | [VRoid Hub](https://hub.vroid.com/characters/1544837030744498397/models/7881216394337592558) |
 | `NPC_CityGuard` | Actor1 アルケミスト | つあ a.k.a 開星 ヨキ | VRoid Hub | [VRoid Hub](https://hub.vroid.com/characters/6546391280923613832/models/3517193298699033227) |
 | `NPC_Paimon` | Paimon 0.1 (แฟนเมดจาก Genshin Impact — ลิขสิทธิ์ตัวละคร HoYoverse) | zero | VRoid Hub · ห้ามแจกต่อ | [VRoid Hub](https://hub.vroid.com/characters/4663497166806139528/models/2110905384497128098) |
-| `NPC_ProfLyso` | Ciel | 白黑燐音 | VRoid Hub · ห้ามแก้ไข · ห้ามใช้หารายได้ | [VRoid Hub](https://hub.vroid.com/characters/1891437088692958341/models/2559850780658924211) |
 | `NPC_SageLinnara` | アバター＊無料DL | 藤依ひな | VRoid Hub | [VRoid Hub](https://hub.vroid.com/characters/2878129923101138674/models/80963258769705464) |
 | `NPC_AuntieGolgi` | デイヴィス家のメアリー | 歩留マリ | VRoid Hub | [VRoid Hub](https://hub.vroid.com/characters/4332181192017932171/models/8221630384582996054) |
 | `NPC_LostTwin` | VRoidダーク恍惚なる闇 | クランク | VRoid Hub · ห้ามใช้หารายได้ | [VRoid Hub](https://hub.vroid.com/characters/6984475036783114177/models/3705415764528957479) |
@@ -173,6 +172,11 @@
 | `NPC_QueenHarvena` | Geminiちゃん | マユラ | VRoid Hub · ห้ามใช้หารายได้ | [VRoid Hub](https://hub.vroid.com/characters/7622872635463746057/models/5323304641621732925) |
 | `NPC_SageCajalis` | グノーム | ネセネセ | VRoid Hub · ต้องระบุเครดิต | [VRoid Hub](https://hub.vroid.com/characters/1714810747070456300/models/5082804560147350271) |
 | `NPC_VillagerLens` | 黄頃（cokoro） | 赤山みんと | VRoid Hub · ต้องระบุเครดิต | [VRoid Hub](https://hub.vroid.com/characters/6863244548031129764/models/7140789147839144914) |
+| `NPC_ProfLyso` | 諏訪昭俊 (白衣) | ますじ | VRoid Hub · ต้องระบุเครดิต · ห้ามใช้เชิงพาณิชย์ | [VRoid Hub](https://hub.vroid.com/characters/6450059504739691299/models/6233863979779266067) |
+| `NPC_SageMendelion` | Horned Human | Fuun | VRoid Hub · ห้ามแก้ไข · ห้ามใช้เชิงพาณิชย์ | [VRoid Hub](https://hub.vroid.com/characters/2640763377717062821/models/3697164647977653586) |
+| `NPC_DrChimera` | Anime Boy | Jonathan Chen | VRoid Hub · ต้องระบุเครดิต | [VRoid Hub](https://hub.vroid.com/characters/7171210035569000445/models/8481347267083016813) |
+| `NPC_GrannyZephyra` | 利用OK 魔女風目隠れオッドアイレディ | pinehead | VRoid Hub · ต้องระบุเครดิต | [VRoid Hub](https://hub.vroid.com/characters/958381910122292531/models/2217970458745246747) |
+| `NPC_UncleER` | 男騎士くん | teradora | VRoid Hub · ห้ามใช้ในนามองค์กร | [VRoid Hub](https://hub.vroid.com/characters/6608986823099270676/models/940430863078135671) |
 | `BGM ทุ่งหญ้า (กลางวัน 1)` | Relaxing Orchestra / Ambient beat / Initiate landing | migfus20, Tausdei, Alexandr Zhelanov | CC BY 4.0 | [OpenGameArt](https://opengameart.org/content/relaxing-orchestra-ambient-beat-and-initiate-landing-migfus20-vs-tausdei-vs-zhelanov) |
 | `BGM ทุ่งหญ้า (กลางวัน 2)` | Forest Ambience | TinyWorlds | CC0 | [OpenGameArt](https://opengameart.org/content/forest-ambience) |
 | `BGM กลางคืน` | Mysterious Ambience (song21) | cynicmusic / pixelsphere.org | CC0 | [OpenGameArt](https://opengameart.org/content/mysterious-ambience-song21) |

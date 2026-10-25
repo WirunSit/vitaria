@@ -100,16 +100,6 @@
   "url": "https://hub.vroid.com/characters/4663497166806139528/models/2110905384497128098"
  },
  {
-  "name": "NPC_ProfLyso",
-  "dir": "NPCs",
-  "file": "ProfLyso.vrm",
-  "title": "Ciel",
-  "author": "白黑燐音",
-  "license": "VRoid Hub · ห้ามแก้ไข · ห้ามใช้หารายได้",
-  "src": "VRoid Hub",
-  "url": "https://hub.vroid.com/characters/1891437088692958341/models/2559850780658924211"
- },
- {
   "name": "NPC_SageLinnara",
   "dir": "NPCs",
   "file": "SageLinnara.vrm",
@@ -188,5 +178,55 @@
   "license": "VRoid Hub · ต้องระบุเครดิต",
   "src": "VRoid Hub",
   "url": "https://hub.vroid.com/characters/6863244548031129764/models/7140789147839144914"
+ },
+ {
+  "name": "NPC_ProfLyso",
+  "dir": "NPCs",
+  "file": "ProfLyso.vrm",
+  "title": "諏訪昭俊 (白衣)",
+  "author": "ますじ",
+  "license": "VRoid Hub · ต้องระบุเครดิต · ห้ามใช้เชิงพาณิชย์",
+  "src": "VRoid Hub",
+  "url": "https://hub.vroid.com/characters/6450059504739691299/models/6233863979779266067"
+ },
+ {
+  "name": "NPC_SageMendelion",
+  "dir": "NPCs",
+  "file": "SageMendelion.vrm",
+  "title": "Horned Human",
+  "author": "Fuun",
+  "license": "VRoid Hub · ห้ามแก้ไข · ห้ามใช้เชิงพาณิชย์",
+  "src": "VRoid Hub",
+  "url": "https://hub.vroid.com/characters/2640763377717062821/models/3697164647977653586"
+ },
+ {
+  "name": "NPC_DrChimera",
+  "dir": "NPCs",
+  "file": "DrChimera.vrm",
+  "title": "Anime Boy",
+  "author": "Jonathan Chen",
+  "license": "VRoid Hub · ต้องระบุเครดิต",
+  "src": "VRoid Hub",
+  "url": "https://hub.vroid.com/characters/7171210035569000445/models/8481347267083016813"
+ },
+ {
+  "name": "NPC_GrannyZephyra",
+  "dir": "NPCs",
+  "file": "GrannyZephyra.vrm",
+  "title": "利用OK 魔女風目隠れオッドアイレディ",
+  "author": "pinehead",
+  "license": "VRoid Hub · ต้องระบุเครดิต",
+  "src": "VRoid Hub",
+  "url": "https://hub.vroid.com/characters/958381910122292531/models/2217970458745246747"
+ },
+ {
+  "name": "NPC_UncleER",
+  "dir": "NPCs",
+  "file": "UncleER.vrm",
+  "title": "男騎士くん",
+  "author": "teradora",
+  "license": "VRoid Hub · ห้ามใช้ในนามองค์กร",
+  "src": "VRoid Hub",
+  "url": "https://hub.vroid.com/characters/6608986823099270676/models/940430863078135671"
  }
 ]
