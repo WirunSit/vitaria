@@ -1649,6 +1649,17 @@
       "drop": [
         "Ground Plane002_Material #565"
       ]
+    },
+    {
+      "code": "WG-02",
+      "dir": "Props",
+      "name": "PRP_Glider",
+      "faces": 8000,
+      "src": "Sketchfab",
+      "title": "Angel wings",
+      "author": "TopNotch Assets",
+      "license": "Sketchfab Free Standard",
+      "url": "https://sketchfab.com/3d-models/angel-wings-a575b36467d840be84d8f91d5074d7d4"
     }
   ]
 }

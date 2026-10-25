@@ -25,7 +25,7 @@ export function getGender() { return playerGender; }
 
 const NPC_SPEAKERS: Record<string, Speaker> = {
   // the floating companion (VRoid model; portraits rendered from it — tools/companion-portraits.js)
-  AMOEBY: { name: 'อะมีบี้', art: 'Companion', color: '#9fd8ff', hair: '#f4f4f8' },
+  AMOEBY: { name: 'วีต้า', art: 'Companion', color: '#9fd8ff', hair: '#f4f4f8' },
   NARRATOR: { name: '', art: null, color: '#888', hair: '#888' },
   STATUE: { name: 'รูปปั้นต้นไม้แห่งชีวิต', art: null, color: '#e8c468', hair: '#d8d0bd' },
   LYSO: { name: 'ศาสตราจารย์ไลโซ', art: 'ProfLyso', color: '#cfd5e2', hair: '#9a9a9a' },

@@ -369,7 +369,7 @@ export function openMap(host: MenuHost) {
 // ------------------------------------------------------------------ Esc menu
 export function openEscMenu(host: MenuHost, actions: { codex: () => void; quests: () => void; chars: () => void; map: () => void; help: () => void; progress: () => void; wish: () => void }) {
   const root = h(`<div class="menu-wrap"><div class="esc-menu panel hex-bg">
-    <h2>เมนูอะมีบี้</h2>
+    <h2>เมนูวีต้า</h2>
     <button class="btn" data-a="resume">▶ เล่นต่อ</button>
     <button class="btn secondary" data-a="daily">🧠 ทบทวนประจำวัน ${host.learning.canDailyReview() ? '<span style="color:var(--gold)">(พร้อม!)</span>' : '(ทำแล้ววันนี้)'}</button>
     <button class="btn secondary" data-a="progress">📊 รายงานการเรียนรู้</button>

@@ -144,6 +144,7 @@
 | `PRP_GiantMushroom` | Mushroom_ Tree | Mahdi | CC BY 4.0 | [Sketchfab](https://sketchfab.com/3d-models/none-2a6a292cad734915bc6d48eb09efa430) |
 | `PRP_StandingStone` | Stylized Stone Pillar | Ngakau Blake | CC BY 4.0 | [Sketchfab](https://sketchfab.com/3d-models/none-bf6337f03be3464d8f5c113242306722) |
 | `BLD_MitosisSpire` | Medieval Watchtower House | Krystian Zem | CC BY 4.0 | [Sketchfab](https://sketchfab.com/3d-models/none-4099fd90094c400e987deb240078c38e) |
+| `PRP_Glider` | Angel wings | TopNotch Assets | Sketchfab Free Standard | [Sketchfab](https://sketchfab.com/3d-models/angel-wings-a575b36467d840be84d8f91d5074d7d4) |
 | `CHR_Alvi` | Hiiragi Yu1 ファンタジー | しーぜ | VRoid Hub · ห้ามแจกต่อ | [VRoid Hub](https://hub.vroid.com/characters/6415961155302263873/models/2417131184333170844) |
 | `CHR_Chloren` | 妖精ちゃん 森の妖精 | 田中 | VRoid Hub · ห้ามใช้เชิงพาณิชย์ | [VRoid Hub](https://hub.vroid.com/characters/2551658023389611705/models/7886204033965452427) |
 | `CHR_Hema` | エフェニ・エトワール Efffrene/ver.000 | Fou8A | VRoid Hub · ต้องระบุเครดิต | [VRoid Hub](https://hub.vroid.com/characters/7720110230278329206/models/7597316024053104803) |

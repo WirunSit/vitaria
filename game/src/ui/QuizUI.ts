@@ -115,7 +115,7 @@ export function runQuiz(opt: QuizOptions): Promise<{ score: number; total: numbe
               <div class="row">
                 ${answered
                   ? `${q.relatedCodex?.length ? '<button class="btn secondary small" id="qcodex">📖 เปิดการ์ดความรู้</button>' : ''}<button class="btn" id="qnext">${idx + 1 < total ? 'ข้อถัดไป ▶' : 'ดูผล'}</button>`
-                  : `<button class="btn secondary small" id="qhint" ${hints >= 3 ? 'disabled' : ''}>💡 ถามอะมีบี้ (${3 - hints})</button>
+                  : `<button class="btn secondary small" id="qhint" ${hints >= 3 ? 'disabled' : ''}>💡 ถามวีต้า (${3 - hints})</button>
                      <button class="btn" id="qok" ${q.type !== 'ORDER' && !selected.length ? 'disabled' : ''}>ยืนยันคำตอบ</button>`}
               </div>
             </div>
@@ -185,7 +185,7 @@ export function runQuiz(opt: QuizOptions): Promise<{ score: number; total: numbe
 
 function hintText(q: QuestionDef, level: number): string {
   if (level === 1) return `💡 ${esc(q.hint?.th ?? 'ลองนึกถึงสิ่งที่เคยเห็นในการ์ดความรู้นะ!')}`;
-  if (level === 2) return q.type === 'ORDER' ? `💡 ข้อแรกคือ "${esc(q.items![0])}"` : '💡 อะมีบี้ตัดตัวเลือกที่ผิดออกให้ 1 ข้อแล้ว!';
+  if (level === 2) return q.type === 'ORDER' ? `💡 ข้อแรกคือ "${esc(q.items![0])}"` : '💡 วีต้าตัดตัวเลือกที่ผิดออกให้ 1 ข้อแล้ว!';
   const c = q.relatedCodex?.[0] ? data.codex.get(q.relatedCodex[0]) : null;
   return c ? `📖 ${esc(c.name.th)}: ${esc(c.body.th.slice(0, 140))}...` : '💡 อ่านโจทย์อีกครั้งช้า ๆ นะ';
 }

@@ -1,7 +1,53 @@
 import * as THREE from 'three';
+import { hasModel, loadGLB } from './ModelLibrary';
+
+/** Ready-made feathered wings (Sketchfab "Angel wings", tools/model_picks.json WG-02); the painted samara pair is the fallback. */
+const MODEL = 'props/PRP_Glider.glb';
+const SPAN = 2.7;    // tip-to-tip when open (m)
+const TILT = -0.95;  // lean the (upright) wing pair back so it spreads like a glider over the shoulders
+
+/** Left/right halves of the wing model, baked into the pair's own frame with the wing roots at the origin. */
+let halves: Promise<{ geo: THREE.BufferGeometry; mat: THREE.Material | THREE.Material[] }[] | null> | null = null;
+function loadHalves() {
+  halves ??= loadGLB(MODEL).then((obj) => {
+    if (!obj) return null;
+    obj.updateMatrixWorld(true);
+    let mesh: THREE.Mesh | null = null;
+    obj.traverse((o) => { if ((o as THREE.Mesh).isMesh && !mesh) mesh = o as THREE.Mesh; });
+    if (!mesh) return null;
+    const m = mesh as THREE.Mesh;
+    const geo = m.geometry.clone().applyMatrix4(m.matrixWorld);
+    geo.computeBoundingBox();
+    const b = geo.boundingBox!;
+    const k = SPAN / (b.max.x - b.min.x);
+    // wing roots: the middle of the back edge, a little above the bottom
+    geo.translate(-(b.min.x + b.max.x) / 2, -(b.min.y + (b.max.y - b.min.y) * 0.3), -b.max.z);
+    geo.scale(k, k, k);
+    const pos = geo.attributes.position as THREE.BufferAttribute;
+    const index = geo.index ? geo.index.array : Array.from({ length: pos.count }, (_, i) => i);
+    const sides: number[][] = [[], []];
+    for (let t = 0; t < index.length / 3; t++) {
+      const cx = pos.getX(index[t * 3]) + pos.getX(index[t * 3 + 1]) + pos.getX(index[t * 3 + 2]);
+      sides[cx < 0 ? 0 : 1].push(index[t * 3], index[t * 3 + 1], index[t * 3 + 2]);
+    }
+    // toon-shaded like the rest of the game (the file's PBR material reads dark grey without an environment map);
+    // crisp feather cut-outs instead of blended transparency (no sorting trouble)
+    const mat = (Array.isArray(m.material) ? m.material : [m.material]).map((x) => new THREE.MeshToonMaterial({
+      map: (x as THREE.MeshStandardMaterial).map, color: (x as THREE.MeshStandardMaterial).color, alphaTest: 0.45, side: THREE.DoubleSide,
+    }));
+    return sides.map((idx) => {
+      const g = new THREE.BufferGeometry();
+      for (const [n, a] of Object.entries(geo.attributes)) g.setAttribute(n, a);
+      g.setIndex(idx);
+      g.computeBoundingSphere();
+      return { geo: g, mat: mat.length === 1 ? mat[0] : mat };
+    });
+  });
+  return halves;
+}
 
 /**
- * The "samara wings" glider: a pair of maple-seed wings (a real double samara is two winged seeds joined at the
+ * The "samara wings" glider (fallback): a pair of maple-seed wings (a real double samara is two winged seeds joined at the
  * nut) worn on the back. Each wing is a gently curved card with a painted texture — the seed, the thick leading
  * vein and the fine veins fanning out across a thin, slightly see-through membrane — and it unfolds from the
  * back when gliding starts and folds away when it ends.
@@ -124,6 +170,8 @@ export class SamaraGlider {
   /** add this to the character's back (it is positioned at the mount point by the caller) */
   readonly root = new THREE.Group();
   private wings: THREE.Group[] = [];
+  /** true once the ready-made feathered wings replaced the painted samara pair */
+  private feathered = false;
   private open = 0;
   private t = 0;
 
@@ -143,6 +191,24 @@ export class SamaraGlider {
     }
     this.root.scale.setScalar(scale);
     this.root.visible = false;
+    if (hasModel(MODEL)) void loadHalves().then((h) => { if (h) this.useModel(h); });
+  }
+
+  private useModel(h: { geo: THREE.BufferGeometry; mat: THREE.Material | THREE.Material[] }[]) {
+    for (const w of this.wings) w.removeFromParent();
+    const pair = new THREE.Group();
+    pair.rotation.x = TILT;
+    this.root.add(pair);
+    this.wings = h.map((half, i) => {
+      const pivot = new THREE.Group();
+      const mesh = new THREE.Mesh(half.geo, half.mat);
+      mesh.castShadow = true;
+      pivot.add(mesh);
+      pivot.userData.side = i === 0 ? -1 : 1;
+      pair.add(pivot);
+      return pivot;
+    });
+    this.feathered = true;
   }
 
   /** `gliding` = whether the wings should be out. Unfolds/folds smoothly and flexes a little in the wind. */
@@ -155,6 +221,12 @@ export class SamaraGlider {
     for (const w of this.wings) {
       const s = w.userData.side as number;
       const flex = Math.sin(this.t * 7 + s) * 0.03 * k;
+      if (this.feathered) {
+        // folded: each wing swept back along the body · open: spread out, tips lifting a little in the wind
+        w.rotation.set(0, s * THREE.MathUtils.lerp(1.3, 0, k), s * flex);
+        w.scale.setScalar(THREE.MathUtils.lerp(0.3, 1, k));
+        continue;
+      }
       // folded: wings hang down along the back · open: spread wide with a slight upward V (dihedral) and sweep
       w.rotation.set(0, s * 0.12 * k, s * (THREE.MathUtils.lerp(-1.35, 0.38, k) + flex));
       w.scale.setScalar(THREE.MathUtils.lerp(0.35, 1, k));
