@@ -8,6 +8,7 @@ import { fitToHeight, hasModel, loadVRM } from './ModelLibrary';
 import { holdQuat, idleAim, WeaponSlot } from './WeaponModels';
 import { clipSetFor, loadMixamoClips, type AnimKey } from './MixamoAnims';
 import { WeaponTrail } from './WeaponTrail';
+import { SamaraGlider } from './Glider';
 
 /**
  * VRoid (.vrm) character — same interface as the placeholder, so the rest of the game doesn't care which one it gets.
@@ -23,7 +24,7 @@ export class VrmCharacterModel implements CharModel {
   private catalyst: THREE.Object3D | null = null;
   private weaponObj: THREE.Object3D | null = null;
   private slot: WeaponSlot | null = null;
-  private glider = new THREE.Group();
+  private glider = new SamaraGlider();
   private pose: Partial<Record<VRMHumanBoneName, THREE.Euler>> = {};
   private mixer: THREE.AnimationMixer | null = null;
   private actions = new Map<AnimKey, THREE.AnimationAction>();
@@ -162,20 +163,15 @@ export class VrmCharacterModel implements CharModel {
     this.slot = new WeaponSlot(w, hand, [g], (o) => o.quaternion.copy(q));
   }
 
+  /** Samara wings on the back: hung on the chest bone so they follow the body's lean. */
   private buildGlider() {
-    const mat = new THREE.MeshToonMaterial({ color: 0xe8d39a, side: THREE.DoubleSide, transparent: true, opacity: 0.92 });
-    for (const sx of [-1, 1]) {
-      const shape = new THREE.Shape();
-      shape.moveTo(0, 0);
-      shape.bezierCurveTo(0.3 * sx, 0.25, 1.1 * sx, 0.2, 1.3 * sx, 0.05);
-      shape.bezierCurveTo(1.0 * sx, -0.12, 0.3 * sx, -0.1, 0, 0);
-      const wing = new THREE.Mesh(new THREE.ShapeGeometry(shape), mat);
-      wing.rotation.x = -Math.PI / 2;
-      this.glider.add(wing);
-    }
-    this.glider.position.set(0, 1.95, -0.05);
-    this.glider.visible = false;
-    this.root.add(this.glider);
+    const H = this.vrm.humanoid;
+    const chest = H.getRawBoneNode('upperChest') ?? H.getRawBoneNode('chest') ?? H.getRawBoneNode('spine');
+    this.root.updateMatrixWorld(true);
+    const at = chest ? chest.getWorldPosition(new THREE.Vector3()) : new THREE.Vector3(0, 1.2, 0);
+    this.glider.root.position.set(0, at.y + 0.04, at.z - 0.15);
+    this.root.add(this.glider.root);
+    if (chest) { this.root.updateMatrixWorld(true); chest.attach(this.glider.root); }
   }
 
   private set(name: VRMHumanBoneName, x: number, y: number, z: number, k: number) {
@@ -195,7 +191,7 @@ export class VrmCharacterModel implements CharModel {
     const sw = Math.sin(this.phase);
     const amp = moving ? Math.min(1, s.speed) * 0.7 : 0;
     const k = Math.min(1, dt * 14);
-    this.glider.visible = s.glide;
+    this.glider.update(dt, s.glide);
     this.combatT = s.attackT >= 0 ? 4 : Math.max(0, this.combatT - dt);
     this.swinging = s.attackT >= 0;
     const clipped = this.animate(dt, s);

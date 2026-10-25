@@ -6,6 +6,7 @@ import { fitToHeight, hasModel, loadVRM } from '../models/ModelLibrary';
 import { loadMixamoClips } from '../models/MixamoAnims';
 import { toon, glow, addOutline } from '../world/Materials';
 import { holdQuat, idleAim, WeaponSlot } from '../models/WeaponModels';
+import { SamaraGlider } from '../models/Glider';
 
 export interface AnimState {
   speed: number;      // 0 idle, 1 run, 1.6 sprint
@@ -43,7 +44,7 @@ export class CharacterModel implements CharModel {
   private armL = new THREE.Group();
   private armR = new THREE.Group();
   private head = new THREE.Group();
-  private glider = new THREE.Group();
+  private glider = new SamaraGlider(0.85);
   private catalyst: THREE.Object3D | null = null;
   private weaponObj: THREE.Object3D | null = null;
   private slot: WeaponSlot | null = null;
@@ -303,21 +304,9 @@ export class CharacterModel implements CharModel {
   setWeapon(id: string | null) { this.slot?.set(id); }
 
   private buildGlider() {
-    const wingMat = new THREE.MeshToonMaterial({ color: 0xe8d39a, side: THREE.DoubleSide, transparent: true, opacity: 0.92 });
-    for (const sx of [-1, 1]) {
-      const shape = new THREE.Shape();
-      shape.moveTo(0, 0);
-      shape.bezierCurveTo(0.3 * sx, 0.25, 1.1 * sx, 0.2, 1.3 * sx, 0.05);
-      shape.bezierCurveTo(1.0 * sx, -0.12, 0.3 * sx, -0.1, 0, 0);
-      const wing = new THREE.Mesh(new THREE.ShapeGeometry(shape), wingMat);
-      wing.rotation.x = -Math.PI / 2;
-      this.glider.add(wing);
-    }
-    const seed = new THREE.Mesh(new THREE.SphereGeometry(0.1, 8, 6), toon('#8a6243'));
-    this.glider.add(seed);
-    this.glider.position.set(0, 1.95, -0.05);
-    this.glider.visible = false;
-    this.body.add(this.glider);
+    // on the back, at shoulder-blade height
+    this.glider.root.position.set(0, 1.05, -0.2);
+    this.body.add(this.glider.root);
   }
 
   update(dt: number, s: AnimState) {
@@ -327,7 +316,7 @@ export class CharacterModel implements CharModel {
     const sw = Math.sin(this.phase);
     const amp = moving ? Math.min(1, s.speed) * 0.75 : 0;
 
-    this.glider.visible = s.glide;
+    this.glider.update(dt, s.glide);
     let lx = sw * amp, rx = -sw * amp;
     let alx = -sw * amp * 0.8, arx = sw * amp * 0.8;
     let alz = -0.12, arz = 0.12;
