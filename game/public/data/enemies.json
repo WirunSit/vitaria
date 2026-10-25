@@ -1,0 +1,510 @@
+[
+  {
+    "id": "EN_BAC_COCCI",
+    "name": {
+      "th": "ค็อกคัสสไลม์",
+      "en": "Coccus Slime"
+    },
+    "family": "BACTERIA",
+    "tags": [
+      "bacteria_slime",
+      "bacteria",
+      "prokaryote"
+    ],
+    "kind": "coccus",
+    "base": {
+      "hp": 70,
+      "atk": 45,
+      "def": 505
+    },
+    "speed": 3.2,
+    "codexId": "CDX_BACTERIA_COCCI",
+    "model": "ENM_CoccusSlime"
+  },
+  {
+    "id": "EN_BAC_BACIL",
+    "name": {
+      "th": "บาซิลลัสสไลม์",
+      "en": "Bacillus Slime"
+    },
+    "family": "BACTERIA",
+    "tags": [
+      "bacteria_slime",
+      "bacteria",
+      "prokaryote"
+    ],
+    "kind": "bacillus",
+    "base": {
+      "hp": 90,
+      "atk": 55,
+      "def": 505
+    },
+    "speed": 3.6,
+    "codexId": "CDX_BACTERIA_BACILLUS",
+    "model": "ENM_BacillusSlime"
+  },
+  {
+    "id": "EN_PHAGE_S",
+    "name": {
+      "th": "เฟจโดรน",
+      "en": "Phage Drone"
+    },
+    "family": "VIRUS",
+    "tags": [
+      "virus",
+      "phage"
+    ],
+    "kind": "phage",
+    "base": {
+      "hp": 60,
+      "atk": 40,
+      "def": 505
+    },
+    "speed": 4.5,
+    "codexId": "CDX_PHAGE",
+    "model": "ENM_PhageDrone"
+  },
+  {
+    "id": "EN_DUMMY",
+    "name": {
+      "th": "หุ่นฝึก",
+      "en": "Training Dummy"
+    },
+    "family": "OBJECT",
+    "tags": [
+      "dummy"
+    ],
+    "kind": "dummy",
+    "base": {
+      "hp": 99999,
+      "atk": 0,
+      "def": 505
+    },
+    "speed": 0,
+    "codexId": ""
+  },
+  {
+    "id": "EN_BOSS_KING",
+    "name": {
+      "th": "ราชาแบคทีเรีย",
+      "en": "Bacteria King"
+    },
+    "family": "BACTERIA",
+    "tags": [
+      "bacteria",
+      "boss",
+      "prokaryote"
+    ],
+    "kind": "boss_king",
+    "base": {
+      "hp": 1100,
+      "atk": 110,
+      "def": 505
+    },
+    "speed": 2.4,
+    "codexId": "CDX_BACTERIA_KING",
+    "boss": {
+      "title": {
+        "th": "ผู้ครองอาณานิคมแห่งหุบเซลล์"
+      },
+      "shields": [
+        0.6,
+        0.25
+      ],
+      "quizSetId": "QZ_BOSS_KING"
+    },
+    "model": "BOS_BacteriaKing"
+  },
+  {
+    "id": "EN_BT_CLUB",
+    "name": {
+      "th": "บลายต์ทรูปเปอร์ – นักรบ",
+      "en": "Blight Trooper"
+    },
+    "family": "BLIGHT",
+    "tags": [
+      "blight",
+      "trooper"
+    ],
+    "kind": "trooper",
+    "base": {
+      "hp": 120,
+      "atk": 60,
+      "def": 505
+    },
+    "speed": 3.0,
+    "codexId": "CDX_BLIGHT_TROOPER",
+    "model": "ENM_BlightTrooper"
+  },
+  {
+    "id": "EN_SYN_HEATER",
+    "name": {
+      "th": "เครื่องทำความร้อนซินดิเคต",
+      "en": "Syndicate Heater"
+    },
+    "family": "MACHINE",
+    "tags": [
+      "machine",
+      "syndicate"
+    ],
+    "kind": "machine",
+    "base": {
+      "hp": 160,
+      "atk": 55,
+      "def": 505
+    },
+    "speed": 0,
+    "codexId": "CDX_ENZYME",
+    "model": "ENM_SyndicateHeater"
+  },
+  {
+    "id": "EN_TUMOR",
+    "name": {
+      "th": "ก้อนเนื้องอก",
+      "en": "Tumor Node"
+    },
+    "family": "BLIGHT",
+    "tags": [
+      "tumor"
+    ],
+    "kind": "tumor",
+    "base": {
+      "hp": 45,
+      "atk": 0,
+      "def": 505
+    },
+    "speed": 0,
+    "codexId": "CDX_CANCER",
+    "model": "ENM_TumorNode"
+  },
+  {
+    "id": "EN_BOSS_GOLEM",
+    "name": {
+      "th": "โกเลมมะเร็ง",
+      "en": "Carcinoma Golem"
+    },
+    "family": "BLIGHT",
+    "tags": [
+      "blight",
+      "boss",
+      "golem"
+    ],
+    "kind": "boss_golem",
+    "base": {
+      "hp": 1800,
+      "atk": 120,
+      "def": 505
+    },
+    "speed": 2.2,
+    "codexId": "CDX_CARCINOMA_GOLEM",
+    "boss": {
+      "title": {
+        "th": "เซลล์ที่ไม่ยอมหยุดแบ่งตัว"
+      },
+      "shields": [
+        0.7,
+        0.35
+      ],
+      "quizSetId": "QZ_GOLEM_1",
+      "quizSetIds": [
+        "QZ_GOLEM_1",
+        "QZ_GOLEM_2"
+      ]
+    },
+    "model": "BOS_CarcinomaGolem"
+  },
+  {
+    "id": "EN_SYN_DOC",
+    "name": {
+      "th": "นักวิจัยซินดิเคต – เทคนิคตัดต่อ",
+      "en": "Syndicate Gene-Splicer"
+    },
+    "family": "SYNDICATE",
+    "tags": [
+      "syndicate",
+      "human"
+    ],
+    "kind": "gunner",
+    "base": {
+      "hp": 130,
+      "atk": 65,
+      "def": 505
+    },
+    "speed": 3.2,
+    "codexId": "CDX_SYN_DOC",
+    "model": "ENM_GeneSplicer"
+  },
+  {
+    "id": "EN_BOSS_CHIMERA",
+    "name": {
+      "th": "ไคเมร่าบีสต์",
+      "en": "Chimera Beast"
+    },
+    "family": "SYNDICATE",
+    "tags": [
+      "syndicate",
+      "boss",
+      "chimera"
+    ],
+    "kind": "boss_chimera",
+    "base": {
+      "hp": 2000,
+      "atk": 130,
+      "def": 505
+    },
+    "speed": 3,
+    "codexId": "CDX_CHIMERA_BEAST",
+    "boss": {
+      "title": {
+        "th": "สิ่งมีชีวิตที่ไม่ควรเกิด"
+      },
+      "shields": [
+        0.66,
+        0.33
+      ],
+      "quizSetId": "QZ_CHIMERA_1",
+      "quizSetIds": [
+        "QZ_CHIMERA_1",
+        "QZ_CHIMERA_2"
+      ]
+    },
+    "model": "BOS_ChimeraBeast"
+  },
+  {
+    "id": "EN_SPORE_MAGE",
+    "name": {
+      "th": "สปอร์เมจ",
+      "en": "Spore Mage"
+    },
+    "family": "FUNGI",
+    "tags": [
+      "fungi",
+      "spore"
+    ],
+    "kind": "caster",
+    "base": {
+      "hp": 110,
+      "atk": 70,
+      "def": 505
+    },
+    "speed": 2.8,
+    "codexId": "CDX_SPORE_MAGE",
+    "model": "ENM_SporeMage"
+  },
+  {
+    "id": "EN_BOSS_VIRUS",
+    "name": {
+      "th": "พายุไวรัส",
+      "en": "Viral Tempest"
+    },
+    "family": "VIRUS",
+    "tags": [
+      "virus",
+      "boss"
+    ],
+    "kind": "boss_virus",
+    "base": {
+      "hp": 2200,
+      "atk": 140,
+      "def": 505
+    },
+    "speed": 2.4,
+    "codexId": "CDX_VIRAL_TEMPEST",
+    "boss": {
+      "title": {
+        "th": "ผู้กลืนกินความหลากหลาย"
+      },
+      "shields": [
+        0.66,
+        0.33
+      ],
+      "quizSetId": "QZ_TEMPEST_1",
+      "quizSetIds": [
+        "QZ_TEMPEST_1",
+        "QZ_TEMPEST_2"
+      ]
+    },
+    "model": "BOS_ViralTempest"
+  },
+  {
+    "id": "EN_BOSS_SPORE",
+    "name": {
+      "th": "ราชินีสปอร์",
+      "en": "Spore Matriarch"
+    },
+    "family": "FUNGI",
+    "tags": [
+      "fungi",
+      "spore",
+      "boss"
+    ],
+    "kind": "boss_spore",
+    "base": {
+      "hp": 2400,
+      "atk": 150,
+      "def": 505
+    },
+    "speed": 2.2,
+    "codexId": "CDX_SPORE_MATRIARCH",
+    "boss": {
+      "title": {
+        "th": "ปรสิตแห่งรากไม้"
+      },
+      "shields": [
+        0.66,
+        0.33
+      ],
+      "quizSetId": "QZ_SPORE_1",
+      "quizSetIds": [
+        "QZ_SPORE_1",
+        "QZ_SPORE_2"
+      ]
+    },
+    "model": "BOS_SporeMatriarch"
+  },
+  {
+    "id": "EN_BOSS_CYANO",
+    "name": {
+      "th": "ไซยาโนคอร์",
+      "en": "Cyano-Core"
+    },
+    "family": "MACHINE",
+    "tags": [
+      "machine",
+      "syndicate",
+      "boss"
+    ],
+    "kind": "boss_cyano",
+    "base": {
+      "hp": 2600,
+      "atk": 160,
+      "def": 505
+    },
+    "speed": 1.8,
+    "codexId": "CDX_CYANO_CORE",
+    "boss": {
+      "title": {
+        "th": "ตัวยับยั้งลูกโซ่อิเล็กตรอน"
+      },
+      "shields": [
+        0.66,
+        0.33
+      ],
+      "quizSetId": "QZ_CYANO_1",
+      "quizSetIds": [
+        "QZ_CYANO_1",
+        "QZ_CYANO_2"
+      ]
+    },
+    "model": "BOS_CyanoCore"
+  },
+  {
+    "id": "EN_BOSS_SUPERBUG",
+    "name": {
+      "th": "ซูเปอร์บั๊ก",
+      "en": "Superbug"
+    },
+    "family": "BACTERIA",
+    "tags": [
+      "bacteria",
+      "boss"
+    ],
+    "kind": "boss_superbug",
+    "base": {
+      "hp": 2800,
+      "atk": 170,
+      "def": 505
+    },
+    "speed": 1.6,
+    "codexId": "CDX_SUPERBUG",
+    "boss": {
+      "title": {
+        "th": "โคโลนีเชื้อดื้อยา"
+      },
+      "shields": [
+        0.66,
+        0.33
+      ],
+      "quizSetId": "QZ_SUPERBUG_1",
+      "quizSetIds": [
+        "QZ_SUPERBUG_1",
+        "QZ_SUPERBUG_2"
+      ]
+    },
+    "model": "BOS_Superbug"
+  },
+  {
+    "id": "EN_BOSS_MEDUSA",
+    "name": {
+      "th": "เมดูซ่าพิษประสาท",
+      "en": "Neuro-Medusa"
+    },
+    "family": "BLIGHT",
+    "tags": [
+      "blight",
+      "boss"
+    ],
+    "kind": "boss_medusa",
+    "base": {
+      "hp": 3000,
+      "atk": 180,
+      "def": 505
+    },
+    "speed": 1.6,
+    "codexId": "CDX_NEURO_MEDUSA",
+    "boss": {
+      "title": {
+        "th": "ผู้ตัดขาดสัญญาณ"
+      },
+      "shields": [
+        0.66,
+        0.33
+      ],
+      "quizSetId": "QZ_MEDUSA_1",
+      "quizSetIds": [
+        "QZ_MEDUSA_1",
+        "QZ_MEDUSA_2"
+      ]
+    },
+    "model": "BOS_NeuroMedusa",
+    "modelFlip": true,
+    "modelLift": 1.2
+  },
+  {
+    "id": "EN_BOSS_HERALD",
+    "name": {
+      "th": "ผู้ประกาศเอนโทรปี",
+      "en": "Entropy Herald"
+    },
+    "family": "BLIGHT",
+    "tags": [
+      "blight",
+      "boss"
+    ],
+    "kind": "boss_herald",
+    "base": {
+      "hp": 3600,
+      "atk": 200,
+      "def": 505
+    },
+    "speed": 2.4,
+    "codexId": "CDX_ENTROPY_HERALD",
+    "boss": {
+      "title": {
+        "th": "ผู้นำคณะเอนโทรปี"
+      },
+      "shields": [
+        0.75,
+        0.5,
+        0.25
+      ],
+      "quizSetId": "QZ_HERALD_1",
+      "quizSetIds": [
+        "QZ_HERALD_1",
+        "QZ_HERALD_2",
+        "QZ_HERALD_3"
+      ]
+    },
+    "model": "BOS_EntropyHerald"
+  }
+]

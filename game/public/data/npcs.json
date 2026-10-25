@@ -1,0 +1,926 @@
+[
+  {
+    "id": "NPC_MITORA",
+    "name": {
+      "th": "ไมโทร่า"
+    },
+    "title": {
+      "th": "นักเรียนสถาบันเซลลาเรีย"
+    },
+    "location": "LOC_MITORA",
+    "model": "char",
+    "charId": "MITORA",
+    "showFlag": "mitora_met",
+    "hideFlag": "mitora_joined"
+  },
+  {
+    "id": "NPC_ALVI",
+    "name": {
+      "th": "อัลวี"
+    },
+    "title": {
+      "th": "นักเรียนแลกเปลี่ยนจากซีเฟอเรีย"
+    },
+    "location": "LOC_ALVI_HILL",
+    "model": "char",
+    "charId": "ALVI",
+    "showFlag": "alvi_visible",
+    "hideFlag": "alvi_joined"
+  },
+  {
+    "id": "NPC_LYSO",
+    "name": {
+      "th": "ศาสตราจารย์ไลโซ"
+    },
+    "title": {
+      "th": "อาจารย์สถาบันเซลลาเรีย"
+    },
+    "location": "LOC_GATE_FRONT",
+    "model": "human",
+    "showFlag": "lyso_visible",
+    "appearance": {
+      "skin": "#f1d3bd",
+      "hair": "#a8a8a8",
+      "eyes": "#3a4a6a",
+      "outfit": "#f4f4f4",
+      "outfit2": "#5a6278",
+      "accent": "#7fb6e8",
+      "hairStyle": "short",
+      "height": 1.05,
+      "coat": true
+    },
+    "talkDialogue": "DLG_LYSO_IDLE",
+    "art": "ProfLyso",
+    "hideFlag": "ch1_started"
+  },
+  {
+    "id": "NPC_CHLOREN",
+    "name": {
+      "th": "คลอเรน"
+    },
+    "title": {
+      "th": "ผู้ช่วยเรือนกระจก"
+    },
+    "location": "LOC_GATE_FRONT",
+    "model": "char",
+    "charId": "CHLOREN",
+    "showFlag": "lyso_visible",
+    "hideFlag": "chloren_joined"
+  },
+  {
+    "id": "NPC_LYSO_ACAD",
+    "name": {
+      "th": "ศาสตราจารย์ไลโซ"
+    },
+    "title": {
+      "th": "อาจารย์สถาบันเซลลาเรีย"
+    },
+    "location": "LOC_ACADEMY",
+    "model": "human",
+    "appearance": {
+      "skin": "#f1d3bd",
+      "hair": "#a8a8a8",
+      "eyes": "#3a4a6a",
+      "outfit": "#f4f4f4",
+      "outfit2": "#5a6278",
+      "accent": "#7fb6e8",
+      "hairStyle": "short",
+      "height": 1.05,
+      "coat": true
+    },
+    "art": "ProfLyso",
+    "talkDialogue": "DLG_LYSO_IDLE",
+    "showFlag": "ch1_started"
+  },
+  {
+    "id": "NPC_RIBO",
+    "name": {
+      "th": "ไรโบ"
+    },
+    "title": {
+      "th": "เด็กฝึกงาน · ครัวไรโบโซม"
+    },
+    "location": "LOC_KITCHEN",
+    "model": "human",
+    "appearance": {
+      "skin": "#f3d6c0",
+      "hair": "#6a4a3a",
+      "eyes": "#3a4a6a",
+      "outfit": "#e8553a",
+      "outfit2": "#3b5fb0",
+      "accent": "#e8c468",
+      "hairStyle": "short",
+      "height": 0.8
+    },
+    "art": "Ribo",
+    "talkDialogue": "DLG_RIBO_IDLE"
+  },
+  {
+    "id": "NPC_GOLGI",
+    "name": {
+      "th": "ป้ากอลจี"
+    },
+    "title": {
+      "th": "ไปรษณีย์กอลจิ"
+    },
+    "location": "LOC_POST",
+    "model": "human",
+    "appearance": {
+      "skin": "#f0cdb0",
+      "hair": "#c8763a",
+      "eyes": "#5a3a2a",
+      "outfit": "#f2c45a",
+      "outfit2": "#8a6243",
+      "accent": "#e8553a",
+      "hairStyle": "braids",
+      "height": 0.98,
+      "skirt": true
+    },
+    "art": "AuntieGolgi",
+    "talkDialogue": "DLG_GOLGI_IDLE"
+  },
+  {
+    "id": "NPC_UNCLE_ER",
+    "name": {
+      "th": "ลุงอีอาร์"
+    },
+    "title": {
+      "th": "ช่างตีเหล็ก · ร่างแหเอนโดพลาซึม"
+    },
+    "location": "LOC_FORGE",
+    "model": "human",
+    "appearance": {
+      "skin": "#d9a88a",
+      "hair": "#3a2a20",
+      "eyes": "#3a2a20",
+      "outfit": "#7aa8e8",
+      "outfit2": "#5a4636",
+      "accent": "#e8c468",
+      "hairStyle": "short",
+      "height": 1.12
+    },
+    "art": "UncleER",
+    "talkDialogue": "DLG_ER_IDLE"
+  },
+  {
+    "id": "NPC_CHIMERA",
+    "name": {
+      "th": "ดร.ไคเมร่า"
+    },
+    "title": {
+      "th": "ผู้บริหารซินดิเคต ซินเทติกา"
+    },
+    "location": "LOC_SPIRE",
+    "model": "human",
+    "appearance": {
+      "skin": "#e8d0c0",
+      "hair": "#2a2a30",
+      "eyes": "#7aff9a",
+      "outfit": "#1e1e26",
+      "outfit2": "#3a3a48",
+      "accent": "#7aff9a",
+      "hairStyle": "short",
+      "height": 1.08,
+      "coat": true,
+      "hat": "goggles"
+    },
+    "art": "DrChimera",
+    "showFlag": "chimera_visible",
+    "hideFlag": "chimera_gone"
+  },
+  {
+    "id": "NPC_HOOKIA",
+    "name": {
+      "th": "ปราชญ์ฮูเคีย"
+    },
+    "title": {
+      "th": "ปราชญ์แห่ง Geo · ผู้อำนวยการสถาบัน"
+    },
+    "location": "LOC_SPIRE",
+    "model": "human",
+    "appearance": {
+      "skin": "#e8c8a8",
+      "hair": "#d9a03a",
+      "eyes": "#5a4a2a",
+      "outfit": "#8a6243",
+      "outfit2": "#e8b54a",
+      "accent": "#e8c468",
+      "hairStyle": "long",
+      "height": 1.0,
+      "cape": true,
+      "hat": "monocle",
+      "skirt": true
+    },
+    "art": "SageHookia",
+    "talkDialogue": "DLG_HOOKIA_IDLE",
+    "showFlag": "hookia_visible"
+  },
+  {
+    "id": "NPC_HELIX",
+    "name": {
+      "th": "เฮลิกซ์"
+    },
+    "title": {
+      "th": "บรรณารักษ์แห่งรหัสชีวิต"
+    },
+    "location": "LOC_GEN_PLAZA",
+    "model": "char",
+    "charId": "HELIX",
+    "showFlag": "genovia_unlocked",
+    "hideFlag": "library_open"
+  },
+  {
+    "id": "NPC_HELIX_LIB",
+    "name": {
+      "th": "เฮลิกซ์"
+    },
+    "title": {
+      "th": "บรรณารักษ์แห่งรหัสชีวิต"
+    },
+    "location": "LOC_GEN_LIBRARY",
+    "model": "char",
+    "charId": "HELIX",
+    "talkDialogue": "DLG_HELIX_IDLE",
+    "showFlag": "library_open"
+  },
+  {
+    "id": "NPC_MENDELION",
+    "name": {
+      "th": "ปราชญ์เมนเดลิออน"
+    },
+    "title": {
+      "th": "ปราชญ์แห่ง Cryo · ผู้ปลูกถั่วลันเตา"
+    },
+    "location": "LOC_GEN_GREENHOUSE",
+    "model": "human",
+    "appearance": {
+      "skin": "#f0d0b8",
+      "hair": "#e8e8e8",
+      "eyes": "#4a6a8a",
+      "outfit": "#5a7a5a",
+      "outfit2": "#3a4a3a",
+      "accent": "#a060d0",
+      "hairStyle": "short",
+      "height": 0.98,
+      "coat": true,
+      "hat": "straw"
+    },
+    "talkDialogue": "DLG_MENDEL_IDLE",
+    "showFlag": "genovia_unlocked",
+    "art": "SageMendelion"
+  },
+  {
+    "id": "NPC_MENDELION_FORT",
+    "name": {
+      "th": "ปราชญ์เมนเดลิออน"
+    },
+    "title": {
+      "th": "ปราชญ์แห่ง Cryo"
+    },
+    "location": "LOC_GEN_FORT",
+    "model": "human",
+    "appearance": {
+      "skin": "#f0d0b8",
+      "hair": "#e8e8e8",
+      "eyes": "#4a6a8a",
+      "outfit": "#5a7a5a",
+      "outfit2": "#3a4a3a",
+      "accent": "#a060d0",
+      "hairStyle": "short",
+      "height": 0.98,
+      "coat": true,
+      "hat": "straw"
+    },
+    "talkDialogue": "DLG_MENDEL_IDLE",
+    "showFlag": "mendelion_fort",
+    "art": "SageMendelion"
+  },
+  {
+    "id": "NPC_VIL_ABO",
+    "name": {
+      "th": "คุณแม่โรซา"
+    },
+    "title": {
+      "th": "ชาวบ้านหมู่บ้านอัลลีล"
+    },
+    "location": "LOC_VIL_1",
+    "model": "human",
+    "appearance": {
+      "skin": "#f0cdb0",
+      "hair": "#8a4a3a",
+      "eyes": "#4a3a2a",
+      "outfit": "#c85a6a",
+      "outfit2": "#f4e8d8",
+      "accent": "#e8c468",
+      "hairStyle": "long",
+      "height": 0.98,
+      "skirt": true
+    },
+    "talkDialogue": "DLG_VIL_ABO_IDLE",
+    "showFlag": "genovia_unlocked",
+    "art": "VillagerRosa"
+  },
+  {
+    "id": "NPC_VIL_CB",
+    "name": {
+      "th": "เด็กชายเลนซ์"
+    },
+    "title": {
+      "th": "ชาวบ้านหมู่บ้านอัลลีล"
+    },
+    "location": "LOC_VIL_2",
+    "model": "human",
+    "appearance": {
+      "skin": "#f3d6c0",
+      "hair": "#e8c468",
+      "eyes": "#3a6a3a",
+      "outfit": "#3a8ad8",
+      "outfit2": "#5a4636",
+      "accent": "#e8553a",
+      "hairStyle": "fluffy",
+      "height": 0.78
+    },
+    "talkDialogue": "DLG_VIL_CB_IDLE",
+    "showFlag": "genovia_unlocked",
+    "art": "VillagerLens"
+  },
+  {
+    "id": "NPC_VIL_DIMPLE",
+    "name": {
+      "th": "ลุงฟอสส์"
+    },
+    "title": {
+      "th": "ชาวนาหมู่บ้านอัลลีล"
+    },
+    "location": "LOC_VIL_3",
+    "model": "human",
+    "appearance": {
+      "skin": "#d9a88a",
+      "hair": "#5a4a3a",
+      "eyes": "#3a2a20",
+      "outfit": "#6a8a4a",
+      "outfit2": "#5a4636",
+      "accent": "#e8c468",
+      "hairStyle": "short",
+      "height": 1.06,
+      "hat": "straw"
+    },
+    "talkDialogue": "DLG_VIL_DIMPLE_IDLE",
+    "showFlag": "genovia_unlocked",
+    "art": "VillagerFoss"
+  },
+  {
+    "id": "NPC_CHIMERA2",
+    "name": {
+      "th": "ดร.ไคเมร่า"
+    },
+    "title": {
+      "th": "ผู้บริหารซินดิเคต ซินเทติกา"
+    },
+    "location": "LOC_GEN_FORT",
+    "model": "human",
+    "appearance": {
+      "skin": "#e8d0c0",
+      "hair": "#2a2a30",
+      "eyes": "#7aff9a",
+      "outfit": "#1e1e26",
+      "outfit2": "#3a3a48",
+      "accent": "#7aff9a",
+      "hairStyle": "short",
+      "height": 1.08,
+      "coat": true,
+      "hat": "goggles"
+    },
+    "art": "DrChimera",
+    "showFlag": "chimera2_visible",
+    "hideFlag": "chimera2_gone"
+  },
+  {
+    "id": "NPC_DARWYN",
+    "name": {
+      "th": "กัปตันดาร์วิน"
+    },
+    "title": {
+      "th": "ปราชญ์แห่ง Anemo · กัปตันเรือบีเกิล"
+    },
+    "location": "LOC_ZEP_DARWYN",
+    "model": "human",
+    "appearance": {
+      "skin": "#ecc8a8",
+      "hair": "#c8b8a0",
+      "eyes": "#3a5a7a",
+      "outfit": "#2a4a7a",
+      "outfit2": "#e8dcc4",
+      "accent": "#e8c468",
+      "hairStyle": "short",
+      "height": 1.1,
+      "coat": true,
+      "hat": "straw"
+    },
+    "art": "SageDarwyn",
+    "talkDialogue": "DLG_DARWYN_IDLE",
+    "showFlag": "zepheria_unlocked"
+  },
+  {
+    "id": "NPC_DARWYN_FADE",
+    "name": {
+      "th": "กัปตันดาร์วิน"
+    },
+    "title": {
+      "th": "ปราชญ์แห่ง Anemo"
+    },
+    "location": "LOC_ZEP_FADE",
+    "model": "human",
+    "appearance": {
+      "skin": "#ecc8a8",
+      "hair": "#c8b8a0",
+      "eyes": "#3a5a7a",
+      "outfit": "#2a4a7a",
+      "outfit2": "#e8dcc4",
+      "accent": "#e8c468",
+      "hairStyle": "short",
+      "height": 1.1,
+      "coat": true,
+      "hat": "straw"
+    },
+    "art": "SageDarwyn",
+    "talkDialogue": "DLG_DARWYN_IDLE",
+    "showFlag": "zep_restored"
+  },
+  {
+    "id": "NPC_GRANNY",
+    "name": {
+      "th": "ยายเซฟีรา"
+    },
+    "title": {
+      "th": "ผู้เฒ่าแห่งท่าเรือลม · ยายของอัลวี"
+    },
+    "location": "LOC_ZEP_GRANNY",
+    "model": "human",
+    "appearance": {
+      "skin": "#ecd0b8",
+      "hair": "#f0f0f0",
+      "eyes": "#5a8a7a",
+      "outfit": "#7ad0b0",
+      "outfit2": "#f4efe2",
+      "accent": "#e8c468",
+      "hairStyle": "braids",
+      "height": 0.92,
+      "skirt": true
+    },
+    "art": "GrannyZephyra",
+    "talkDialogue": "DLG_GRANNY_IDLE",
+    "showFlag": "zepheria_unlocked"
+  },
+  {
+    "id": "NPC_RANGER",
+    "name": {
+      "th": "เรนเจอร์ไลลา"
+    },
+    "title": {
+      "th": "ผู้พิทักษ์เกาะที่กำลังจางหาย"
+    },
+    "location": "LOC_ZEP_RANGER",
+    "model": "human",
+    "appearance": {
+      "skin": "#d9a88a",
+      "hair": "#4a3a2a",
+      "eyes": "#3a5a3a",
+      "outfit": "#5a7a4a",
+      "outfit2": "#8a6243",
+      "accent": "#e8c468",
+      "hairStyle": "ponytail",
+      "height": 1.0,
+      "hat": "goggles"
+    },
+    "art": "RangerLila",
+    "talkDialogue": "DLG_RANGER_IDLE",
+    "showFlag": "zepheria_unlocked"
+  },
+  {
+    "id": "NPC_LINNARA",
+    "name": {
+      "th": "ปราชญ์ลินนาร่า"
+    },
+    "title": {
+      "th": "ปราชญ์แห่ง Dendro · ผู้ตั้งชื่อให้ทุกสิ่ง"
+    },
+    "location": "LOC_FLO_LINNARA",
+    "model": "human",
+    "appearance": {
+      "skin": "#f2d6bc",
+      "hair": "#8a5a2e",
+      "eyes": "#4a8a3a",
+      "outfit": "#4f8f3a",
+      "outfit2": "#f4ecd0",
+      "accent": "#ffd35a",
+      "hairStyle": "braids",
+      "height": 0.9,
+      "skirt": true,
+      "coat": true
+    },
+    "art": "SageLinnara",
+    "talkDialogue": "DLG_LINNARA_IDLE",
+    "showFlag": "florantis_unlocked"
+  },
+  {
+    "id": "NPC_LINNARA_HEART",
+    "name": {
+      "th": "ปราชญ์ลินนาร่า"
+    },
+    "title": {
+      "th": "ปราชญ์แห่ง Dendro"
+    },
+    "location": "LOC_FLO_LINNARA_HEART",
+    "model": "human",
+    "appearance": {
+      "skin": "#f2d6bc",
+      "hair": "#8a5a2e",
+      "eyes": "#4a8a3a",
+      "outfit": "#4f8f3a",
+      "outfit2": "#f4ecd0",
+      "accent": "#ffd35a",
+      "hairStyle": "braids",
+      "height": 0.9,
+      "skirt": true,
+      "coat": true
+    },
+    "art": "SageLinnara",
+    "talkDialogue": "DLG_LINNARA_IDLE",
+    "showFlag": "flo_restored"
+  },
+  {
+    "id": "NPC_KREBION",
+    "name": {
+      "th": "ปราชญ์เครบิออน"
+    },
+    "title": {
+      "th": "ปราชญ์แห่ง Pyro · หัวหน้าช่างเตาหลอม"
+    },
+    "location": "LOC_MET_KREBION",
+    "model": "human",
+    "appearance": {
+      "skin": "#d9a888",
+      "hair": "#3a2a20",
+      "eyes": "#7a3a1a",
+      "outfit": "#7a3a2a",
+      "outfit2": "#e8c8a0",
+      "accent": "#ff8a3a",
+      "hairStyle": "short",
+      "height": 1.25,
+      "coat": true
+    },
+    "art": "SageKrebion",
+    "talkDialogue": "DLG_KREBION_IDLE",
+    "showFlag": "metabolis_unlocked"
+  },
+  {
+    "id": "NPC_KREBION_HEART",
+    "name": {
+      "th": "ปราชญ์เครบิออน"
+    },
+    "title": {
+      "th": "ปราชญ์แห่ง Pyro"
+    },
+    "location": "LOC_MET_KREBION_HEART",
+    "model": "human",
+    "appearance": {
+      "skin": "#d9a888",
+      "hair": "#3a2a20",
+      "eyes": "#7a3a1a",
+      "outfit": "#7a3a2a",
+      "outfit2": "#e8c8a0",
+      "accent": "#ff8a3a",
+      "hairStyle": "short",
+      "height": 1.25,
+      "coat": true
+    },
+    "art": "SageKrebion",
+    "talkDialogue": "DLG_KREBION_IDLE",
+    "showFlag": "met_restored"
+  },
+  {
+    "id": "NPC_HARVENA",
+    "name": {
+      "th": "ราชินีฮาร์วีน่า"
+    },
+    "title": {
+      "th": "ปราชญ์แห่ง Hydro · ราชินีแห่งอควอร์รา"
+    },
+    "location": "LOC_AQU_HARVENA",
+    "model": "human",
+    "appearance": {
+      "skin": "#f4dccc",
+      "hair": "#e8e0f0",
+      "eyes": "#3d8fd0",
+      "outfit": "#3d7ad8",
+      "outfit2": "#f4f1ff",
+      "accent": "#e8c468",
+      "hairStyle": "long",
+      "height": 1.05,
+      "skirt": true,
+      "coat": true
+    },
+    "art": "QueenHarvena",
+    "talkDialogue": "DLG_HARVENA_IDLE",
+    "showFlag": "aquorra_unlocked"
+  },
+  {
+    "id": "NPC_HARVENA_MARSH",
+    "name": {
+      "th": "ราชินีฮาร์วีน่า"
+    },
+    "title": {
+      "th": "ปราชญ์แห่ง Hydro"
+    },
+    "location": "LOC_AQU_HARVENA_MARSH",
+    "model": "human",
+    "appearance": {
+      "skin": "#f4dccc",
+      "hair": "#e8e0f0",
+      "eyes": "#3d8fd0",
+      "outfit": "#3d7ad8",
+      "outfit2": "#f4f1ff",
+      "accent": "#e8c468",
+      "hairStyle": "long",
+      "height": 1.05,
+      "skirt": true,
+      "coat": true
+    },
+    "art": "QueenHarvena",
+    "talkDialogue": "DLG_HARVENA_IDLE",
+    "showFlag": "aqu_cured"
+  },
+  {
+    "id": "NPC_NEUROS",
+    "name": {
+      "th": "นิวรอส"
+    },
+    "title": {
+      "th": "หัวหน้าองครักษ์แห่งนิวรีออน"
+    },
+    "location": "LOC_NEU_NEUROS",
+    "model": "char",
+    "charId": "NEUROS",
+    "showFlag": "neurion_unlocked",
+    "hideFlag": "neuros_joined"
+  },
+  {
+    "id": "NPC_CAJALIS",
+    "name": {
+      "th": "จักรพรรดิคาฮาลิส"
+    },
+    "title": {
+      "th": "ปราชญ์แห่ง Electro · จักรพรรดิแห่งนิวรีออน"
+    },
+    "location": "LOC_NEU_CAJALIS",
+    "model": "human",
+    "appearance": {
+      "skin": "#e8ccb8",
+      "hair": "#2a2440",
+      "eyes": "#b06cff",
+      "outfit": "#2a2244",
+      "outfit2": "#e8e0ff",
+      "accent": "#e8c468",
+      "hairStyle": "long",
+      "height": 1.18,
+      "coat": true
+    },
+    "art": "SageCajalis",
+    "talkDialogue": "DLG_CAJALIS_IDLE",
+    "showFlag": "neu_freed"
+  },
+  {
+    "id": "NPC_ARB_HOOKIA",
+    "name": {
+      "th": "ปราชญ์ฮูเคีย"
+    },
+    "title": {
+      "th": "ปราชญ์แห่ง Geo · ผู้อำนวยการสถาบัน"
+    },
+    "location": "LOC_ARB_SAGE_HOOKIA",
+    "model": "human",
+    "appearance": {
+      "skin": "#e8c8a8",
+      "hair": "#d9a03a",
+      "eyes": "#5a4a2a",
+      "outfit": "#8a6243",
+      "outfit2": "#e8b54a",
+      "accent": "#e8c468",
+      "hairStyle": "long",
+      "height": 1.0,
+      "cape": true,
+      "hat": "monocle",
+      "skirt": true
+    },
+    "art": "SageHookia",
+    "talkDialogue": "DLG_ARB_HOOKIA",
+    "showFlag": "roots_unlocked"
+  },
+  {
+    "id": "NPC_ARB_MENDELION",
+    "name": {
+      "th": "ปราชญ์เมนเดลิออน"
+    },
+    "title": {
+      "th": "ปราชญ์แห่ง Cryo · ผู้ปลูกถั่วลันเตา"
+    },
+    "location": "LOC_ARB_SAGE_MENDELION",
+    "model": "human",
+    "appearance": {
+      "skin": "#f0d0b8",
+      "hair": "#e8e8e8",
+      "eyes": "#4a6a8a",
+      "outfit": "#5a7a5a",
+      "outfit2": "#3a4a3a",
+      "accent": "#a060d0",
+      "hairStyle": "short",
+      "height": 0.98,
+      "coat": true,
+      "hat": "straw"
+    },
+    "art": "SageMendelion",
+    "talkDialogue": "DLG_ARB_MENDELION",
+    "showFlag": "roots_unlocked"
+  },
+  {
+    "id": "NPC_ARB_DARWYN",
+    "name": {
+      "th": "กัปตันดาร์วิน"
+    },
+    "title": {
+      "th": "ปราชญ์แห่ง Anemo · กัปตันเรือบีเกิล"
+    },
+    "location": "LOC_ARB_SAGE_DARWYN",
+    "model": "human",
+    "appearance": {
+      "skin": "#ecc8a8",
+      "hair": "#c8b8a0",
+      "eyes": "#3a5a7a",
+      "outfit": "#2a4a7a",
+      "outfit2": "#e8dcc4",
+      "accent": "#e8c468",
+      "hairStyle": "short",
+      "height": 1.1,
+      "coat": true,
+      "hat": "straw"
+    },
+    "art": "SageDarwyn",
+    "talkDialogue": "DLG_ARB_DARWYN",
+    "showFlag": "roots_unlocked"
+  },
+  {
+    "id": "NPC_ARB_LINNARA",
+    "name": {
+      "th": "ปราชญ์ลินนาร่า"
+    },
+    "title": {
+      "th": "ปราชญ์แห่ง Dendro · ผู้ตั้งชื่อให้ทุกสิ่ง"
+    },
+    "location": "LOC_ARB_SAGE_LINNARA",
+    "model": "human",
+    "appearance": {
+      "skin": "#f2d6bc",
+      "hair": "#8a5a2e",
+      "eyes": "#4a8a3a",
+      "outfit": "#4f8f3a",
+      "outfit2": "#f4ecd0",
+      "accent": "#ffd35a",
+      "hairStyle": "braids",
+      "height": 0.9,
+      "skirt": true,
+      "coat": true
+    },
+    "art": "SageLinnara",
+    "talkDialogue": "DLG_ARB_LINNARA",
+    "showFlag": "roots_unlocked"
+  },
+  {
+    "id": "NPC_ARB_KREBION",
+    "name": {
+      "th": "ปราชญ์เครบิออน"
+    },
+    "title": {
+      "th": "ปราชญ์แห่ง Pyro · หัวหน้าช่างเตาหลอม"
+    },
+    "location": "LOC_ARB_SAGE_KREBION",
+    "model": "human",
+    "appearance": {
+      "skin": "#d9a888",
+      "hair": "#3a2a20",
+      "eyes": "#7a3a1a",
+      "outfit": "#7a3a2a",
+      "outfit2": "#e8c8a0",
+      "accent": "#ff8a3a",
+      "hairStyle": "short",
+      "height": 1.25,
+      "coat": true
+    },
+    "art": "SageKrebion",
+    "talkDialogue": "DLG_ARB_KREBION",
+    "showFlag": "roots_unlocked"
+  },
+  {
+    "id": "NPC_ARB_HARVENA",
+    "name": {
+      "th": "ราชินีฮาร์วีน่า"
+    },
+    "title": {
+      "th": "ปราชญ์แห่ง Hydro · ราชินีแห่งอควอร์รา"
+    },
+    "location": "LOC_ARB_SAGE_HARVENA",
+    "model": "human",
+    "appearance": {
+      "skin": "#f4dccc",
+      "hair": "#e8e0f0",
+      "eyes": "#3d8fd0",
+      "outfit": "#3d7ad8",
+      "outfit2": "#f4f1ff",
+      "accent": "#e8c468",
+      "hairStyle": "long",
+      "height": 1.05,
+      "skirt": true,
+      "coat": true
+    },
+    "art": "QueenHarvena",
+    "talkDialogue": "DLG_ARB_HARVENA",
+    "showFlag": "roots_unlocked"
+  },
+  {
+    "id": "NPC_ARB_CAJALIS",
+    "name": {
+      "th": "จักรพรรดิคาฮาลิส"
+    },
+    "title": {
+      "th": "ปราชญ์แห่ง Electro · จักรพรรดิแห่งนิวรีออน"
+    },
+    "location": "LOC_ARB_SAGE_CAJALIS",
+    "model": "human",
+    "appearance": {
+      "skin": "#e8ccb8",
+      "hair": "#2a2440",
+      "eyes": "#b06cff",
+      "outfit": "#2a2244",
+      "outfit2": "#e8e0ff",
+      "accent": "#e8c468",
+      "hairStyle": "long",
+      "height": 1.18,
+      "coat": true
+    },
+    "art": "SageCajalis",
+    "talkDialogue": "DLG_ARB_CAJALIS",
+    "showFlag": "roots_unlocked"
+  },
+  {
+    "id": "NPC_HOOKIA_SEED",
+    "name": {
+      "th": "ปราชญ์ฮูเคีย"
+    },
+    "title": {
+      "th": "ปราชญ์แห่ง Geo"
+    },
+    "location": "LOC_ARB_HOOKIA_SEED",
+    "model": "human",
+    "appearance": {
+      "skin": "#e8c8a8",
+      "hair": "#d9a03a",
+      "eyes": "#5a4a2a",
+      "outfit": "#8a6243",
+      "outfit2": "#e8b54a",
+      "accent": "#e8c468",
+      "hairStyle": "long",
+      "height": 1.0,
+      "cape": true,
+      "hat": "monocle",
+      "skirt": true
+    },
+    "art": "SageHookia",
+    "talkDialogue": "DLG_ARB_HOOKIA",
+    "showFlag": "arb_healed"
+  },
+  {
+    "id": "NPC_TWIN",
+    "name": {
+      "th": "ฝาแฝดของเธอ"
+    },
+    "title": {
+      "th": "ผู้ที่กลับมาจากเงามืด"
+    },
+    "location": "LOC_ARB_TWIN",
+    "model": "human",
+    "appearance": {
+      "skin": "#f1d8c8",
+      "hair": "#1a1a22",
+      "eyes": "#7a4ab0",
+      "outfit": "#2a2236",
+      "outfit2": "#5a3a7a",
+      "accent": "#b06cff",
+      "hairStyle": "short",
+      "height": 1.0,
+      "coat": true
+    },
+    "art": "LostTwin",
+    "talkDialogue": "DLG_TWIN_IDLE",
+    "showFlag": "arb_healed"
+  }
+]

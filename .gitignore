@@ -1,0 +1,17 @@
+# Dependencies & build output
+node_modules/
+game/dist/
+.vite/
+__pycache__/
+*.pyc
+
+# Raw downloaded source assets (3+ GB, files exceed GitHub's 100 MB limit)
+Assets/_Project/Downloads/
+
+# Archives
+*.zip
+
+# OS / editor
+Thumbs.db
+.DS_Store
+desktop.ini

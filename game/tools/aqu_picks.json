@@ -1,0 +1,185 @@
+[
+  {
+    "code": "AH-3",
+    "dir": "Props",
+    "name": "BLD_AquHouseA",
+    "faces": 20000,
+    "src": "Sketchfab",
+    "title": "Stylized House",
+    "author": "FireWolf",
+    "license": "CC BY 4.0",
+    "url": "https://sketchfab.com/3d-models/none-a89396566b6f43f7a1796ff8cf45c1b7",
+    "uid": "a89396566b6f43f7a1796ff8cf45c1b7",
+    "pack": true
+  },
+  {
+    "code": "AH-5",
+    "dir": "Props",
+    "name": "BLD_AquHouseB",
+    "faces": 5000,
+    "src": "Sketchfab",
+    "title": "Venice Building LOW POLY",
+    "author": "Caio de Oliveira",
+    "license": "CC BY 4.0",
+    "url": "https://sketchfab.com/3d-models/none-85a797e259ac4a16b63b9ab8eeb33331",
+    "uid": "85a797e259ac4a16b63b9ab8eeb33331",
+    "drop": [
+      "polySurface48_",
+      "polySurface89_"
+    ]
+  },
+  {
+    "code": "AP-3",
+    "dir": "Props",
+    "name": "BLD_AquPalace",
+    "faces": 6000,
+    "src": "Sketchfab",
+    "title": "Anime Mansion",
+    "author": "AnixMoonLight",
+    "license": "CC BY 4.0",
+    "url": "https://sketchfab.com/3d-models/none-d5549e1a837e47659dee64d12ce0bb30",
+    "uid": "d5549e1a837e47659dee64d12ce0bb30"
+  },
+  {
+    "code": "AB-5",
+    "dir": "Props",
+    "name": "PRP_AquBridge",
+    "faces": 2000,
+    "src": "Sketchfab",
+    "title": "Stylized Bridge low poly",
+    "author": "Pikas",
+    "license": "CC BY 4.0",
+    "url": "https://sketchfab.com/3d-models/none-c561570254414e50985974e29d08834b",
+    "uid": "c561570254414e50985974e29d08834b"
+  },
+  {
+    "code": "GD-2",
+    "dir": "Props",
+    "name": "PRP_Gondola",
+    "faces": 2000,
+    "src": "Sketchfab",
+    "title": "Victorian Row Boat & Lamp - Low Poly",
+    "author": "hate94neu",
+    "license": "CC BY 4.0",
+    "url": "https://sketchfab.com/3d-models/none-744a2da01dac469cbded105427bdbd11",
+    "uid": "744a2da01dac469cbded105427bdbd11"
+  },
+  {
+    "code": "FT-2",
+    "dir": "Props",
+    "name": "PRP_Fountain",
+    "faces": 2000,
+    "src": "Sketchfab",
+    "title": "Stylized fountain 3DEX tutorial",
+    "author": "Hermi Marske",
+    "license": "CC BY 4.0",
+    "url": "https://sketchfab.com/3d-models/none-1b88af909c6d4862a268823d0b0f1eed",
+    "uid": "1b88af909c6d4862a268823d0b0f1eed"
+  },
+  {
+    "code": "LP-2",
+    "dir": "Props",
+    "name": "PRP_CanalLamp",
+    "faces": 3000,
+    "src": "Sketchfab",
+    "title": "Stylized Street Light",
+    "author": "WillowBoxArt",
+    "license": "CC BY 4.0",
+    "url": "https://sketchfab.com/3d-models/none-877c0ac0ad414ac1a9c9f7689add01c4",
+    "uid": "877c0ac0ad414ac1a9c9f7689add01c4"
+  },
+  {
+    "code": "HT-1",
+    "dir": "Props",
+    "name": "PRP_HeartModel",
+    "faces": 12000,
+    "src": "Sketchfab",
+    "title": "Realistic Human Heart",
+    "author": "neshallads",
+    "license": "CC BY 4.0",
+    "url": "https://sketchfab.com/3d-models/none-3f8072336ce94d18b3d0d055a1ece089",
+    "uid": "3f8072336ce94d18b3d0d055a1ece089"
+  },
+  {
+    "code": "RB-1",
+    "dir": "Props",
+    "name": "PRP_RBC",
+    "faces": 2000,
+    "src": "Sketchfab",
+    "title": "Red Blood Cells (Erythrocytes)",
+    "author": "_Bonehead14",
+    "license": "CC BY 4.0",
+    "url": "https://sketchfab.com/3d-models/none-657f7b34ab2e43878c4f366e3e940ebd",
+    "uid": "657f7b34ab2e43878c4f366e3e940ebd",
+    "pack": true
+  },
+  {
+    "code": "WB-1",
+    "dir": "Props",
+    "name": "PRP_WBC",
+    "faces": 2000,
+    "src": "Sketchfab",
+    "title": "White Blood Cells",
+    "author": "Celena Ransil",
+    "license": "CC BY 4.0",
+    "url": "https://sketchfab.com/3d-models/none-557451d5e6ca496d8c691e14b42edd93",
+    "uid": "557451d5e6ca496d8c691e14b42edd93",
+    "drop": [
+      "hairs_low_",
+      "body_low_",
+      "brow_low2"
+    ]
+  },
+  {
+    "code": "IF-1",
+    "dir": "Props",
+    "name": "BLD_ImmuneFort",
+    "faces": 12000,
+    "src": "Sketchfab",
+    "title": "Medieval Watchtower House",
+    "author": "Krystian Zem",
+    "license": "CC BY 4.0",
+    "url": "https://sketchfab.com/3d-models/none-4099fd90094c400e987deb240078c38e",
+    "uid": "4099fd90094c400e987deb240078c38e",
+    "drop": [
+      "Ground Plane002_Material #565"
+    ]
+  },
+  {
+    "code": "KD-1",
+    "dir": "Props",
+    "name": "PRP_Kidney",
+    "faces": 10000,
+    "src": "Sketchfab",
+    "title": "Human Kidney",
+    "author": "neshallads",
+    "license": "CC BY 4.0",
+    "url": "https://sketchfab.com/3d-models/none-e1476ceb1e3b4412af5418eee9c5ed08",
+    "uid": "e1476ceb1e3b4412af5418eee9c5ed08"
+  },
+  {
+    "code": "NP-1",
+    "dir": "Props",
+    "name": "PRP_Nephron",
+    "faces": 10000,
+    "src": "Sketchfab",
+    "title": "Structure Of Nephron",
+    "author": "arloopa",
+    "license": "Sketchfab Free Standard",
+    "url": "https://sketchfab.com/3d-models/none-338b7a2396e14055ad3adbbbd007c882",
+    "uid": "338b7a2396e14055ad3adbbbd007c882"
+  },
+  {
+    "code": "SB-4",
+    "dir": "Enemies",
+    "name": "BOS_Superbug",
+    "faces": 80000,
+    "src": "Sketchfab",
+    "title": "Animated Ammonite - Marine Creature Asset",
+    "author": "GAMICO",
+    "license": "CC BY 4.0",
+    "url": "https://sketchfab.com/3d-models/none-f9b46704c9a34c95acb8757edfd501a1",
+    "uid": "f9b46704c9a34c95acb8757edfd501a1",
+    "pack": true
+  }
+]

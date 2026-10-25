@@ -1,0 +1,7727 @@
+[
+  {
+    "id": "MQ_P_01",
+    "type": "MAIN",
+    "chapter": "PROLOGUE",
+    "title": {
+      "th": "ตื่นขึ้นในหุบเซลล์"
+    },
+    "description": {
+      "th": "เธอตื่นขึ้นในหุบเขาแปลกตาโดยจำอะไรไม่ได้เลย มีแสงสีอำพันส่องมาจากที่ไกล ๆ ลองไปดูกัน"
+    },
+    "bioTopics": [
+      "bio.cell.prokaryote_eukaryote"
+    ],
+    "prerequisites": [],
+    "autoStart": true,
+    "steps": [
+      {
+        "id": "S1",
+        "log": {
+          "th": "ไปยังผลึกอำพันที่ส่องแสง"
+        },
+        "onStart": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_P01_WAKE"
+          }
+        ],
+        "objectives": [
+          {
+            "type": "GOTO",
+            "locationId": "LOC_HOLLOW_CRYSTAL",
+            "radius": 9
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_P01_MEET_AMOEBY"
+          }
+        ]
+      },
+      {
+        "id": "S2",
+        "log": {
+          "th": "ช่วยอะมีบี้จากแบคทีเรีย"
+        },
+        "onStart": [
+          {
+            "action": "SPAWN_ENEMY",
+            "enemyId": "EN_BAC_COCCI",
+            "count": 3,
+            "locationId": "LOC_HOLLOW_CRYSTAL",
+            "level": 1,
+            "tag": "P01",
+            "aggro": true
+          },
+          {
+            "action": "AMOEBY",
+            "text": "คลิกซ้ายเพื่อโจมตี! กด Shift เพื่อหลบนะ!"
+          }
+        ],
+        "objectives": [
+          {
+            "type": "DEFEAT",
+            "enemyTag": "bacteria_slime",
+            "count": 3,
+            "label": {
+              "th": "กำจัดแบคทีเรียสไลม์"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_P01_AFTER_FIGHT"
+          },
+          {
+            "action": "UNLOCK_SYSTEM",
+            "systemId": "SCANNER"
+          }
+        ]
+      },
+      {
+        "id": "S3",
+        "log": {
+          "th": "ลองใช้ Bio-Scanner"
+        },
+        "objectives": [
+          {
+            "type": "SCAN",
+            "targetTag": "bacteria_remains",
+            "count": 1,
+            "label": {
+              "th": "กด T แล้วเล็งไปที่ซากแบคทีเรีย"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_P01_SCANNED"
+          },
+          {
+            "action": "UNLOCK_CODEX",
+            "codexId": "CDX_BINARY_FISSION"
+          }
+        ]
+      }
+    ],
+    "rewards": [
+      {
+        "itemId": "INSIGHT_CRYSTAL",
+        "count": 30
+      },
+      {
+        "itemId": "GLUCOSE",
+        "count": 5000
+      },
+      {
+        "itemId": "EXP_MONO",
+        "count": 3
+      },
+      {
+        "itemId": "RR_EXP",
+        "count": 200
+      }
+    ],
+    "nextQuest": "MQ_P_02"
+  },
+  {
+    "id": "MQ_P_02",
+    "type": "MAIN",
+    "chapter": "PROLOGUE",
+    "title": {
+      "th": "แกนชีวิตที่ว่างเปล่า"
+    },
+    "description": {
+      "th": "อะมีบี้บอกว่าแกนชีวิตบนข้อมือของเธอว่างเปล่า บางทีรูปปั้นต้นไม้แห่งชีวิตอาจช่วยได้"
+    },
+    "bioTopics": [
+      "bio.cell.cell_theory"
+    ],
+    "prerequisites": [
+      {
+        "type": "QUEST_COMPLETED",
+        "value": "MQ_P_01"
+      }
+    ],
+    "steps": [
+      {
+        "id": "S1",
+        "log": {
+          "th": "ไปยังรูปปั้นต้นไม้แห่งชีวิต"
+        },
+        "objectives": [
+          {
+            "type": "GOTO",
+            "locationId": "LOC_STATUE",
+            "radius": 9
+          }
+        ]
+      },
+      {
+        "id": "S2",
+        "log": {
+          "th": "แตะรูปปั้นต้นไม้แห่งชีวิต"
+        },
+        "objectives": [
+          {
+            "type": "INTERACT",
+            "objectId": "OBJ_STATUE",
+            "label": {
+              "th": "แตะรูปปั้น (กด F)"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_P02_STATUE"
+          },
+          {
+            "action": "UNLOCK_SYSTEM",
+            "systemId": "ELEMENT"
+          },
+          {
+            "action": "UNLOCK_CODEX",
+            "codexId": "CDX_CELL_THEORY"
+          },
+          {
+            "action": "TOAST",
+            "text": "⬢ แกนชีวิตเรียนรู้ธาตุศิลา (Geo)!",
+            "big": true
+          }
+        ]
+      },
+      {
+        "id": "S3",
+        "log": {
+          "th": "ทดลองพลังธาตุที่ลานฝึก"
+        },
+        "onStart": [
+          {
+            "action": "SPAWN_ENEMY",
+            "enemyId": "EN_DUMMY",
+            "count": 3,
+            "locationId": "LOC_DUMMIES",
+            "level": 1,
+            "tag": "P02"
+          },
+          {
+            "action": "AMOEBY",
+            "text": "กด E เพื่อใช้สกิลธาตุใส่หุ่นฝึกเลย!"
+          }
+        ],
+        "objectives": [
+          {
+            "type": "USE_SKILL",
+            "skill": "E",
+            "count": 2,
+            "label": {
+              "th": "ใช้สกิลธาตุ (E)"
+            }
+          }
+        ]
+      },
+      {
+        "id": "S4",
+        "log": {
+          "th": "ปลดปล่อยท่าไม้ตาย"
+        },
+        "onStart": [
+          {
+            "action": "FILL_ENERGY"
+          },
+          {
+            "action": "AMOEBY",
+            "text": "พลังงานเต็มแล้ว! กด Q ปล่อยท่าไม้ตายเลย!"
+          }
+        ],
+        "objectives": [
+          {
+            "type": "USE_SKILL",
+            "skill": "Q",
+            "count": 1,
+            "label": {
+              "th": "ใช้ท่าไม้ตาย (Q)"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "WAIT",
+            "ms": 1500
+          },
+          {
+            "action": "CLEAR_ENEMIES",
+            "tag": "P02"
+          },
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_P02_DONE"
+          },
+          {
+            "action": "UNLOCK_SYSTEM",
+            "systemId": "MAP"
+          }
+        ]
+      }
+    ],
+    "rewards": [
+      {
+        "itemId": "INSIGHT_CRYSTAL",
+        "count": 40
+      },
+      {
+        "itemId": "GLUCOSE",
+        "count": 6000
+      },
+      {
+        "itemId": "EXP_MONO",
+        "count": 4
+      },
+      {
+        "itemId": "RR_EXP",
+        "count": 250
+      }
+    ],
+    "nextQuest": "MQ_P_03"
+  },
+  {
+    "id": "MQ_P_03",
+    "type": "MAIN",
+    "chapter": "PROLOGUE",
+    "title": {
+      "th": "ปริศนาของนักวิทยาศาสตร์"
+    },
+    "description": {
+      "th": "ทางไปนครเซลลาเรียต้องผ่านประตูโบราณที่ปิดสนิท จารึกบนประตูท้าให้ 'พิสูจน์ด้วยวิธีของนักวิทยาศาสตร์'"
+    },
+    "bioTopics": [
+      "bio.intro.science_method"
+    ],
+    "prerequisites": [
+      {
+        "type": "QUEST_COMPLETED",
+        "value": "MQ_P_02"
+      }
+    ],
+    "steps": [
+      {
+        "id": "S1",
+        "log": {
+          "th": "ไปยังลานประตูโบราณ"
+        },
+        "objectives": [
+          {
+            "type": "GOTO",
+            "locationId": "LOC_ANCIENT_DOOR",
+            "radius": 13
+          }
+        ]
+      },
+      {
+        "id": "S2",
+        "log": {
+          "th": "ตรวจสอบประตูโบราณ"
+        },
+        "objectives": [
+          {
+            "type": "INTERACT",
+            "objectId": "OBJ_ANCIENT_DOOR",
+            "label": {
+              "th": "ตรวจสอบประตู (กด F)"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_P03_INSCRIPTION"
+          }
+        ]
+      },
+      {
+        "id": "S3",
+        "log": {
+          "th": "สังเกตต้นไม้ที่เหี่ยวเฉา"
+        },
+        "objectives": [
+          {
+            "type": "SCAN",
+            "targetId": "PLANT_WILTED",
+            "label": {
+              "th": "สแกนต้นไม้ในแปลงทดลอง (กด T)"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "UNLOCK_CODEX",
+            "codexId": "CDX_SCI_METHOD"
+          },
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_P03_OBSERVED"
+          }
+        ]
+      },
+      {
+        "id": "S4",
+        "log": {
+          "th": "ตั้งสมมติฐาน"
+        },
+        "objectives": [
+          {
+            "type": "QUIZ",
+            "quizSetId": "QZ_HYPOTHESIS",
+            "label": {
+              "th": "ตั้งสมมติฐานที่ทดสอบได้"
+            }
+          }
+        ]
+      },
+      {
+        "id": "S5",
+        "log": {
+          "th": "ออกแบบการทดลอง"
+        },
+        "onStart": [
+          {
+            "action": "AMOEBY",
+            "text": "ไปที่แปลงทดลองแล้วกด F เพื่อออกแบบการทดลองกัน!"
+          }
+        ],
+        "objectives": [
+          {
+            "type": "PUZZLE",
+            "puzzleId": "PZ_PLANT_EXPERIMENT",
+            "objectId": "OBJ_PLOTS",
+            "label": {
+              "th": "ออกแบบการทดลองที่แปลงทดลอง (กด F)"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "SET_FLAG",
+            "flag": "plots_healthy"
+          },
+          {
+            "action": "WAIT",
+            "ms": 1200
+          },
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_P03_RESULT"
+          }
+        ]
+      },
+      {
+        "id": "S6",
+        "log": {
+          "th": "สรุปผลการทดลอง"
+        },
+        "objectives": [
+          {
+            "type": "QUIZ",
+            "quizSetId": "QZ_CONCLUSION",
+            "label": {
+              "th": "สรุปผลการทดลอง"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "SET_FLAG",
+            "flag": "door_open"
+          },
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_P03_DOOR_OPEN"
+          }
+        ]
+      }
+    ],
+    "rewards": [
+      {
+        "itemId": "INSIGHT_CRYSTAL",
+        "count": 40
+      },
+      {
+        "itemId": "GLUCOSE",
+        "count": 8000
+      },
+      {
+        "itemId": "EXP_MONO",
+        "count": 5
+      },
+      {
+        "itemId": "EXP_DI",
+        "count": 1
+      },
+      {
+        "itemId": "RR_EXP",
+        "count": 300
+      }
+    ],
+    "nextQuest": "MQ_P_04"
+  },
+  {
+    "id": "MQ_P_04",
+    "type": "MAIN",
+    "chapter": "PROLOGUE",
+    "title": {
+      "th": "นักเรียนผู้ร้อนแรง"
+    },
+    "description": {
+      "th": "มีเสียงระเบิดดังมาจากทุ่งหญ้าตะวันออก ใครบางคนกำลังต่อสู้อยู่!"
+    },
+    "bioTopics": [
+      "bio.cell.cellular_respiration"
+    ],
+    "prerequisites": [
+      {
+        "type": "QUEST_COMPLETED",
+        "value": "MQ_P_03"
+      }
+    ],
+    "steps": [
+      {
+        "id": "S1",
+        "log": {
+          "th": "ไปยังทุ่งหญ้าตะวันออก"
+        },
+        "onStart": [
+          {
+            "action": "SET_FLAG",
+            "flag": "mitora_met"
+          },
+          {
+            "action": "AMOEBY",
+            "text": "ตูม! ได้ยินไหม? เสียงระเบิดมาจากทางตะวันออก!"
+          }
+        ],
+        "objectives": [
+          {
+            "type": "GOTO",
+            "locationId": "LOC_MITORA",
+            "radius": 16
+          }
+        ]
+      },
+      {
+        "id": "S2",
+        "log": {
+          "th": "ช่วยไมโทร่าต่อสู้"
+        },
+        "onStart": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_P04_MEET"
+          },
+          {
+            "action": "SET_FLAG",
+            "flag": "mitora_joined"
+          },
+          {
+            "action": "ADD_CHARACTER",
+            "charId": "MITORA"
+          },
+          {
+            "action": "SPAWN_ENEMY",
+            "enemyId": "EN_BAC_COCCI",
+            "count": 3,
+            "locationId": "LOC_MITORA",
+            "level": 3,
+            "tag": "P04",
+            "aggro": true
+          },
+          {
+            "action": "SPAWN_ENEMY",
+            "enemyId": "EN_BAC_BACIL",
+            "count": 2,
+            "locationId": "LOC_MITORA",
+            "level": 3,
+            "tag": "P04",
+            "aggro": true
+          },
+          {
+            "action": "AMOEBY",
+            "text": "ไมโทร่าเข้าทีมแล้ว! กด 1–2 เพื่อสลับตัวละคร"
+          }
+        ],
+        "objectives": [
+          {
+            "type": "DEFEAT",
+            "enemyTag": "bacteria",
+            "count": 5,
+            "label": {
+              "th": "กำจัดแบคทีเรีย"
+            }
+          }
+        ]
+      },
+      {
+        "id": "S3",
+        "log": {
+          "th": "ลองทำปฏิกิริยาธาตุ"
+        },
+        "onStart": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_P04_REACTION_TUT"
+          },
+          {
+            "action": "SPAWN_ENEMY",
+            "enemyId": "EN_BAC_COCCI",
+            "count": 4,
+            "locationId": "LOC_MITORA",
+            "level": 2,
+            "tag": "P04B",
+            "respawn": true
+          }
+        ],
+        "objectives": [
+          {
+            "type": "REACTION",
+            "reaction": "MEMBRANE_SHIELD",
+            "label": {
+              "th": "โจมตีด้วยไฟ (ไมโทร่า) แล้วตามด้วยศิลา (สกิล E นักเดินทาง)"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "WAIT",
+            "ms": 800
+          },
+          {
+            "action": "CLEAR_ENEMIES",
+            "tag": "P04B"
+          },
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_P04_DONE"
+          }
+        ]
+      }
+    ],
+    "rewards": [
+      {
+        "itemId": "INSIGHT_CRYSTAL",
+        "count": 40
+      },
+      {
+        "itemId": "GLUCOSE",
+        "count": 8000
+      },
+      {
+        "itemId": "EXP_MONO",
+        "count": 5
+      },
+      {
+        "itemId": "RR_EXP",
+        "count": 300
+      }
+    ],
+    "nextQuest": "MQ_P_05"
+  },
+  {
+    "id": "MQ_P_05",
+    "type": "MAIN",
+    "chapter": "PROLOGUE",
+    "title": {
+      "th": "ลมหายใจบนยอดเนิน"
+    },
+    "description": {
+      "th": "ไมโทร่าบอกว่าเพื่อนของเธอชื่ออัลวี ชอบไปนอนเล่นบนยอดเนินทางตะวันตก"
+    },
+    "bioTopics": [
+      "bio.cell.membrane_transport"
+    ],
+    "prerequisites": [
+      {
+        "type": "QUEST_COMPLETED",
+        "value": "MQ_P_04"
+      }
+    ],
+    "steps": [
+      {
+        "id": "S1",
+        "log": {
+          "th": "ขึ้นไปบนยอดเนินลมหายใจ"
+        },
+        "onStart": [
+          {
+            "action": "SET_FLAG",
+            "flag": "alvi_visible"
+          }
+        ],
+        "objectives": [
+          {
+            "type": "GOTO",
+            "locationId": "LOC_ALVI_HILL",
+            "radius": 9
+          }
+        ]
+      },
+      {
+        "id": "S2",
+        "log": {
+          "th": "ปลุกอัลวี"
+        },
+        "objectives": [
+          {
+            "type": "TALK",
+            "npcId": "NPC_ALVI",
+            "dialogueId": "DLG_P05_ALVI",
+            "label": {
+              "th": "คุยกับอัลวี (กด F)"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "SET_FLAG",
+            "flag": "alvi_joined"
+          },
+          {
+            "action": "ADD_CHARACTER",
+            "charId": "ALVI"
+          },
+          {
+            "action": "UNLOCK_SYSTEM",
+            "systemId": "GLIDER"
+          },
+          {
+            "action": "TOAST",
+            "text": "🍃 ได้รับปีกซามารา! กด Space กลางอากาศเพื่อร่อน",
+            "big": true
+          }
+        ]
+      },
+      {
+        "id": "S3",
+        "log": {
+          "th": "ร่อนลงสู่ทุ่งปลายลม"
+        },
+        "objectives": [
+          {
+            "type": "GOTO",
+            "locationId": "LOC_GLIDE_TARGET",
+            "radius": 12,
+            "label": {
+              "th": "กระโดดจากเนินแล้วร่อนไปยังทุ่งปลายลม"
+            }
+          }
+        ]
+      },
+      {
+        "id": "S4",
+        "log": {
+          "th": "กำจัดไวรัสเฟจ"
+        },
+        "onStart": [
+          {
+            "action": "SPAWN_ENEMY",
+            "enemyId": "EN_BAC_COCCI",
+            "count": 3,
+            "locationId": "LOC_GLIDE_TARGET",
+            "level": 4,
+            "tag": "P05"
+          },
+          {
+            "action": "SPAWN_ENEMY",
+            "enemyId": "EN_PHAGE_S",
+            "count": 3,
+            "locationId": "LOC_GLIDE_TARGET",
+            "level": 4,
+            "tag": "P05",
+            "aggro": true
+          },
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_P05_PHAGE"
+          }
+        ],
+        "objectives": [
+          {
+            "type": "DEFEAT",
+            "enemyTag": "virus",
+            "count": 4,
+            "label": {
+              "th": "กำจัดเฟจโดรน"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "WAIT",
+            "ms": 600
+          },
+          {
+            "action": "CLEAR_ENEMIES",
+            "tag": "P05"
+          },
+          {
+            "action": "UNLOCK_CODEX",
+            "codexId": "CDX_PHAGE"
+          },
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_P05_DONE"
+          }
+        ]
+      }
+    ],
+    "rewards": [
+      {
+        "itemId": "INSIGHT_CRYSTAL",
+        "count": 40
+      },
+      {
+        "itemId": "GLUCOSE",
+        "count": 8000
+      },
+      {
+        "itemId": "EXP_MONO",
+        "count": 5
+      },
+      {
+        "itemId": "EXP_DI",
+        "count": 1
+      },
+      {
+        "itemId": "ANTIBIOTIC",
+        "count": 3
+      },
+      {
+        "itemId": "RR_EXP",
+        "count": 300
+      }
+    ],
+    "nextQuest": "MQ_P_06"
+  },
+  {
+    "id": "MQ_P_06",
+    "type": "MAIN",
+    "chapter": "PROLOGUE",
+    "title": {
+      "th": "ประตูสู่เซลลาเรีย"
+    },
+    "description": {
+      "th": "นครเซลลาเรียอยู่ทางเหนือ แต่ดูเหมือนจะมีบางสิ่งขวางทางอยู่หน้าประตูเมือง..."
+    },
+    "bioTopics": [
+      "bio.cell.prokaryote_eukaryote",
+      "bio.intro.science_method"
+    ],
+    "prerequisites": [
+      {
+        "type": "QUEST_COMPLETED",
+        "value": "MQ_P_05"
+      }
+    ],
+    "steps": [
+      {
+        "id": "S1",
+        "log": {
+          "th": "เดินทางไปยังประตูนครเซลลาเรีย"
+        },
+        "onStart": [
+          {
+            "action": "AMOEBY",
+            "text": "นครเซลลาเรียอยู่ทางเหนือ! ตามเครื่องหมายไปเลย"
+          }
+        ],
+        "objectives": [
+          {
+            "type": "GOTO",
+            "locationId": "LOC_BOSS_ARENA",
+            "radius": 18
+          }
+        ]
+      },
+      {
+        "id": "S2",
+        "log": {
+          "th": "ปราบราชาแบคทีเรีย"
+        },
+        "onStart": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_P06_KING"
+          },
+          {
+            "action": "SPAWN_ENEMY",
+            "enemyId": "EN_BOSS_KING",
+            "count": 1,
+            "locationId": "LOC_BOSS_ARENA",
+            "level": 8,
+            "tag": "P06",
+            "aggro": true
+          }
+        ],
+        "objectives": [
+          {
+            "type": "DEFEAT",
+            "enemyId": "EN_BOSS_KING",
+            "label": {
+              "th": "ปราบราชาแบคทีเรีย"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "WAIT",
+            "ms": 1000
+          },
+          {
+            "action": "CLEAR_ENEMIES",
+            "tag": "P06"
+          },
+          {
+            "action": "SET_FLAG",
+            "flag": "lyso_visible"
+          },
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_P06_AFTER"
+          }
+        ]
+      },
+      {
+        "id": "S3",
+        "log": {
+          "th": "สอบเข้าสถาบันเซลลาเรีย"
+        },
+        "objectives": [
+          {
+            "type": "QUIZ",
+            "npcId": "NPC_LYSO",
+            "quizSetId": "QZ_PROLOGUE_FINAL",
+            "dialogueId": "DLG_P06_EXAM",
+            "label": {
+              "th": "คุยกับศาสตราจารย์ไลโซ (กด F)"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_P06_PASS"
+          },
+          {
+            "action": "SET_FLAG",
+            "flag": "chloren_joined"
+          },
+          {
+            "action": "ADD_CHARACTER",
+            "charId": "CHLOREN"
+          },
+          {
+            "action": "CHAPTER_CARD",
+            "top": "บทนำ · จบ",
+            "title": "ผู้ค้นหาแห่งเซลล์"
+          }
+        ]
+      }
+    ],
+    "rewards": [
+      {
+        "itemId": "INSIGHT_CRYSTAL",
+        "count": 60
+      },
+      {
+        "itemId": "GLUCOSE",
+        "count": 15000
+      },
+      {
+        "itemId": "EXP_DI",
+        "count": 2
+      },
+      {
+        "itemId": "RR_EXP",
+        "count": 500
+      }
+    ],
+    "nextQuest": null
+  },
+  {
+    "id": "MQ_1_01",
+    "type": "MAIN",
+    "chapter": "CH1",
+    "title": {
+      "th": "นักเรียนใหม่แห่งสถาบัน"
+    },
+    "description": {
+      "th": "ในที่สุดก็ได้เข้าสู่นครเซลลาเรีย — เมืองที่สร้างเหมือนเซลล์ยักษ์ ศาสตราจารย์ไลโซมีภารกิจปฐมนิเทศรออยู่"
+    },
+    "bioTopics": [
+      "bio.cell.organelle",
+      "bio.cell.membrane_transport"
+    ],
+    "prerequisites": [
+      {
+        "type": "QUEST_COMPLETED",
+        "value": "MQ_P_06"
+      }
+    ],
+    "steps": [
+      {
+        "log": {
+          "th": "เข้าสู่นครเซลลาเรียผ่านประตูเมือง (กด F ที่ประตู)"
+        },
+        "objectives": [
+          {
+            "type": "GOTO",
+            "locationId": "LOC_CITY_PLAZA",
+            "radius": 18,
+            "label": {
+              "th": "เข้าเมืองแล้วไปที่ลานกลาง"
+            }
+          }
+        ],
+        "onStart": [
+          {
+            "action": "CHAPTER_CARD",
+            "top": "บทที่ 1",
+            "title": "เซลล์ที่ไม่ยอมหยุดแบ่งตัว"
+          },
+          {
+            "action": "AMOEBY",
+            "text": "ไปที่ประตูนครเซลลาเรีย แล้วกด F เพื่อเข้าเมืองกัน!"
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "SET_FLAG",
+            "flag": "ch1_started"
+          },
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_C1_ARRIVE"
+          }
+        ],
+        "id": "S1"
+      },
+      {
+        "log": {
+          "th": "รายงานตัวกับศาสตราจารย์ไลโซที่สถาบัน"
+        },
+        "objectives": [
+          {
+            "type": "TALK",
+            "npcId": "NPC_LYSO_ACAD",
+            "dialogueId": "DLG_C1_ORIENT"
+          }
+        ],
+        "id": "S2"
+      },
+      {
+        "log": {
+          "th": "สแกนออร์แกเนลล์ทั้ง 10 ย่านของเมือง"
+        },
+        "objectives": [
+          {
+            "type": "SCAN",
+            "targetTag": "organelle",
+            "count": 10,
+            "label": {
+              "th": "สแกนออร์แกเนลล์ทั้ง 10 ย่าน (กด T)"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_C1_SCANNED"
+          }
+        ],
+        "id": "S3"
+      },
+      {
+        "log": {
+          "th": "รายงานผลการสำรวจ"
+        },
+        "objectives": [
+          {
+            "type": "QUIZ",
+            "npcId": "NPC_LYSO_ACAD",
+            "quizSetId": "QZ_CH1_ORGANELLE",
+            "dialogueId": "DLG_C1_REPORT",
+            "label": {
+              "th": "รายงานผลกับศาสตราจารย์ไลโซ (กด F)"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_C1_ORIENT_DONE"
+          }
+        ],
+        "id": "S4"
+      }
+    ],
+    "rewards": [
+      {
+        "itemId": "INSIGHT_CRYSTAL",
+        "count": 50
+      },
+      {
+        "itemId": "GLUCOSE",
+        "count": 10000
+      },
+      {
+        "itemId": "EXP_DI",
+        "count": 2
+      },
+      {
+        "itemId": "RR_EXP",
+        "count": 400
+      }
+    ],
+    "nextQuest": "MQ_1_02",
+    "autoStart": true
+  },
+  {
+    "id": "MQ_1_02",
+    "type": "MAIN",
+    "chapter": "CH1",
+    "title": {
+      "th": "โมเลกุลที่หายไป"
+    },
+    "description": {
+      "th": "ครัวไรโบโซมขาดวัตถุดิบสำหรับสร้างโปรตีน ไรโบขอให้ช่วยเก็บโมเลกุลพื้นฐานจากที่ราบโมเลกุล"
+    },
+    "bioTopics": [
+      "bio.chem.protein",
+      "bio.chem.carbohydrate",
+      "bio.chem.lipid",
+      "bio.chem.nucleic_acid"
+    ],
+    "prerequisites": [
+      {
+        "type": "QUEST_COMPLETED",
+        "value": "MQ_1_01"
+      }
+    ],
+    "steps": [
+      {
+        "log": {
+          "th": "คุยกับไรโบที่ครัวไรโบโซม"
+        },
+        "objectives": [
+          {
+            "type": "TALK",
+            "npcId": "NPC_RIBO",
+            "dialogueId": "DLG_C2_RIBO"
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "SET_FLAG",
+            "flag": "ch1_molecules"
+          }
+        ],
+        "id": "S1"
+      },
+      {
+        "log": {
+          "th": "เดินทางไปที่ราบโมเลกุล (ทางใต้ของหุบเซลล์)"
+        },
+        "objectives": [
+          {
+            "type": "GOTO",
+            "locationId": "LOC_MOLECULE_PLAINS",
+            "radius": 20
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_C2_PLAINS"
+          }
+        ],
+        "id": "S2"
+      },
+      {
+        "log": {
+          "th": "เก็บโมเลกุลพื้นฐาน และขับไล่บลายต์"
+        },
+        "objectives": [
+          {
+            "type": "COLLECT",
+            "itemId": "MOL_AMINO",
+            "count": 4
+          },
+          {
+            "type": "COLLECT",
+            "itemId": "MOL_MONOSAC",
+            "count": 4
+          },
+          {
+            "type": "COLLECT",
+            "itemId": "MOL_FATTY",
+            "count": 4
+          },
+          {
+            "type": "COLLECT",
+            "itemId": "MOL_NUCLEOTIDE",
+            "count": 4
+          },
+          {
+            "type": "DEFEAT",
+            "enemyId": "EN_BT_CLUB",
+            "count": 3,
+            "label": {
+              "th": "ขับไล่บลายต์ทรูปเปอร์"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "SET_FLAG",
+            "flag": "ch1_molecules",
+            "value": false
+          },
+          {
+            "action": "CLEAR_ENEMIES",
+            "tag": "C2"
+          },
+          {
+            "action": "AMOEBY",
+            "text": "ได้ครบแล้ว! กลับไปส่งให้ไรโบที่ครัวไรโบโซมกัน"
+          }
+        ],
+        "id": "S3",
+        "onStart": [
+          {
+            "action": "SPAWN_ENEMY",
+            "enemyId": "EN_BT_CLUB",
+            "count": 3,
+            "locationId": "LOC_MOLECULE_PLAINS",
+            "level": 9,
+            "tag": "C2",
+            "aggro": true
+          }
+        ]
+      },
+      {
+        "log": {
+          "th": "ส่งโมเลกุลให้ไรโบ"
+        },
+        "objectives": [
+          {
+            "type": "QUIZ",
+            "npcId": "NPC_RIBO",
+            "quizSetId": "QZ_CH1_BIOMOL",
+            "dialogueId": "DLG_C2_DELIVER",
+            "label": {
+              "th": "ส่งโมเลกุลให้ไรโบ (กด F)"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_C2_DONE"
+          }
+        ],
+        "id": "S4"
+      }
+    ],
+    "rewards": [
+      {
+        "itemId": "INSIGHT_CRYSTAL",
+        "count": 50
+      },
+      {
+        "itemId": "GLUCOSE",
+        "count": 10000
+      },
+      {
+        "itemId": "EXP_DI",
+        "count": 2
+      },
+      {
+        "itemId": "ORE_CALCIUM",
+        "count": 3
+      },
+      {
+        "itemId": "RR_EXP",
+        "count": 400
+      }
+    ],
+    "nextQuest": "MQ_1_03"
+  },
+  {
+    "id": "MQ_1_03",
+    "type": "MAIN",
+    "chapter": "CH1",
+    "title": {
+      "th": "ป่าที่เอนไซม์ไม่ทำงาน"
+    },
+    "description": {
+      "th": "ประตูเอนไซม์ทั้งป่าหยุดทำงานเพราะอุณหภูมิสูงผิดปกติ — มีคนจงใจทำให้มันร้อน"
+    },
+    "bioTopics": [
+      "bio.chem.enzyme",
+      "bio.chem.protein"
+    ],
+    "prerequisites": [
+      {
+        "type": "QUEST_COMPLETED",
+        "value": "MQ_1_02"
+      }
+    ],
+    "steps": [
+      {
+        "log": {
+          "th": "เดินทางไปป่าเอนไซม์ (ตะวันตกเฉียงเหนือ)"
+        },
+        "objectives": [
+          {
+            "type": "GOTO",
+            "locationId": "LOC_ENZYME_GROVE",
+            "radius": 22
+          }
+        ],
+        "onStart": [
+          {
+            "action": "AMOEBY",
+            "text": "ป่าเอนไซม์อยู่ทางตะวันตกเฉียงเหนือของหุบเซลล์ ตามเครื่องหมายไปเลย!"
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_C3_GROVE"
+          }
+        ],
+        "id": "S1"
+      },
+      {
+        "log": {
+          "th": "ตรวจสอบประตูเอนไซม์"
+        },
+        "objectives": [
+          {
+            "type": "SCAN",
+            "targetId": "OBJ_ENZYME_GATE",
+            "locationId": "OBJ_ENZYME_GATE",
+            "label": {
+              "th": "สแกนประตูเอนไซม์ (กด T)"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_C3_SCANNED"
+          }
+        ],
+        "id": "S2"
+      },
+      {
+        "log": {
+          "th": "ทำลายเครื่องทำความร้อนของซินดิเคต"
+        },
+        "objectives": [
+          {
+            "type": "DEFEAT",
+            "enemyId": "EN_SYN_HEATER",
+            "count": 3,
+            "label": {
+              "th": "ทำลายเครื่องทำความร้อน (หลบวงความร้อนด้วย!)"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "CLEAR_ENEMIES",
+            "tag": "C3"
+          },
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_C3_COOL"
+          }
+        ],
+        "id": "S3",
+        "onStart": [
+          {
+            "action": "SPAWN_ENEMY",
+            "enemyId": "EN_SYN_HEATER",
+            "count": 1,
+            "locationId": "LOC_HEATER_A",
+            "level": 10,
+            "tag": "C3",
+            "element": "PYRO"
+          },
+          {
+            "action": "SPAWN_ENEMY",
+            "enemyId": "EN_SYN_HEATER",
+            "count": 1,
+            "locationId": "LOC_HEATER_B",
+            "level": 10,
+            "tag": "C3",
+            "element": "PYRO"
+          },
+          {
+            "action": "SPAWN_ENEMY",
+            "enemyId": "EN_SYN_HEATER",
+            "count": 1,
+            "locationId": "LOC_HEATER_C",
+            "level": 10,
+            "tag": "C3",
+            "element": "PYRO"
+          },
+          {
+            "action": "SPAWN_ENEMY",
+            "enemyId": "EN_BT_CLUB",
+            "count": 2,
+            "locationId": "LOC_ENZYME_GROVE",
+            "level": 10,
+            "tag": "C3",
+            "aggro": true
+          }
+        ]
+      },
+      {
+        "log": {
+          "th": "รีสตาร์ตประตูเอนไซม์"
+        },
+        "objectives": [
+          {
+            "type": "QUIZ",
+            "quizSetId": "QZ_CH1_ENZYME",
+            "label": {
+              "th": "ตอบคำถามเรื่องเอนไซม์"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "SET_FLAG",
+            "flag": "enzyme_fixed"
+          },
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_C3_DONE"
+          }
+        ],
+        "id": "S4"
+      }
+    ],
+    "rewards": [
+      {
+        "itemId": "INSIGHT_CRYSTAL",
+        "count": 50
+      },
+      {
+        "itemId": "GLUCOSE",
+        "count": 12000
+      },
+      {
+        "itemId": "EXP_DI",
+        "count": 2
+      },
+      {
+        "itemId": "GROWTH_FACTOR",
+        "count": 2
+      },
+      {
+        "itemId": "RR_EXP",
+        "count": 450
+      }
+    ],
+    "nextQuest": "MQ_1_04"
+  },
+  {
+    "id": "MQ_1_04",
+    "type": "MAIN",
+    "chapter": "CH1",
+    "title": {
+      "th": "ทะเลสาบที่แห้งเหือด"
+    },
+    "description": {
+      "th": "ต้นไม้ริมทะเลสาบเยื่อหุ้มเหี่ยวเฉาทั้งที่อยู่ติดน้ำ มีบางอย่างผิดปกติกับน้ำในทะเลสาบ"
+    },
+    "bioTopics": [
+      "bio.cell.membrane_transport"
+    ],
+    "prerequisites": [
+      {
+        "type": "QUEST_COMPLETED",
+        "value": "MQ_1_03"
+      }
+    ],
+    "steps": [
+      {
+        "log": {
+          "th": "ไปที่ริมทะเลสาบเยื่อหุ้ม"
+        },
+        "objectives": [
+          {
+            "type": "GOTO",
+            "locationId": "LOC_LAKE_SALT",
+            "radius": 16
+          }
+        ],
+        "onStart": [
+          {
+            "action": "SET_FLAG",
+            "flag": "salt_dumped"
+          },
+          {
+            "action": "AMOEBY",
+            "text": "ทะเลสาบเยื่อหุ้มมีปัญหา! ไปดูทางฝั่งใต้ของทะเลสาบกัน"
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_C4_LAKE"
+          }
+        ],
+        "id": "S1"
+      },
+      {
+        "log": {
+          "th": "ตรวจสอบต้นกกที่เหี่ยว"
+        },
+        "objectives": [
+          {
+            "type": "SCAN",
+            "targetId": "OBJ_WILTED",
+            "locationId": "OBJ_WILTED",
+            "label": {
+              "th": "สแกนต้นกกที่เหี่ยว (กด T)"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_C4_WILTED"
+          }
+        ],
+        "id": "S2",
+        "onStart": [
+          {
+            "action": "SPAWN_ENEMY",
+            "enemyId": "EN_BT_CLUB",
+            "count": 2,
+            "locationId": "LOC_LAKE_SALT",
+            "level": 10,
+            "tag": "C4",
+            "aggro": true
+          },
+          {
+            "action": "SPAWN_ENEMY",
+            "enemyId": "EN_BAC_COCCI",
+            "count": 2,
+            "locationId": "LOC_LAKE_SALT",
+            "level": 10,
+            "tag": "C4",
+            "element": "HYDRO",
+            "aggro": true
+          }
+        ]
+      },
+      {
+        "log": {
+          "th": "เก็บกองเกลือออกจากริมทะเลสาบ"
+        },
+        "objectives": [
+          {
+            "type": "INTERACT",
+            "objectId": "OBJ_SALT_1",
+            "label": {
+              "th": "เก็บกองเกลือ ①"
+            }
+          },
+          {
+            "type": "INTERACT",
+            "objectId": "OBJ_SALT_2",
+            "label": {
+              "th": "เก็บกองเกลือ ②"
+            }
+          },
+          {
+            "type": "INTERACT",
+            "objectId": "OBJ_SALT_3",
+            "label": {
+              "th": "เก็บกองเกลือ ③"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "CLEAR_ENEMIES",
+            "tag": "C4"
+          }
+        ],
+        "id": "S3"
+      },
+      {
+        "log": {
+          "th": "ฟื้นฟูทะเลสาบ"
+        },
+        "objectives": [
+          {
+            "type": "QUIZ",
+            "quizSetId": "QZ_CH1_OSMOSIS",
+            "label": {
+              "th": "ตอบคำถามเรื่องออสโมซิส"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "SET_FLAG",
+            "flag": "lake_fixed"
+          },
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_C4_DONE"
+          }
+        ],
+        "id": "S4"
+      }
+    ],
+    "rewards": [
+      {
+        "itemId": "INSIGHT_CRYSTAL",
+        "count": 50
+      },
+      {
+        "itemId": "GLUCOSE",
+        "count": 12000
+      },
+      {
+        "itemId": "EXP_DI",
+        "count": 2
+      },
+      {
+        "itemId": "ORE_CALCIUM",
+        "count": 4
+      },
+      {
+        "itemId": "RR_EXP",
+        "count": 450
+      }
+    ],
+    "nextQuest": "MQ_1_05"
+  },
+  {
+    "id": "MQ_1_05",
+    "type": "MAIN",
+    "chapter": "CH1",
+    "title": {
+      "th": "หอคอยที่เติบโตไม่หยุด"
+    },
+    "description": {
+      "th": "หอคอยไมโทซิสทางตะวันออกขยายตัวไม่หยุด เบื้องหลังคือซินดิเคต... และใครบางคนที่คุ้นหน้า"
+    },
+    "bioTopics": [
+      "bio.cell.cell_division"
+    ],
+    "prerequisites": [
+      {
+        "type": "QUEST_COMPLETED",
+        "value": "MQ_1_04"
+      }
+    ],
+    "steps": [
+      {
+        "log": {
+          "th": "เดินทางไปหอคอยไมโทซิส (ตะวันออกเฉียงเหนือ)"
+        },
+        "objectives": [
+          {
+            "type": "GOTO",
+            "locationId": "LOC_SPIRE",
+            "radius": 18
+          }
+        ],
+        "onStart": [
+          {
+            "action": "SET_FLAG",
+            "flag": "chimera_visible"
+          },
+          {
+            "action": "AMOEBY",
+            "text": "หอคอยไมโทซิสอยู่ทางตะวันออกเฉียงเหนือ ระวังตัวด้วยนะ!"
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_C5_CHIMERA"
+          },
+          {
+            "action": "SET_FLAG",
+            "flag": "chimera_gone"
+          }
+        ],
+        "id": "S1"
+      },
+      {
+        "log": {
+          "th": "ปราบลูกน้องของซินดิเคต"
+        },
+        "objectives": [
+          {
+            "type": "DEFEAT",
+            "enemyId": "EN_BT_CLUB",
+            "count": 4,
+            "label": {
+              "th": "ปราบบลายต์ทรูปเปอร์"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_C5_AFTER"
+          }
+        ],
+        "id": "S2",
+        "onStart": [
+          {
+            "action": "SPAWN_ENEMY",
+            "enemyId": "EN_BT_CLUB",
+            "count": 4,
+            "locationId": "LOC_SPIRE",
+            "level": 11,
+            "tag": "C5",
+            "aggro": true
+          }
+        ]
+      },
+      {
+        "log": {
+          "th": "ตรวจสอบหอคอย"
+        },
+        "objectives": [
+          {
+            "type": "SCAN",
+            "targetId": "OBJ_SPIRE",
+            "locationId": "LOC_SPIRE_TOWER",
+            "label": {
+              "th": "สแกนหอคอยไมโทซิส (กด T)"
+            }
+          }
+        ],
+        "id": "S3"
+      },
+      {
+        "log": {
+          "th": "ซ่อมจังหวะการแบ่งเซลล์ของหอคอย"
+        },
+        "objectives": [
+          {
+            "type": "QUIZ",
+            "quizSetId": "QZ_CH1_MITOSIS",
+            "label": {
+              "th": "เรียงลำดับการแบ่งเซลล์"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_C5_DONE"
+          }
+        ],
+        "id": "S4"
+      }
+    ],
+    "rewards": [
+      {
+        "itemId": "INSIGHT_CRYSTAL",
+        "count": 50
+      },
+      {
+        "itemId": "GLUCOSE",
+        "count": 12000
+      },
+      {
+        "itemId": "EXP_DI",
+        "count": 3
+      },
+      {
+        "itemId": "RR_EXP",
+        "count": 450
+      }
+    ],
+    "nextQuest": "MQ_1_06"
+  },
+  {
+    "id": "MQ_1_06",
+    "type": "MAIN",
+    "chapter": "CH1",
+    "title": {
+      "th": "ปราชญ์แห่งศิลา"
+    },
+    "description": {
+      "th": "เซลล์ที่หลุดการควบคุมรวมตัวกันเป็นโกเลมยักษ์ ต้องหยุดมันก่อนที่มันจะแพร่กระจายไปทั่วไซโทเรีย"
+    },
+    "bioTopics": [
+      "bio.cell.cell_division",
+      "bio.cell.organelle",
+      "bio.chem.enzyme",
+      "bio.cell.membrane_transport"
+    ],
+    "prerequisites": [
+      {
+        "type": "QUEST_COMPLETED",
+        "value": "MQ_1_05"
+      }
+    ],
+    "steps": [
+      {
+        "log": {
+          "th": "ปราบโกเลมมะเร็ง"
+        },
+        "objectives": [
+          {
+            "type": "DEFEAT",
+            "enemyId": "EN_BOSS_GOLEM",
+            "label": {
+              "th": "ปราบโกเลมมะเร็ง (ทำลายก้อนเนื้องอกให้เร็ว!)"
+            }
+          }
+        ],
+        "onStart": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_C6_GOLEM"
+          },
+          {
+            "action": "SPAWN_ENEMY",
+            "enemyId": "EN_BOSS_GOLEM",
+            "count": 1,
+            "locationId": "LOC_SPIRE",
+            "level": 12,
+            "tag": "C6",
+            "aggro": true
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "WAIT",
+            "ms": 1000
+          },
+          {
+            "action": "CLEAR_ENEMIES",
+            "tag": "C6"
+          },
+          {
+            "action": "SET_FLAG",
+            "flag": "spire_calm"
+          },
+          {
+            "action": "SET_FLAG",
+            "flag": "hookia_visible"
+          },
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_C6_AFTER"
+          }
+        ],
+        "id": "S1"
+      },
+      {
+        "log": {
+          "th": "คุยกับผู้ปรากฏตัวที่ลานหอคอย"
+        },
+        "objectives": [
+          {
+            "type": "TALK",
+            "npcId": "NPC_HOOKIA",
+            "dialogueId": "DLG_C6_HOOKIA"
+          }
+        ],
+        "id": "S2"
+      },
+      {
+        "log": {
+          "th": "บททดสอบของปราชญ์"
+        },
+        "objectives": [
+          {
+            "type": "QUIZ",
+            "npcId": "NPC_HOOKIA",
+            "quizSetId": "QZ_CH1_FINAL",
+            "dialogueId": "DLG_C6_EXAM",
+            "label": {
+              "th": "รับบททดสอบจากปราชญ์ฮูเคีย (กด F)"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_C6_PASS"
+          },
+          {
+            "action": "CHAPTER_CARD",
+            "top": "บทที่ 1 · จบ",
+            "title": "เซลล์ที่ไม่ยอมหยุดแบ่งตัว"
+          }
+        ],
+        "id": "S3"
+      }
+    ],
+    "rewards": [
+      {
+        "itemId": "INSIGHT_CRYSTAL",
+        "count": 60
+      },
+      {
+        "itemId": "GLUCOSE",
+        "count": 20000
+      },
+      {
+        "itemId": "EXP_DI",
+        "count": 3
+      },
+      {
+        "itemId": "GROWTH_FACTOR",
+        "count": 3
+      },
+      {
+        "itemId": "MAT_GOLEM_CORE",
+        "count": 1
+      },
+      {
+        "itemId": "RR_EXP",
+        "count": 600
+      }
+    ],
+    "nextQuest": null
+  },
+  {
+    "id": "MQ_2_01",
+    "type": "MAIN",
+    "chapter": "CH2",
+    "title": {
+      "th": "จดหมายจากเจโนเวีย"
+    },
+    "description": {
+      "th": "หอสมุดพันธุกรรมแห่งเจโนเวียถูกบุกรุก ประมวลจีโนมหายไป — ถึงเวลาขึ้นเรือเหาะไปทางเหนือ"
+    },
+    "bioTopics": [
+      "bio.genetics.dna"
+    ],
+    "prerequisites": [
+      {
+        "type": "QUEST_COMPLETED",
+        "value": "MQ_1_06"
+      }
+    ],
+    "steps": [
+      {
+        "log": {
+          "th": "พบศาสตราจารย์ไลโซที่สถาบัน"
+        },
+        "objectives": [
+          {
+            "type": "TALK",
+            "npcId": "NPC_LYSO_ACAD",
+            "dialogueId": "DLG_G1_LYSO"
+          }
+        ],
+        "onStart": [
+          {
+            "action": "CHAPTER_CARD",
+            "top": "บทที่ 2",
+            "title": "รหัสที่ถูกขโมย"
+          },
+          {
+            "action": "AMOEBY",
+            "text": "ศาสตราจารย์ไลโซเรียกพบที่สถาบันในนครเซลลาเรีย!"
+          }
+        ],
+        "id": "S1"
+      },
+      {
+        "log": {
+          "th": "ขึ้นเรือเหาะที่ลานหลังสถาบัน"
+        },
+        "objectives": [
+          {
+            "type": "INTERACT",
+            "objectId": "OBJ_AIRSHIP_CITY",
+            "label": {
+              "th": "ขึ้นเรือเหาะที่ลานหลังสถาบัน (กด F)"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "SET_FLAG",
+            "flag": "genovia_unlocked"
+          },
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_G1_FLIGHT"
+          },
+          {
+            "action": "TELEPORT",
+            "locationId": "LOC_GEN_ARRIVE"
+          }
+        ],
+        "id": "S2"
+      },
+      {
+        "log": {
+          "th": "พบเฮลิกซ์ที่ลานเกลียวน้ำแข็ง"
+        },
+        "objectives": [
+          {
+            "type": "TALK",
+            "npcId": "NPC_HELIX",
+            "dialogueId": "DLG_G1_HELIX"
+          }
+        ],
+        "id": "S3"
+      },
+      {
+        "log": {
+          "th": "ศึกษาเกลียวน้ำแข็ง"
+        },
+        "objectives": [
+          {
+            "type": "SCAN",
+            "targetId": "OBJ_DNA_SPIRE",
+            "locationId": "LOC_GEN_PLAZA",
+            "label": {
+              "th": "สแกนเกลียวน้ำแข็ง DNA (กด T)"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_G1_SPIRE"
+          }
+        ],
+        "id": "S4"
+      },
+      {
+        "log": {
+          "th": "รับบททดสอบจากเฮลิกซ์"
+        },
+        "objectives": [
+          {
+            "type": "QUIZ",
+            "npcId": "NPC_HELIX",
+            "quizSetId": "QZ_CH2_DNA",
+            "dialogueId": "DLG_G1_TEST",
+            "label": {
+              "th": "คุยกับเฮลิกซ์ (กด F)"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_G1_DONE"
+          }
+        ],
+        "id": "S5"
+      }
+    ],
+    "rewards": [
+      {
+        "itemId": "INSIGHT_CRYSTAL",
+        "count": 50
+      },
+      {
+        "itemId": "GLUCOSE",
+        "count": 14000
+      },
+      {
+        "itemId": "EXP_DI",
+        "count": 3
+      },
+      {
+        "itemId": "RR_EXP",
+        "count": 500
+      }
+    ],
+    "nextQuest": "MQ_2_02",
+    "autoStart": true
+  },
+  {
+    "id": "MQ_2_02",
+    "type": "MAIN",
+    "chapter": "CH2",
+    "title": {
+      "th": "หอสมุดใต้ธารน้ำแข็ง"
+    },
+    "description": {
+      "th": "หอสมุดพันธุกรรมถูกล็อกจากด้านใน และมีคนของซินดิเคตวนเวียนอยู่ด้านหน้า"
+    },
+    "bioTopics": [
+      "bio.genetics.dna"
+    ],
+    "prerequisites": [
+      {
+        "type": "QUEST_COMPLETED",
+        "value": "MQ_2_01"
+      }
+    ],
+    "steps": [
+      {
+        "log": {
+          "th": "ไปที่หอสมุดพันธุกรรม (ตีนธารน้ำแข็งทางเหนือ)"
+        },
+        "objectives": [
+          {
+            "type": "GOTO",
+            "locationId": "LOC_GEN_LIBRARY",
+            "radius": 14
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_G2_LIBRARY"
+          }
+        ],
+        "id": "S1"
+      },
+      {
+        "log": {
+          "th": "ขับไล่ซินดิเคตออกจากหอสมุด"
+        },
+        "objectives": [
+          {
+            "type": "DEFEAT",
+            "enemyId": "EN_SYN_DOC",
+            "label": {
+              "th": "ปราบนักวิจัยซินดิเคต"
+            }
+          },
+          {
+            "type": "DEFEAT",
+            "enemyId": "EN_BT_CLUB",
+            "count": 2,
+            "label": {
+              "th": "ปราบบลายต์ทรูปเปอร์"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "CLEAR_ENEMIES",
+            "tag": "G2"
+          }
+        ],
+        "id": "S2",
+        "onStart": [
+          {
+            "action": "SPAWN_ENEMY",
+            "enemyId": "EN_SYN_DOC",
+            "count": 1,
+            "locationId": "LOC_GEN_LIBRARY",
+            "level": 14,
+            "tag": "G2",
+            "aggro": true
+          },
+          {
+            "action": "SPAWN_ENEMY",
+            "enemyId": "EN_BT_CLUB",
+            "count": 2,
+            "locationId": "LOC_GEN_LIBRARY",
+            "level": 14,
+            "tag": "G2",
+            "element": "CRYO",
+            "aggro": true
+          }
+        ]
+      },
+      {
+        "log": {
+          "th": "ไขประตูรหัสเบสคู่"
+        },
+        "objectives": [
+          {
+            "type": "PUZZLE",
+            "objectId": "OBJ_LIBRARY_DOOR",
+            "puzzleId": "PZ_BASE_PAIR",
+            "label": {
+              "th": "ไขประตูรหัสเบสคู่ (กด F ที่ประตู)"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "SET_FLAG",
+            "flag": "library_open"
+          },
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_G2_OPEN"
+          }
+        ],
+        "id": "S3"
+      },
+      {
+        "log": {
+          "th": "อ่านบันทึกกับเฮลิกซ์"
+        },
+        "objectives": [
+          {
+            "type": "QUIZ",
+            "npcId": "NPC_HELIX_LIB",
+            "quizSetId": "QZ_CH2_REPLICATION",
+            "dialogueId": "DLG_G2_HELIX",
+            "label": {
+              "th": "คุยกับเฮลิกซ์ในหอสมุด (กด F)"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_G2_DONE"
+          }
+        ],
+        "id": "S4"
+      }
+    ],
+    "rewards": [
+      {
+        "itemId": "INSIGHT_CRYSTAL",
+        "count": 50
+      },
+      {
+        "itemId": "GLUCOSE",
+        "count": 14000
+      },
+      {
+        "itemId": "EXP_DI",
+        "count": 3
+      },
+      {
+        "itemId": "MAT_ICE_HELIX",
+        "count": 2
+      },
+      {
+        "itemId": "RR_EXP",
+        "count": 500
+      }
+    ],
+    "nextQuest": "MQ_2_03"
+  },
+  {
+    "id": "MQ_2_03",
+    "type": "MAIN",
+    "chapter": "CH2",
+    "title": {
+      "th": "ถ้ำโครโมโซม"
+    },
+    "description": {
+      "th": "รอยเท้าของขโมยนำไปสู่ถ้ำที่เก็บแม่แบบโครโมโซมโบราณ"
+    },
+    "bioTopics": [
+      "bio.genetics.chromosome"
+    ],
+    "prerequisites": [
+      {
+        "type": "QUEST_COMPLETED",
+        "value": "MQ_2_02"
+      }
+    ],
+    "steps": [
+      {
+        "log": {
+          "th": "เดินทางไปถ้ำโครโมโซม (ตะวันตก)"
+        },
+        "objectives": [
+          {
+            "type": "GOTO",
+            "locationId": "LOC_GEN_CAVE",
+            "radius": 13
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_G3_CAVE"
+          }
+        ],
+        "id": "S1"
+      },
+      {
+        "log": {
+          "th": "สแกนผลึกโครโมโซม"
+        },
+        "objectives": [
+          {
+            "type": "SCAN",
+            "targetTag": "chromosome",
+            "count": 3,
+            "label": {
+              "th": "สแกนผลึกโครโมโซมทั้ง 3 คู่ (กด T)"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "CLEAR_ENEMIES",
+            "tag": "G3"
+          },
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_G3_SCANNED"
+          }
+        ],
+        "id": "S2",
+        "onStart": [
+          {
+            "action": "SPAWN_ENEMY",
+            "enemyId": "EN_BAC_COCCI",
+            "count": 3,
+            "locationId": "LOC_GEN_CAVE",
+            "level": 14,
+            "tag": "G3",
+            "element": "CRYO",
+            "aggro": true
+          }
+        ]
+      },
+      {
+        "log": {
+          "th": "ไขความลับของโครโมโซม"
+        },
+        "objectives": [
+          {
+            "type": "QUIZ",
+            "quizSetId": "QZ_CH2_CHROMOSOME",
+            "label": {
+              "th": "ตอบคำถามเรื่องโครโมโซม"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_G3_DONE"
+          }
+        ],
+        "id": "S3"
+      }
+    ],
+    "rewards": [
+      {
+        "itemId": "INSIGHT_CRYSTAL",
+        "count": 50
+      },
+      {
+        "itemId": "GLUCOSE",
+        "count": 14000
+      },
+      {
+        "itemId": "EXP_DI",
+        "count": 3
+      },
+      {
+        "itemId": "RR_EXP",
+        "count": 500
+      }
+    ],
+    "nextQuest": "MQ_2_04"
+  },
+  {
+    "id": "MQ_2_04",
+    "type": "MAIN",
+    "chapter": "CH2",
+    "title": {
+      "th": "สวนถั่วของเมนเดลิออน"
+    },
+    "description": {
+      "th": "ปราชญ์ผู้ปลูกถั่วลันเตาในเรือนกระจกน้ำแข็งอาจเห็นขโมย — และมีบทเรียนรอเจ้าอยู่"
+    },
+    "bioTopics": [
+      "bio.genetics.mendel"
+    ],
+    "prerequisites": [
+      {
+        "type": "QUEST_COMPLETED",
+        "value": "MQ_2_03"
+      }
+    ],
+    "steps": [
+      {
+        "log": {
+          "th": "พบปราชญ์เมนเดลิออนที่เรือนกระจก"
+        },
+        "objectives": [
+          {
+            "type": "TALK",
+            "npcId": "NPC_MENDELION",
+            "dialogueId": "DLG_G4_MENDEL"
+          }
+        ],
+        "id": "S1"
+      },
+      {
+        "log": {
+          "th": "ทำตารางพันเนตต์ที่แปลงผสมพันธุ์"
+        },
+        "objectives": [
+          {
+            "type": "PUZZLE",
+            "objectId": "OBJ_PEA_BED",
+            "puzzleId": "PZ_PUNNETT",
+            "label": {
+              "th": "ทำตารางพันเนตต์ที่แปลงผสมพันธุ์ (กด F)"
+            }
+          }
+        ],
+        "id": "S2"
+      },
+      {
+        "log": {
+          "th": "รับบทเรียนจากปราชญ์"
+        },
+        "objectives": [
+          {
+            "type": "QUIZ",
+            "npcId": "NPC_MENDELION",
+            "quizSetId": "QZ_CH2_MENDEL",
+            "dialogueId": "DLG_G4_EXAM",
+            "label": {
+              "th": "คุยกับปราชญ์เมนเดลิออน (กด F)"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_G4_DONE"
+          }
+        ],
+        "id": "S3"
+      }
+    ],
+    "rewards": [
+      {
+        "itemId": "INSIGHT_CRYSTAL",
+        "count": 50
+      },
+      {
+        "itemId": "GLUCOSE",
+        "count": 14000
+      },
+      {
+        "itemId": "EXP_DI",
+        "count": 3
+      },
+      {
+        "itemId": "GROWTH_FACTOR",
+        "count": 2
+      },
+      {
+        "itemId": "RR_EXP",
+        "count": 500
+      }
+    ],
+    "nextQuest": "MQ_2_05"
+  },
+  {
+    "id": "MQ_2_05",
+    "type": "MAIN",
+    "chapter": "CH2",
+    "title": {
+      "th": "หมู่บ้านอัลลีล"
+    },
+    "description": {
+      "th": "ซินดิเคตใช้ความไม่รู้เรื่องพันธุกรรมหลอกเก็บตัวอย่างเลือดจากชาวบ้าน"
+    },
+    "bioTopics": [
+      "bio.genetics.heredity",
+      "bio.genetics.probability"
+    ],
+    "prerequisites": [
+      {
+        "type": "QUEST_COMPLETED",
+        "value": "MQ_2_04"
+      }
+    ],
+    "steps": [
+      {
+        "log": {
+          "th": "ฟังปัญหาของชาวบ้าน"
+        },
+        "objectives": [
+          {
+            "type": "TALK",
+            "npcId": "NPC_VIL_ABO",
+            "dialogueId": "DLG_G5_ABO",
+            "label": {
+              "th": "คุยกับคุณแม่โรซา"
+            }
+          },
+          {
+            "type": "TALK",
+            "npcId": "NPC_VIL_CB",
+            "dialogueId": "DLG_G5_CB",
+            "label": {
+              "th": "คุยกับเด็กชายเลนซ์"
+            }
+          },
+          {
+            "type": "TALK",
+            "npcId": "NPC_VIL_DIMPLE",
+            "dialogueId": "DLG_G5_DIMPLE",
+            "label": {
+              "th": "คุยกับลุงฟอสส์"
+            }
+          }
+        ],
+        "id": "S1"
+      },
+      {
+        "log": {
+          "th": "ไขปริศนาครอบครัว"
+        },
+        "objectives": [
+          {
+            "type": "QUIZ",
+            "quizSetId": "QZ_CH2_HEREDITY",
+            "label": {
+              "th": "ตอบคำถามเรื่องการถ่ายทอดลักษณะ"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_G5_DONE"
+          }
+        ],
+        "id": "S2"
+      }
+    ],
+    "rewards": [
+      {
+        "itemId": "INSIGHT_CRYSTAL",
+        "count": 50
+      },
+      {
+        "itemId": "GLUCOSE",
+        "count": 14000
+      },
+      {
+        "itemId": "EXP_DI",
+        "count": 3
+      },
+      {
+        "itemId": "MAT_ICE_HELIX",
+        "count": 2
+      },
+      {
+        "itemId": "RR_EXP",
+        "count": 500
+      }
+    ],
+    "nextQuest": "MQ_2_06"
+  },
+  {
+    "id": "MQ_2_06",
+    "type": "MAIN",
+    "chapter": "CH2",
+    "title": {
+      "th": "ไคเมร่าที่ไม่ควรเกิด"
+    },
+    "description": {
+      "th": "ป้อมซินดิเคตคือห้องแล็บของ ดร.ไคเมร่า — และสิ่งที่เขาสร้างจากรหัสที่ขโมยมา"
+    },
+    "bioTopics": [
+      "bio.genetics.biotech",
+      "bio.genetics.mendel",
+      "bio.genetics.dna"
+    ],
+    "prerequisites": [
+      {
+        "type": "QUEST_COMPLETED",
+        "value": "MQ_2_05"
+      }
+    ],
+    "steps": [
+      {
+        "log": {
+          "th": "บุกป้อมซินดิเคต (ตะวันออกเฉียงเหนือ)"
+        },
+        "objectives": [
+          {
+            "type": "GOTO",
+            "locationId": "LOC_GEN_FORT",
+            "radius": 17
+          }
+        ],
+        "onStart": [
+          {
+            "action": "SET_FLAG",
+            "flag": "chimera2_visible"
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_G6_FORT"
+          },
+          {
+            "action": "SET_FLAG",
+            "flag": "chimera2_gone"
+          }
+        ],
+        "id": "S1"
+      },
+      {
+        "log": {
+          "th": "หยุดนักวิจัยและตรวจห้องแล็บ"
+        },
+        "objectives": [
+          {
+            "type": "DEFEAT",
+            "enemyId": "EN_SYN_DOC",
+            "count": 2,
+            "label": {
+              "th": "ปราบนักวิจัยซินดิเคต"
+            }
+          },
+          {
+            "type": "SCAN",
+            "targetTag": "biotech",
+            "count": 2,
+            "label": {
+              "th": "สแกนเครื่อง PCR และแผ่นเจล (กด T)"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "CLEAR_ENEMIES",
+            "tag": "G6A"
+          },
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_G6_BEAST"
+          }
+        ],
+        "id": "S2",
+        "onStart": [
+          {
+            "action": "SPAWN_ENEMY",
+            "enemyId": "EN_SYN_DOC",
+            "count": 2,
+            "locationId": "LOC_GEN_FORT",
+            "level": 15,
+            "tag": "G6A",
+            "aggro": true
+          },
+          {
+            "action": "SPAWN_ENEMY",
+            "enemyId": "EN_BT_CLUB",
+            "count": 2,
+            "locationId": "LOC_GEN_FORT",
+            "level": 15,
+            "tag": "G6A",
+            "element": "CRYO",
+            "aggro": true
+          }
+        ]
+      },
+      {
+        "log": {
+          "th": "ปราบไคเมร่าบีสต์"
+        },
+        "objectives": [
+          {
+            "type": "DEFEAT",
+            "enemyId": "EN_BOSS_CHIMERA",
+            "label": {
+              "th": "ปราบไคเมร่าบีสต์ (ระวังมันเปลี่ยนธาตุ!)"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "WAIT",
+            "ms": 1000
+          },
+          {
+            "action": "CLEAR_ENEMIES",
+            "tag": "G6"
+          },
+          {
+            "action": "SET_FLAG",
+            "flag": "mendelion_fort"
+          },
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_G6_AFTER"
+          }
+        ],
+        "id": "S3",
+        "onStart": [
+          {
+            "action": "SPAWN_ENEMY",
+            "enemyId": "EN_BOSS_CHIMERA",
+            "count": 1,
+            "locationId": "LOC_GEN_FORT",
+            "level": 16,
+            "tag": "G6",
+            "aggro": true
+          }
+        ]
+      },
+      {
+        "log": {
+          "th": "บททดสอบของปราชญ์เมนเดลิออน"
+        },
+        "objectives": [
+          {
+            "type": "QUIZ",
+            "npcId": "NPC_MENDELION_FORT",
+            "quizSetId": "QZ_CH2_FINAL",
+            "dialogueId": "DLG_G6_EXAM",
+            "label": {
+              "th": "รับบททดสอบจากปราชญ์เมนเดลิออน (กด F)"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_G6_PASS"
+          },
+          {
+            "action": "CHAPTER_CARD",
+            "top": "บทที่ 2 · จบ",
+            "title": "รหัสที่ถูกขโมย"
+          }
+        ],
+        "id": "S4"
+      }
+    ],
+    "rewards": [
+      {
+        "itemId": "INSIGHT_CRYSTAL",
+        "count": 60
+      },
+      {
+        "itemId": "GLUCOSE",
+        "count": 24000
+      },
+      {
+        "itemId": "EXP_DI",
+        "count": 4
+      },
+      {
+        "itemId": "GROWTH_FACTOR",
+        "count": 3
+      },
+      {
+        "itemId": "MAT_CHIMERA_SCALE",
+        "count": 1
+      },
+      {
+        "itemId": "RR_EXP",
+        "count": 700
+      }
+    ],
+    "nextQuest": null
+  },
+  {
+    "id": "MQ_3_01",
+    "type": "MAIN",
+    "chapter": "CH3",
+    "title": {
+      "th": "ลมจากบ้านเกิด"
+    },
+    "description": {
+      "th": "ยายของอัลวีส่งจดหมายมาว่าเกาะในซีเฟอเรียกำลังจางหาย — ถึงเวลาเยือนบ้านเกิดของอัลวี"
+    },
+    "bioTopics": [
+      "bio.evolution"
+    ],
+    "prerequisites": [
+      {
+        "type": "QUEST_COMPLETED",
+        "value": "MQ_2_06"
+      }
+    ],
+    "steps": [
+      {
+        "log": {
+          "th": "พบศาสตราจารย์ไลโซที่สถาบัน"
+        },
+        "objectives": [
+          {
+            "type": "TALK",
+            "npcId": "NPC_LYSO_ACAD",
+            "dialogueId": "DLG_Z1_LYSO"
+          }
+        ],
+        "onStart": [
+          {
+            "action": "CHAPTER_CARD",
+            "top": "บทที่ 3",
+            "title": "หมู่เกาะที่หายไป"
+          },
+          {
+            "action": "AMOEBY",
+            "text": "อัลวีได้จดหมายจากบ้าน! ไปหาศาสตราจารย์ไลโซที่สถาบันกัน"
+          }
+        ],
+        "id": "S1"
+      },
+      {
+        "log": {
+          "th": "ขึ้นเรือเหาะที่ลานหลังสถาบัน"
+        },
+        "objectives": [
+          {
+            "type": "INTERACT",
+            "objectId": "OBJ_AIRSHIP_CITY",
+            "label": {
+              "th": "ขึ้นเรือเหาะไปซีเฟอเรีย (กด F)"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "SET_FLAG",
+            "flag": "zepheria_unlocked"
+          },
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_Z1_FLIGHT"
+          },
+          {
+            "action": "TELEPORT",
+            "locationId": "LOC_ZEP_ARRIVE"
+          }
+        ],
+        "id": "S2"
+      },
+      {
+        "log": {
+          "th": "ทักทายยายของอัลวี"
+        },
+        "objectives": [
+          {
+            "type": "TALK",
+            "npcId": "NPC_GRANNY",
+            "dialogueId": "DLG_Z1_GRANNY"
+          }
+        ],
+        "id": "S3"
+      },
+      {
+        "log": {
+          "th": "พบกัปตันดาร์วินที่เรือบีเกิล"
+        },
+        "objectives": [
+          {
+            "type": "QUIZ",
+            "npcId": "NPC_DARWYN",
+            "quizSetId": "QZ_CH3_EVO_INTRO",
+            "dialogueId": "DLG_Z1_DARWYN",
+            "label": {
+              "th": "คุยกับกัปตันดาร์วิน (กด F)"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_Z1_DONE"
+          }
+        ],
+        "id": "S4"
+      }
+    ],
+    "rewards": [
+      {
+        "itemId": "INSIGHT_CRYSTAL",
+        "count": 50
+      },
+      {
+        "itemId": "GLUCOSE",
+        "count": 16000
+      },
+      {
+        "itemId": "EXP_DI",
+        "count": 3
+      },
+      {
+        "itemId": "RR_EXP",
+        "count": 550
+      }
+    ],
+    "nextQuest": "MQ_3_02",
+    "autoStart": true
+  },
+  {
+    "id": "MQ_3_02",
+    "type": "MAIN",
+    "chapter": "CH3",
+    "title": {
+      "th": "จะงอยปากของนกฟินช์"
+    },
+    "description": {
+      "th": "นกฟินช์บนเกาะทางตะวันตกเงียบหายไป — แต่จะงอยปากของพวกมันซ่อนความลับของวิวัฒนาการไว้"
+    },
+    "bioTopics": [
+      "bio.evolution"
+    ],
+    "prerequisites": [
+      {
+        "type": "QUEST_COMPLETED",
+        "value": "MQ_3_01"
+      }
+    ],
+    "steps": [
+      {
+        "log": {
+          "th": "ข้ามสะพานไปเกาะนกฟินช์ (ตะวันตก)"
+        },
+        "objectives": [
+          {
+            "type": "GOTO",
+            "locationId": "LOC_ZEP_FINCH",
+            "radius": 15
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_Z2_FINCH"
+          }
+        ],
+        "id": "S1"
+      },
+      {
+        "log": {
+          "th": "สังเกตนกฟินช์"
+        },
+        "objectives": [
+          {
+            "type": "SCAN",
+            "targetTag": "finch",
+            "count": 3,
+            "label": {
+              "th": "สแกนนกฟินช์ทั้ง 3 ตัว (กด T)"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_Z2_SCANNED"
+          }
+        ],
+        "id": "S2"
+      },
+      {
+        "log": {
+          "th": "จับคู่จะงอยปากกับอาหาร"
+        },
+        "objectives": [
+          {
+            "type": "PUZZLE",
+            "objectId": "OBJ_FINCH_BOARD",
+            "puzzleId": "PZ_BEAK",
+            "label": {
+              "th": "เปิดบันทึกของดาร์วินกลางเกาะ (กด F)"
+            }
+          }
+        ],
+        "id": "S3"
+      },
+      {
+        "log": {
+          "th": "สรุปการคัดเลือกโดยธรรมชาติ"
+        },
+        "objectives": [
+          {
+            "type": "QUIZ",
+            "quizSetId": "QZ_CH3_SELECTION",
+            "label": {
+              "th": "ตอบคำถามเรื่องการคัดเลือกโดยธรรมชาติ"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_Z2_DONE"
+          }
+        ],
+        "id": "S4"
+      }
+    ],
+    "rewards": [
+      {
+        "itemId": "INSIGHT_CRYSTAL",
+        "count": 50
+      },
+      {
+        "itemId": "GLUCOSE",
+        "count": 16000
+      },
+      {
+        "itemId": "EXP_DI",
+        "count": 3
+      },
+      {
+        "itemId": "RR_EXP",
+        "count": 550
+      },
+      {
+        "itemId": "MAT_STORM_PEARL",
+        "count": 1
+      }
+    ],
+    "nextQuest": "MQ_3_03"
+  },
+  {
+    "id": "MQ_3_03",
+    "type": "MAIN",
+    "chapter": "CH3",
+    "title": {
+      "th": "กระดูกที่เล่าเรื่อง"
+    },
+    "description": {
+      "th": "หลุมขุดฟอสซิลบนเกาะทางตะวันออกเก็บหลักฐานของวิวัฒนาการไว้ — แต่บลายต์มาขุดคุ้ยก่อน"
+    },
+    "bioTopics": [
+      "bio.evolution"
+    ],
+    "prerequisites": [
+      {
+        "type": "QUEST_COMPLETED",
+        "value": "MQ_3_02"
+      }
+    ],
+    "steps": [
+      {
+        "log": {
+          "th": "ข้ามสะพานไปเกาะฟอสซิล (ตะวันออก)"
+        },
+        "objectives": [
+          {
+            "type": "GOTO",
+            "locationId": "LOC_ZEP_FOSSIL",
+            "radius": 15
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_Z3_FOSSIL"
+          }
+        ],
+        "id": "S1"
+      },
+      {
+        "log": {
+          "th": "ไล่บลายต์และสำรวจหลักฐาน"
+        },
+        "objectives": [
+          {
+            "type": "DEFEAT",
+            "enemyId": "EN_BT_CLUB",
+            "count": 3,
+            "label": {
+              "th": "ไล่บลายต์ทรูปเปอร์"
+            }
+          },
+          {
+            "type": "SCAN",
+            "targetTag": "fossil",
+            "count": 4,
+            "label": {
+              "th": "สแกนฟอสซิล 3 ชิ้น + รูปปั้นขาหน้า (กด T)"
+            }
+          }
+        ],
+        "onStart": [
+          {
+            "action": "SPAWN_ENEMY",
+            "enemyId": "EN_BT_CLUB",
+            "count": 3,
+            "locationId": "LOC_ZEP_FOSSIL",
+            "level": 18,
+            "tag": "Z3",
+            "element": "ANEMO",
+            "aggro": true
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "CLEAR_ENEMIES",
+            "tag": "Z3"
+          },
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_Z3_SCANNED"
+          }
+        ],
+        "id": "S2"
+      },
+      {
+        "log": {
+          "th": "ไขหลักฐานของวิวัฒนาการ"
+        },
+        "objectives": [
+          {
+            "type": "QUIZ",
+            "quizSetId": "QZ_CH3_EVIDENCE",
+            "label": {
+              "th": "ตอบคำถามเรื่องหลักฐานของวิวัฒนาการ"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_Z3_DONE"
+          }
+        ],
+        "id": "S3"
+      }
+    ],
+    "rewards": [
+      {
+        "itemId": "INSIGHT_CRYSTAL",
+        "count": 50
+      },
+      {
+        "itemId": "GLUCOSE",
+        "count": 16000
+      },
+      {
+        "itemId": "EXP_DI",
+        "count": 3
+      },
+      {
+        "itemId": "RR_EXP",
+        "count": 550
+      },
+      {
+        "itemId": "ORE_CALCIUM",
+        "count": 4
+      }
+    ],
+    "nextQuest": "MQ_3_04"
+  },
+  {
+    "id": "MQ_3_04",
+    "type": "MAIN",
+    "chapter": "CH3",
+    "title": {
+      "th": "เสาจัดหมวดหมู่"
+    },
+    "description": {
+      "th": "เกาะที่ไม่มีสะพาน — ต้องร่อนขึ้นกระแสลมไป เสาจัดหมวดหมู่บนนั้นดับลง และเห็ดราเดินได้กำลังอาละวาด"
+    },
+    "bioTopics": [
+      "bio.biodiversity"
+    ],
+    "prerequisites": [
+      {
+        "type": "QUEST_COMPLETED",
+        "value": "MQ_3_03"
+      }
+    ],
+    "steps": [
+      {
+        "log": {
+          "th": "ร่อนขึ้นกระแสลมไปเกาะจัดหมวดหมู่ (ตะวันตกเฉียงเหนือ)"
+        },
+        "objectives": [
+          {
+            "type": "GOTO",
+            "locationId": "LOC_ZEP_TAXON",
+            "radius": 14
+          }
+        ],
+        "onStart": [
+          {
+            "action": "AMOEBY",
+            "text": "ไปที่เกาะกลางลม แล้วกระโดดเข้ากระแสลมสีเขียว กด Space กางร่อน ลมจะพาขึ้นไปเอง!"
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_Z4_TAXON"
+          }
+        ],
+        "id": "S1"
+      },
+      {
+        "log": {
+          "th": "ปราบสปอร์เมจ"
+        },
+        "objectives": [
+          {
+            "type": "DEFEAT",
+            "enemyId": "EN_SPORE_MAGE",
+            "count": 3,
+            "label": {
+              "th": "ปราบสปอร์เมจ (หลบกลุ่มสปอร์!)"
+            }
+          }
+        ],
+        "onStart": [
+          {
+            "action": "SPAWN_ENEMY",
+            "enemyId": "EN_SPORE_MAGE",
+            "count": 3,
+            "locationId": "LOC_ZEP_TAXON",
+            "level": 18,
+            "tag": "Z4",
+            "element": "DENDRO",
+            "aggro": true
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "CLEAR_ENEMIES",
+            "tag": "Z4"
+          },
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_Z4_CLEARED"
+          }
+        ],
+        "id": "S2"
+      },
+      {
+        "log": {
+          "th": "จุดแสงเสาจัดหมวดหมู่"
+        },
+        "objectives": [
+          {
+            "type": "PUZZLE",
+            "objectId": "OBJ_TOTEM",
+            "puzzleId": "PZ_TAXONOMY",
+            "label": {
+              "th": "จัดสิ่งมีชีวิตเข้ากลุ่มที่เสา (กด F)"
+            }
+          }
+        ],
+        "id": "S3"
+      },
+      {
+        "log": {
+          "th": "ภาษาสากลของสิ่งมีชีวิต"
+        },
+        "objectives": [
+          {
+            "type": "QUIZ",
+            "quizSetId": "QZ_CH3_CLASSIFY",
+            "label": {
+              "th": "ตอบคำถามเรื่องการจัดหมวดหมู่"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_Z4_DONE"
+          }
+        ],
+        "id": "S4"
+      }
+    ],
+    "rewards": [
+      {
+        "itemId": "INSIGHT_CRYSTAL",
+        "count": 50
+      },
+      {
+        "itemId": "GLUCOSE",
+        "count": 16000
+      },
+      {
+        "itemId": "EXP_DI",
+        "count": 3
+      },
+      {
+        "itemId": "RR_EXP",
+        "count": 550
+      },
+      {
+        "itemId": "MAT_SPORE_CAP",
+        "count": 3
+      }
+    ],
+    "nextQuest": "MQ_3_05"
+  },
+  {
+    "id": "MQ_3_05",
+    "type": "MAIN",
+    "chapter": "CH3",
+    "title": {
+      "th": "สายใยที่ขาดสะบั้น"
+    },
+    "description": {
+      "th": "สิ่งมีชีวิตต่างถิ่นที่ซินดิเคตปล่อยไว้กำลังกลืนกินเกาะสายใยอาหาร"
+    },
+    "bioTopics": [
+      "bio.ecology"
+    ],
+    "prerequisites": [
+      {
+        "type": "QUEST_COMPLETED",
+        "value": "MQ_3_04"
+      }
+    ],
+    "steps": [
+      {
+        "log": {
+          "th": "ไปเกาะสายใยอาหาร (ตะวันออกเฉียงเหนือ)"
+        },
+        "objectives": [
+          {
+            "type": "GOTO",
+            "locationId": "LOC_ZEP_WEB",
+            "radius": 16
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_Z5_WEB"
+          }
+        ],
+        "id": "S1"
+      },
+      {
+        "log": {
+          "th": "ขับไล่สิ่งมีชีวิตต่างถิ่นที่รุกราน"
+        },
+        "objectives": [
+          {
+            "type": "DEFEAT",
+            "count": 5,
+            "label": {
+              "th": "ขับไล่สไลม์ต่างถิ่น"
+            },
+            "enemyId": "EN_BAC_COCCI"
+          }
+        ],
+        "onStart": [
+          {
+            "action": "SPAWN_ENEMY",
+            "enemyId": "EN_BAC_COCCI",
+            "count": 5,
+            "locationId": "LOC_ZEP_WEB",
+            "level": 18,
+            "tag": "Z5",
+            "element": "ANEMO",
+            "aggro": true
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "CLEAR_ENEMIES",
+            "tag": "Z5"
+          },
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_Z5_CLEARED"
+          }
+        ],
+        "id": "S2"
+      },
+      {
+        "log": {
+          "th": "ซ่อมวงหินสายใยอาหาร"
+        },
+        "objectives": [
+          {
+            "type": "PUZZLE",
+            "objectId": "OBJ_FOODWEB",
+            "puzzleId": "PZ_PYRAMID",
+            "label": {
+              "th": "จัดลำดับโซ่อาหารที่วงหิน (กด F)"
+            }
+          }
+        ],
+        "id": "S3"
+      },
+      {
+        "log": {
+          "th": "ทบทวนระบบนิเวศ"
+        },
+        "objectives": [
+          {
+            "type": "QUIZ",
+            "quizSetId": "QZ_CH3_ECOLOGY",
+            "label": {
+              "th": "ตอบคำถามเรื่องระบบนิเวศ"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_Z5_DONE"
+          }
+        ],
+        "id": "S4"
+      }
+    ],
+    "rewards": [
+      {
+        "itemId": "INSIGHT_CRYSTAL",
+        "count": 50
+      },
+      {
+        "itemId": "GLUCOSE",
+        "count": 16000
+      },
+      {
+        "itemId": "EXP_DI",
+        "count": 3
+      },
+      {
+        "itemId": "RR_EXP",
+        "count": 550
+      },
+      {
+        "itemId": "GROWTH_FACTOR",
+        "count": 2
+      }
+    ],
+    "nextQuest": "MQ_3_06"
+  },
+  {
+    "id": "MQ_3_06",
+    "type": "MAIN",
+    "chapter": "CH3",
+    "title": {
+      "th": "พายุไวรัส"
+    },
+    "description": {
+      "th": "เกาะทางเหนือกำลังจางหาย สิ่งมีชีวิตเหลือไม่ถึงหนึ่งในสิบ — ต้นเหตุคือพายุที่ลอยวนอยู่เหนือเกาะ"
+    },
+    "bioTopics": [
+      "bio.ecology",
+      "bio.biodiversity",
+      "bio.evolution"
+    ],
+    "prerequisites": [
+      {
+        "type": "QUEST_COMPLETED",
+        "value": "MQ_3_05"
+      }
+    ],
+    "steps": [
+      {
+        "log": {
+          "th": "ข้ามสะพานไปเกาะที่กำลังจางหาย (เหนือ)"
+        },
+        "objectives": [
+          {
+            "type": "GOTO",
+            "locationId": "LOC_ZEP_FADE",
+            "radius": 20
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_Z6_FADE"
+          }
+        ],
+        "id": "S1"
+      },
+      {
+        "log": {
+          "th": "สำรวจเกาะกับเรนเจอร์"
+        },
+        "objectives": [
+          {
+            "type": "SCAN",
+            "targetId": "OBJ_LAST_TREE",
+            "locationId": "LOC_ZEP_FADE",
+            "label": {
+              "th": "สแกนต้นไม้ต้นสุดท้ายของสายพันธุ์ (กด T)"
+            }
+          }
+        ],
+        "id": "S2"
+      },
+      {
+        "log": {
+          "th": "ปราบพายุไวรัส"
+        },
+        "objectives": [
+          {
+            "type": "DEFEAT",
+            "enemyId": "EN_BOSS_VIRUS",
+            "label": {
+              "th": "ปราบพายุไวรัส (หลบหนามที่ตกลงมา!)"
+            }
+          }
+        ],
+        "onStart": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_Z6_TEMPEST"
+          },
+          {
+            "action": "SPAWN_ENEMY",
+            "enemyId": "EN_BOSS_VIRUS",
+            "count": 1,
+            "locationId": "LOC_ZEP_FADE",
+            "level": 20,
+            "tag": "Z6",
+            "aggro": true
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "WAIT",
+            "ms": 1000
+          },
+          {
+            "action": "CLEAR_ENEMIES",
+            "tag": "Z6"
+          },
+          {
+            "action": "SET_FLAG",
+            "flag": "zep_restored"
+          },
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_Z6_AFTER"
+          }
+        ],
+        "id": "S3"
+      },
+      {
+        "log": {
+          "th": "บททดสอบของกัปตันดาร์วิน"
+        },
+        "objectives": [
+          {
+            "type": "QUIZ",
+            "npcId": "NPC_DARWYN_FADE",
+            "quizSetId": "QZ_CH3_FINAL",
+            "dialogueId": "DLG_Z6_EXAM",
+            "label": {
+              "th": "รับบททดสอบจากกัปตันดาร์วิน (กด F)"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_Z6_PASS"
+          },
+          {
+            "action": "CHAPTER_CARD",
+            "top": "บทที่ 3 · จบ",
+            "title": "หมู่เกาะที่หายไป"
+          }
+        ],
+        "id": "S4"
+      }
+    ],
+    "rewards": [
+      {
+        "itemId": "INSIGHT_CRYSTAL",
+        "count": 60
+      },
+      {
+        "itemId": "GLUCOSE",
+        "count": 26000
+      },
+      {
+        "itemId": "EXP_DI",
+        "count": 4
+      },
+      {
+        "itemId": "GROWTH_FACTOR",
+        "count": 3
+      },
+      {
+        "itemId": "MAT_STORM_PEARL",
+        "count": 2
+      },
+      {
+        "itemId": "RR_EXP",
+        "count": 750
+      }
+    ],
+    "nextQuest": null
+  },
+  {
+    "id": "MQ_4_01",
+    "type": "MAIN",
+    "chapter": "CH4",
+    "title": {
+      "th": "ป่าที่หยุดหายใจ"
+    },
+    "description": {
+      "th": "จดหมายจากฟลอแรนทิส: ใบไม้ทั้งป่าซีดเป็นสีเทา ต้นไม้หยุดสังเคราะห์ด้วยแสง — ถึงเวลาไปบ้านเกิดของคลอเรน"
+    },
+    "bioTopics": [
+      "bio.plant.tissue"
+    ],
+    "prerequisites": [
+      {
+        "type": "QUEST_COMPLETED",
+        "value": "MQ_3_06"
+      }
+    ],
+    "steps": [
+      {
+        "log": {
+          "th": "พบศาสตราจารย์ไลโซที่สถาบัน"
+        },
+        "objectives": [
+          {
+            "type": "TALK",
+            "npcId": "NPC_LYSO_ACAD",
+            "dialogueId": "DLG_F1_LYSO"
+          }
+        ],
+        "onStart": [
+          {
+            "action": "CHAPTER_CARD",
+            "top": "บทที่ 4",
+            "title": "ป่าที่หยุดหายใจ"
+          },
+          {
+            "action": "AMOEBY",
+            "text": "มีจดหมายด่วนมาจากฟลอแรนทิส! ไปหาศาสตราจารย์ไลโซที่สถาบันกัน"
+          }
+        ],
+        "id": "S1"
+      },
+      {
+        "log": {
+          "th": "ขึ้นเรือเหาะที่ลานหลังสถาบัน"
+        },
+        "objectives": [
+          {
+            "type": "INTERACT",
+            "objectId": "OBJ_AIRSHIP_CITY",
+            "label": {
+              "th": "ขึ้นเรือเหาะไปฟลอแรนทิส (กด F)"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "SET_FLAG",
+            "flag": "florantis_unlocked"
+          },
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_F1_FLIGHT"
+          },
+          {
+            "action": "TELEPORT",
+            "locationId": "LOC_FLO_ARRIVE"
+          }
+        ],
+        "id": "S2"
+      },
+      {
+        "log": {
+          "th": "พบปราชญ์ลินนาร่าที่หมู่บ้านรากไม้"
+        },
+        "objectives": [
+          {
+            "type": "QUIZ",
+            "npcId": "NPC_LINNARA",
+            "quizSetId": "QZ_CH4_INTRO",
+            "dialogueId": "DLG_F1_LINNARA",
+            "label": {
+              "th": "คุยกับปราชญ์ลินนาร่า (กด F)"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_F1_DONE"
+          }
+        ],
+        "id": "S3"
+      }
+    ],
+    "rewards": [
+      {
+        "itemId": "INSIGHT_CRYSTAL",
+        "count": 50
+      },
+      {
+        "itemId": "GLUCOSE",
+        "count": 18000
+      },
+      {
+        "itemId": "EXP_DI",
+        "count": 3
+      },
+      {
+        "itemId": "RR_EXP",
+        "count": 600
+      }
+    ],
+    "nextQuest": "MQ_4_02",
+    "autoStart": true
+  },
+  {
+    "id": "MQ_4_02",
+    "type": "MAIN",
+    "chapter": "CH4",
+    "title": {
+      "th": "ท่อที่อุดตัน"
+    },
+    "description": {
+      "th": "ต้นไซเลมยักษ์ล้มป่วยเป็นต้นแรก — ท่อลำเลียงของมันถูกอุดจนน้ำขึ้นไม่ถึงใบ"
+    },
+    "bioTopics": [
+      "bio.plant.tissue"
+    ],
+    "prerequisites": [
+      {
+        "type": "QUEST_COMPLETED",
+        "value": "MQ_4_01"
+      }
+    ],
+    "steps": [
+      {
+        "log": {
+          "th": "ไปที่ต้นไซเลมยักษ์ (ตะวันตก)"
+        },
+        "objectives": [
+          {
+            "type": "GOTO",
+            "locationId": "LOC_FLO_ROOTS",
+            "radius": 16
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_F2_ROOTS"
+          }
+        ],
+        "id": "S1"
+      },
+      {
+        "log": {
+          "th": "ไล่แบคทีเรียและสำรวจเนื้อเยื่อ"
+        },
+        "objectives": [
+          {
+            "type": "DEFEAT",
+            "enemyId": "EN_BAC_BACIL",
+            "count": 3,
+            "label": {
+              "th": "ไล่แบคทีเรียบาซิลลัสที่เกาะราก"
+            }
+          },
+          {
+            "type": "SCAN",
+            "targetTag": "tissue",
+            "count": 4,
+            "label": {
+              "th": "สแกนเนื้อเยื่อพืช 4 แบบ (กด T)"
+            }
+          }
+        ],
+        "onStart": [
+          {
+            "action": "SPAWN_ENEMY",
+            "enemyId": "EN_BAC_BACIL",
+            "count": 3,
+            "locationId": "LOC_FLO_ROOTS",
+            "level": 22,
+            "tag": "F2",
+            "aggro": true
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "CLEAR_ENEMIES",
+            "tag": "F2"
+          },
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_F2_SCANNED"
+          }
+        ],
+        "id": "S2"
+      },
+      {
+        "log": {
+          "th": "เปิดท่อลำเลียง"
+        },
+        "objectives": [
+          {
+            "type": "PUZZLE",
+            "objectId": "OBJ_FLO_ROOTBOARD",
+            "puzzleId": "PZ_TISSUE",
+            "label": {
+              "th": "จับคู่เนื้อเยื่อกับหน้าที่ที่ป้าย (กด F)"
+            }
+          }
+        ],
+        "id": "S3"
+      },
+      {
+        "log": {
+          "th": "ทบทวนเนื้อเยื่อพืช"
+        },
+        "objectives": [
+          {
+            "type": "QUIZ",
+            "quizSetId": "QZ_CH4_TISSUE",
+            "label": {
+              "th": "ตอบคำถามเรื่องเนื้อเยื่อพืช"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_F2_DONE"
+          }
+        ],
+        "id": "S4"
+      }
+    ],
+    "rewards": [
+      {
+        "itemId": "INSIGHT_CRYSTAL",
+        "count": 50
+      },
+      {
+        "itemId": "GLUCOSE",
+        "count": 18000
+      },
+      {
+        "itemId": "EXP_DI",
+        "count": 3
+      },
+      {
+        "itemId": "RR_EXP",
+        "count": 600
+      },
+      {
+        "itemId": "MAT_BAC_SLIME",
+        "count": 3
+      }
+    ],
+    "nextQuest": "MQ_4_03"
+  },
+  {
+    "id": "MQ_4_03",
+    "type": "MAIN",
+    "chapter": "CH4",
+    "title": {
+      "th": "ดอกไม้ที่ไม่ติดผล"
+    },
+    "description": {
+      "th": "ดอกไม้ยักษ์บานสะพรั่งแต่ไม่ติดผลมาหลายฤดู — แมลงผสมเกสรหายไปไหนหมด?"
+    },
+    "bioTopics": [
+      "bio.plant.reproduction"
+    ],
+    "prerequisites": [
+      {
+        "type": "QUEST_COMPLETED",
+        "value": "MQ_4_02"
+      }
+    ],
+    "steps": [
+      {
+        "log": {
+          "th": "ไปทุ่งดอกไม้ยักษ์ (ตะวันออก)"
+        },
+        "objectives": [
+          {
+            "type": "GOTO",
+            "locationId": "LOC_FLO_BLOOM",
+            "radius": 16
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_F3_BLOOM"
+          }
+        ],
+        "id": "S1"
+      },
+      {
+        "log": {
+          "th": "ปราบสปอร์เมจ"
+        },
+        "objectives": [
+          {
+            "type": "DEFEAT",
+            "enemyId": "EN_SPORE_MAGE",
+            "count": 3,
+            "label": {
+              "th": "ปราบสปอร์เมจ (หลบกลุ่มสปอร์!)"
+            }
+          }
+        ],
+        "onStart": [
+          {
+            "action": "SPAWN_ENEMY",
+            "enemyId": "EN_SPORE_MAGE",
+            "count": 3,
+            "locationId": "LOC_FLO_BLOOM",
+            "level": 22,
+            "tag": "F3",
+            "element": "DENDRO",
+            "aggro": true
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "CLEAR_ENEMIES",
+            "tag": "F3"
+          },
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_F3_CLEARED"
+          }
+        ],
+        "id": "S2"
+      },
+      {
+        "log": {
+          "th": "ปลุกดอกไม้ยักษ์"
+        },
+        "objectives": [
+          {
+            "type": "PUZZLE",
+            "objectId": "OBJ_FLO_FLOWER",
+            "puzzleId": "PZ_FLOWER",
+            "label": {
+              "th": "ระบุหน้าที่ส่วนต่าง ๆ ของดอก (กด F)"
+            }
+          }
+        ],
+        "id": "S3"
+      },
+      {
+        "log": {
+          "th": "ความลับของดอกไม้"
+        },
+        "objectives": [
+          {
+            "type": "QUIZ",
+            "quizSetId": "QZ_CH4_FLOWER",
+            "label": {
+              "th": "ตอบคำถามเรื่องการสืบพันธุ์ของพืชดอก"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_F3_DONE"
+          }
+        ],
+        "id": "S4"
+      }
+    ],
+    "rewards": [
+      {
+        "itemId": "INSIGHT_CRYSTAL",
+        "count": 50
+      },
+      {
+        "itemId": "GLUCOSE",
+        "count": 18000
+      },
+      {
+        "itemId": "EXP_DI",
+        "count": 3
+      },
+      {
+        "itemId": "RR_EXP",
+        "count": 600
+      },
+      {
+        "itemId": "MAT_SPORE_CAP",
+        "count": 3
+      }
+    ],
+    "nextQuest": "MQ_4_04"
+  },
+  {
+    "id": "MQ_4_04",
+    "type": "MAIN",
+    "chapter": "CH4",
+    "title": {
+      "th": "แสงในใบไม้"
+    },
+    "description": {
+      "th": "ที่ลานขั้นบันไดแสงตะวัน ลินนาร่าปลูกพืชสามชนิดที่เก็บคาร์บอนต่างกัน — กุญแจสู่การทำให้ป่าสังเคราะห์ด้วยแสงอีกครั้ง"
+    },
+    "bioTopics": [
+      "bio.plant.photosynthesis"
+    ],
+    "prerequisites": [
+      {
+        "type": "QUEST_COMPLETED",
+        "value": "MQ_4_03"
+      }
+    ],
+    "steps": [
+      {
+        "log": {
+          "th": "ไปลานขั้นบันไดแสงตะวัน (ตะวันตกเฉียงเหนือ)"
+        },
+        "objectives": [
+          {
+            "type": "GOTO",
+            "locationId": "LOC_FLO_TERRACE",
+            "radius": 16
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_F4_TERRACE"
+          }
+        ],
+        "id": "S1"
+      },
+      {
+        "log": {
+          "th": "สังเกตพืชสามแบบ"
+        },
+        "objectives": [
+          {
+            "type": "SCAN",
+            "targetTag": "psplant",
+            "count": 3,
+            "label": {
+              "th": "สแกนข้าว ข้าวโพด และสับปะรด (กด T)"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_F4_SCANNED"
+          }
+        ],
+        "id": "S2"
+      },
+      {
+        "log": {
+          "th": "ปลุกนาฬิกาแดดใบไม้"
+        },
+        "objectives": [
+          {
+            "type": "PUZZLE",
+            "objectId": "OBJ_FLO_SUNDIAL",
+            "puzzleId": "PZ_PHOTO",
+            "label": {
+              "th": "จัดกลุ่มพืช C3 / C4 / CAM ที่นาฬิกาแดด (กด F)"
+            }
+          }
+        ],
+        "id": "S3"
+      },
+      {
+        "log": {
+          "th": "ทบทวนการสังเคราะห์ด้วยแสง"
+        },
+        "objectives": [
+          {
+            "type": "QUIZ",
+            "quizSetId": "QZ_CH4_PHOTO",
+            "label": {
+              "th": "ตอบคำถามเรื่องการสังเคราะห์ด้วยแสง"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_F4_DONE"
+          }
+        ],
+        "id": "S4"
+      }
+    ],
+    "rewards": [
+      {
+        "itemId": "INSIGHT_CRYSTAL",
+        "count": 50
+      },
+      {
+        "itemId": "GLUCOSE",
+        "count": 18000
+      },
+      {
+        "itemId": "EXP_DI",
+        "count": 3
+      },
+      {
+        "itemId": "RR_EXP",
+        "count": 600
+      },
+      {
+        "itemId": "GROWTH_FACTOR",
+        "count": 2
+      }
+    ],
+    "nextQuest": "MQ_4_05"
+  },
+  {
+    "id": "MQ_4_05",
+    "type": "MAIN",
+    "chapter": "CH4",
+    "title": {
+      "th": "สารสื่อสารของพืช"
+    },
+    "description": {
+      "th": "ต้นกล้าในเรือนเพาะชำโตไม่เท่ากัน และขวดฮอร์โมนของลินนาร่าถูกขโมย"
+    },
+    "bioTopics": [
+      "bio.plant.hormone"
+    ],
+    "prerequisites": [
+      {
+        "type": "QUEST_COMPLETED",
+        "value": "MQ_4_04"
+      }
+    ],
+    "steps": [
+      {
+        "log": {
+          "th": "ไปเรือนเพาะชำ (ตะวันออกเฉียงเหนือ)"
+        },
+        "objectives": [
+          {
+            "type": "GOTO",
+            "locationId": "LOC_FLO_NURSERY",
+            "radius": 15
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_F5_NURSERY"
+          }
+        ],
+        "id": "S1"
+      },
+      {
+        "log": {
+          "th": "ขับไล่บลายต์ทรูปเปอร์"
+        },
+        "objectives": [
+          {
+            "type": "DEFEAT",
+            "enemyId": "EN_BT_CLUB",
+            "count": 4,
+            "label": {
+              "th": "ขับไล่บลายต์ทรูปเปอร์"
+            }
+          }
+        ],
+        "onStart": [
+          {
+            "action": "SPAWN_ENEMY",
+            "enemyId": "EN_BT_CLUB",
+            "count": 4,
+            "locationId": "LOC_FLO_NURSERY",
+            "level": 23,
+            "tag": "F5",
+            "element": "DENDRO",
+            "aggro": true
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "CLEAR_ENEMIES",
+            "tag": "F5"
+          },
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_F5_CLEARED"
+          }
+        ],
+        "id": "S2"
+      },
+      {
+        "log": {
+          "th": "ติดฉลากขวดฮอร์โมน"
+        },
+        "objectives": [
+          {
+            "type": "PUZZLE",
+            "objectId": "OBJ_FLO_HORMONE",
+            "puzzleId": "PZ_HORMONE",
+            "label": {
+              "th": "จับคู่ฮอร์โมนกับผลที่โต๊ะ (กด F)"
+            }
+          }
+        ],
+        "id": "S3"
+      },
+      {
+        "log": {
+          "th": "ทบทวนฮอร์โมนพืช"
+        },
+        "objectives": [
+          {
+            "type": "QUIZ",
+            "quizSetId": "QZ_CH4_HORMONE",
+            "label": {
+              "th": "ตอบคำถามเรื่องฮอร์โมนพืช"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_F5_DONE"
+          }
+        ],
+        "id": "S4"
+      }
+    ],
+    "rewards": [
+      {
+        "itemId": "INSIGHT_CRYSTAL",
+        "count": 50
+      },
+      {
+        "itemId": "GLUCOSE",
+        "count": 18000
+      },
+      {
+        "itemId": "EXP_DI",
+        "count": 3
+      },
+      {
+        "itemId": "RR_EXP",
+        "count": 600
+      },
+      {
+        "itemId": "MAT_BLIGHT_CLOTH",
+        "count": 3
+      }
+    ],
+    "nextQuest": "MQ_4_06"
+  },
+  {
+    "id": "MQ_4_06",
+    "type": "MAIN",
+    "chapter": "CH4",
+    "title": {
+      "th": "ราชินีสปอร์"
+    },
+    "description": {
+      "th": "รากของต้นไม้ทั้งป่าเชื่อมกันที่ต้นไม้มารดา — และบางอย่างกำลังดูดชีวิตของมันไป"
+    },
+    "bioTopics": [
+      "bio.plant.tissue",
+      "bio.plant.reproduction",
+      "bio.plant.photosynthesis",
+      "bio.plant.hormone"
+    ],
+    "prerequisites": [
+      {
+        "type": "QUEST_COMPLETED",
+        "value": "MQ_4_05"
+      }
+    ],
+    "steps": [
+      {
+        "log": {
+          "th": "ไปใจกลางป่า (เหนือ)"
+        },
+        "objectives": [
+          {
+            "type": "GOTO",
+            "locationId": "LOC_FLO_HEART",
+            "radius": 20
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_F6_HEART"
+          }
+        ],
+        "id": "S1"
+      },
+      {
+        "log": {
+          "th": "สำรวจต้นไม้มารดา"
+        },
+        "objectives": [
+          {
+            "type": "SCAN",
+            "targetId": "OBJ_FLO_MOTHER",
+            "locationId": "LOC_FLO_HEART",
+            "label": {
+              "th": "สแกนต้นไม้มารดา (กด T)"
+            }
+          }
+        ],
+        "id": "S2"
+      },
+      {
+        "log": {
+          "th": "ปราบราชินีสปอร์"
+        },
+        "objectives": [
+          {
+            "type": "DEFEAT",
+            "enemyId": "EN_BOSS_SPORE",
+            "label": {
+              "th": "ปราบราชินีสปอร์ (หลบฝนสปอร์!)"
+            }
+          }
+        ],
+        "onStart": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_F6_BOSS"
+          },
+          {
+            "action": "SPAWN_ENEMY",
+            "enemyId": "EN_BOSS_SPORE",
+            "count": 1,
+            "locationId": "LOC_FLO_HEART",
+            "level": 24,
+            "tag": "F6",
+            "aggro": true
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "WAIT",
+            "ms": 1000
+          },
+          {
+            "action": "CLEAR_ENEMIES",
+            "tag": "F6"
+          },
+          {
+            "action": "SET_FLAG",
+            "flag": "flo_restored"
+          },
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_F6_AFTER"
+          }
+        ],
+        "id": "S3"
+      },
+      {
+        "log": {
+          "th": "บททดสอบของปราชญ์ลินนาร่า"
+        },
+        "objectives": [
+          {
+            "type": "QUIZ",
+            "npcId": "NPC_LINNARA_HEART",
+            "quizSetId": "QZ_CH4_FINAL",
+            "dialogueId": "DLG_F6_EXAM",
+            "label": {
+              "th": "รับบททดสอบจากลินนาร่า (กด F)"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_F6_PASS"
+          },
+          {
+            "action": "CHAPTER_CARD",
+            "top": "บทที่ 4 · จบ",
+            "title": "ป่าที่หยุดหายใจ"
+          }
+        ],
+        "id": "S4"
+      }
+    ],
+    "rewards": [
+      {
+        "itemId": "INSIGHT_CRYSTAL",
+        "count": 60
+      },
+      {
+        "itemId": "GLUCOSE",
+        "count": 28000
+      },
+      {
+        "itemId": "EXP_DI",
+        "count": 4
+      },
+      {
+        "itemId": "GROWTH_FACTOR",
+        "count": 3
+      },
+      {
+        "itemId": "MAT_SPORE_CAP",
+        "count": 4
+      },
+      {
+        "itemId": "RR_EXP",
+        "count": 800
+      }
+    ],
+    "nextQuest": null
+  },
+  {
+    "id": "MQ_5_01",
+    "type": "MAIN",
+    "chapter": "CH5",
+    "title": {
+      "th": "เตาที่มอดดับ"
+    },
+    "description": {
+      "th": "เตาหลอมใหญ่ของเมแทบอลิส บ้านเกิดของไมโทร่า ดับลงทั้งที่ยังมีเชื้อเพลิงและอากาศครบ"
+    },
+    "bioTopics": [
+      "bio.cell.cellular_respiration"
+    ],
+    "prerequisites": [
+      {
+        "type": "QUEST_COMPLETED",
+        "value": "MQ_4_06"
+      }
+    ],
+    "steps": [
+      {
+        "log": {
+          "th": "พบศาสตราจารย์ไลโซที่สถาบัน"
+        },
+        "objectives": [
+          {
+            "type": "TALK",
+            "npcId": "NPC_LYSO_ACAD",
+            "dialogueId": "DLG_M1_LYSO"
+          }
+        ],
+        "onStart": [
+          {
+            "action": "CHAPTER_CARD",
+            "top": "บทที่ 5",
+            "title": "เตาที่มอดดับ"
+          },
+          {
+            "action": "AMOEBY",
+            "text": "ไลโซเรียกพบอีกแล้ว! ได้ยินว่ามีเรื่องที่บ้านของไมโทร่า"
+          }
+        ],
+        "id": "S1"
+      },
+      {
+        "log": {
+          "th": "ขึ้นเรือเหาะที่ลานหลังสถาบัน"
+        },
+        "objectives": [
+          {
+            "type": "INTERACT",
+            "objectId": "OBJ_AIRSHIP_CITY",
+            "label": {
+              "th": "ขึ้นเรือเหาะไปเมแทบอลิส (กด F)"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "SET_FLAG",
+            "flag": "metabolis_unlocked"
+          },
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_M1_FLIGHT"
+          },
+          {
+            "action": "TELEPORT",
+            "locationId": "LOC_MET_ARRIVE"
+          }
+        ],
+        "id": "S2"
+      },
+      {
+        "log": {
+          "th": "พบปราชญ์เครบิออนที่โรงตีเหล็ก"
+        },
+        "objectives": [
+          {
+            "type": "QUIZ",
+            "npcId": "NPC_KREBION",
+            "quizSetId": "QZ_CH5_INTRO",
+            "dialogueId": "DLG_M1_KREBION",
+            "label": {
+              "th": "คุยกับปราชญ์เครบิออน (กด F)"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_M1_DONE"
+          }
+        ],
+        "id": "S3"
+      }
+    ],
+    "rewards": [
+      {
+        "itemId": "INSIGHT_CRYSTAL",
+        "count": 50
+      },
+      {
+        "itemId": "GLUCOSE",
+        "count": 20000
+      },
+      {
+        "itemId": "EXP_DI",
+        "count": 3
+      },
+      {
+        "itemId": "RR_EXP",
+        "count": 650
+      }
+    ],
+    "nextQuest": "MQ_5_02",
+    "autoStart": true
+  },
+  {
+    "id": "MQ_5_02",
+    "type": "MAIN",
+    "chapter": "CH5",
+    "title": {
+      "th": "อุโมงค์ย่อยอาหาร"
+    },
+    "description": {
+      "th": "เชื้อเพลิงของเตาคือกลูโคสจากอาหาร — แต่อุโมงค์ย่อยอาหารของเมืองอุดตัน"
+    },
+    "bioTopics": [
+      "bio.animal.digestion"
+    ],
+    "prerequisites": [
+      {
+        "type": "QUEST_COMPLETED",
+        "value": "MQ_5_01"
+      }
+    ],
+    "steps": [
+      {
+        "log": {
+          "th": "ไปอุโมงค์ย่อยอาหาร (ตะวันตก)"
+        },
+        "objectives": [
+          {
+            "type": "GOTO",
+            "locationId": "LOC_MET_DIGEST",
+            "radius": 18
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_M2_TUNNEL"
+          }
+        ],
+        "id": "S1"
+      },
+      {
+        "log": {
+          "th": "ไล่แบคทีเรียและสำรวจอวัยวะ"
+        },
+        "objectives": [
+          {
+            "type": "DEFEAT",
+            "enemyId": "EN_BAC_COCCI",
+            "count": 4,
+            "label": {
+              "th": "ไล่แบคทีเรียสไลม์ในอุโมงค์"
+            }
+          },
+          {
+            "type": "SCAN",
+            "targetTag": "digest",
+            "count": 4,
+            "label": {
+              "th": "สแกนปาก กระเพาะ ลำไส้เล็ก และตับ (กด T)"
+            }
+          }
+        ],
+        "onStart": [
+          {
+            "action": "SPAWN_ENEMY",
+            "enemyId": "EN_BAC_COCCI",
+            "count": 4,
+            "locationId": "LOC_MET_DIGEST",
+            "level": 26,
+            "tag": "M2",
+            "aggro": true
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "CLEAR_ENEMIES",
+            "tag": "M2"
+          },
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_M2_SCANNED"
+          }
+        ],
+        "id": "S2"
+      },
+      {
+        "log": {
+          "th": "เปิดทางให้อาหาร"
+        },
+        "objectives": [
+          {
+            "type": "PUZZLE",
+            "objectId": "OBJ_MET_DIGESTBOARD",
+            "puzzleId": "PZ_DIGEST",
+            "label": {
+              "th": "จับคู่อวัยวะกับหน้าที่ที่แผ่นป้าย (กด F)"
+            }
+          }
+        ],
+        "id": "S3"
+      },
+      {
+        "log": {
+          "th": "ทบทวนระบบย่อยอาหาร"
+        },
+        "objectives": [
+          {
+            "type": "QUIZ",
+            "quizSetId": "QZ_CH5_DIGEST",
+            "label": {
+              "th": "ตอบคำถามเรื่องระบบย่อยอาหาร"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_M2_DONE"
+          }
+        ],
+        "id": "S4"
+      }
+    ],
+    "rewards": [
+      {
+        "itemId": "INSIGHT_CRYSTAL",
+        "count": 50
+      },
+      {
+        "itemId": "GLUCOSE",
+        "count": 20000
+      },
+      {
+        "itemId": "EXP_DI",
+        "count": 3
+      },
+      {
+        "itemId": "RR_EXP",
+        "count": 650
+      },
+      {
+        "itemId": "MAT_BAC_SLIME",
+        "count": 3
+      }
+    ],
+    "nextQuest": "MQ_5_03"
+  },
+  {
+    "id": "MQ_5_03",
+    "type": "MAIN",
+    "chapter": "CH5",
+    "title": {
+      "th": "ลมหายใจของเตา"
+    },
+    "description": {
+      "th": "ไฟจะติดต้องมีออกซิเจน — แต่ปอดยักษ์ของโรงสูบลมทำงานผิดจังหวะ"
+    },
+    "bioTopics": [
+      "bio.animal.respiratory"
+    ],
+    "prerequisites": [
+      {
+        "type": "QUEST_COMPLETED",
+        "value": "MQ_5_02"
+      }
+    ],
+    "steps": [
+      {
+        "log": {
+          "th": "ไปโรงสูบลมปอดยักษ์ (ตะวันออก)"
+        },
+        "objectives": [
+          {
+            "type": "GOTO",
+            "locationId": "LOC_MET_LUNGS",
+            "radius": 16
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_M3_LUNGS"
+          }
+        ],
+        "id": "S1"
+      },
+      {
+        "log": {
+          "th": "ไล่แบคทีเรียและสำรวจระบบหายใจ"
+        },
+        "objectives": [
+          {
+            "type": "DEFEAT",
+            "enemyId": "EN_BAC_BACIL",
+            "count": 3,
+            "label": {
+              "th": "ไล่แบคทีเรียแท่งที่เกาะหลอดลม"
+            }
+          },
+          {
+            "type": "SCAN",
+            "targetTag": "breath",
+            "count": 4,
+            "label": {
+              "th": "สแกนท่อลม ปอด กะบังลม และถุงลม (กด T)"
+            }
+          }
+        ],
+        "onStart": [
+          {
+            "action": "SPAWN_ENEMY",
+            "enemyId": "EN_BAC_BACIL",
+            "count": 3,
+            "locationId": "LOC_MET_LUNGS",
+            "level": 26,
+            "tag": "M3",
+            "aggro": true
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "CLEAR_ENEMIES",
+            "tag": "M3"
+          },
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_M3_SCANNED"
+          }
+        ],
+        "id": "S2"
+      },
+      {
+        "log": {
+          "th": "ปรับจังหวะปอดยักษ์"
+        },
+        "objectives": [
+          {
+            "type": "PUZZLE",
+            "objectId": "OBJ_MET_LUNGBOARD",
+            "puzzleId": "PZ_BREATH",
+            "label": {
+              "th": "บอกจังหวะหายใจเข้า-ออกที่แผ่นป้าย (กด F)"
+            }
+          }
+        ],
+        "id": "S3"
+      },
+      {
+        "log": {
+          "th": "ทบทวนระบบหายใจ"
+        },
+        "objectives": [
+          {
+            "type": "QUIZ",
+            "quizSetId": "QZ_CH5_BREATH",
+            "label": {
+              "th": "ตอบคำถามเรื่องระบบหายใจ"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_M3_DONE"
+          }
+        ],
+        "id": "S4"
+      }
+    ],
+    "rewards": [
+      {
+        "itemId": "INSIGHT_CRYSTAL",
+        "count": 50
+      },
+      {
+        "itemId": "GLUCOSE",
+        "count": 20000
+      },
+      {
+        "itemId": "EXP_DI",
+        "count": 3
+      },
+      {
+        "itemId": "RR_EXP",
+        "count": 650
+      },
+      {
+        "itemId": "MAT_STORM_PEARL",
+        "count": 1
+      }
+    ],
+    "nextQuest": "MQ_5_04"
+  },
+  {
+    "id": "MQ_5_04",
+    "type": "MAIN",
+    "chapter": "CH5",
+    "title": {
+      "th": "สายพานน้ำตาล"
+    },
+    "description": {
+      "th": "มีทั้งกลูโคสและออกซิเจนแล้ว แต่เตายังเย็น — มีเสียงแปลก ๆ ดังมาจากสายพานไกลโคไลซิส"
+    },
+    "bioTopics": [
+      "bio.cell.cellular_respiration"
+    ],
+    "prerequisites": [
+      {
+        "type": "QUEST_COMPLETED",
+        "value": "MQ_5_03"
+      }
+    ],
+    "steps": [
+      {
+        "log": {
+          "th": "ไปสายพานไกลโคไลซิส (ตะวันตกเฉียงเหนือ)"
+        },
+        "objectives": [
+          {
+            "type": "GOTO",
+            "locationId": "LOC_MET_GLYCO",
+            "radius": 16
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_M4_GLYCO"
+          }
+        ],
+        "id": "S1"
+      },
+      {
+        "log": {
+          "th": "ขับไล่นักวิจัยซินดิเคต"
+        },
+        "objectives": [
+          {
+            "type": "DEFEAT",
+            "enemyId": "EN_SYN_DOC",
+            "count": 3,
+            "label": {
+              "th": "ขับไล่นักวิจัยซินดิเคต"
+            }
+          }
+        ],
+        "onStart": [
+          {
+            "action": "SPAWN_ENEMY",
+            "enemyId": "EN_SYN_DOC",
+            "count": 3,
+            "locationId": "LOC_MET_GLYCO",
+            "level": 27,
+            "tag": "M4",
+            "aggro": true
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "CLEAR_ENEMIES",
+            "tag": "M4"
+          },
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_M4_CLEARED"
+          }
+        ],
+        "id": "S2"
+      },
+      {
+        "log": {
+          "th": "ส่งน้ำตาลให้ถูกห้อง"
+        },
+        "objectives": [
+          {
+            "type": "PUZZLE",
+            "objectId": "OBJ_MET_GLYCOBOARD",
+            "puzzleId": "PZ_GLYCO",
+            "label": {
+              "th": "ระบุตำแหน่งแต่ละขั้นที่แผ่นป้าย (กด F)"
+            }
+          }
+        ],
+        "id": "S3"
+      },
+      {
+        "log": {
+          "th": "ทบทวนการหายใจระดับเซลล์"
+        },
+        "objectives": [
+          {
+            "type": "QUIZ",
+            "quizSetId": "QZ_CH5_RESP",
+            "label": {
+              "th": "ตอบคำถามเรื่องการหายใจระดับเซลล์"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_M4_DONE"
+          }
+        ],
+        "id": "S4"
+      }
+    ],
+    "rewards": [
+      {
+        "itemId": "INSIGHT_CRYSTAL",
+        "count": 50
+      },
+      {
+        "itemId": "GLUCOSE",
+        "count": 20000
+      },
+      {
+        "itemId": "EXP_DI",
+        "count": 3
+      },
+      {
+        "itemId": "RR_EXP",
+        "count": 650
+      },
+      {
+        "itemId": "MAT_SYN_GEAR",
+        "count": 3
+      }
+    ],
+    "nextQuest": "MQ_5_05"
+  },
+  {
+    "id": "MQ_5_05",
+    "type": "MAIN",
+    "chapter": "CH5",
+    "title": {
+      "th": "วงล้อเครบส์"
+    },
+    "description": {
+      "th": "วงล้อเครบส์หมุนช้าผิดปกติ ราวกับมีบางอย่างขวางปลายทางพลังงานอยู่"
+    },
+    "bioTopics": [
+      "bio.cell.cellular_respiration"
+    ],
+    "prerequisites": [
+      {
+        "type": "QUEST_COMPLETED",
+        "value": "MQ_5_04"
+      }
+    ],
+    "steps": [
+      {
+        "log": {
+          "th": "ไปวงล้อเครบส์ (ตะวันออกเฉียงเหนือ)"
+        },
+        "objectives": [
+          {
+            "type": "GOTO",
+            "locationId": "LOC_MET_KREBS",
+            "radius": 16
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_M5_WHEEL"
+          }
+        ],
+        "id": "S1"
+      },
+      {
+        "log": {
+          "th": "สำรวจวงล้อ"
+        },
+        "objectives": [
+          {
+            "type": "SCAN",
+            "targetId": "OBJ_MET_WHEEL",
+            "locationId": "LOC_MET_KREBS",
+            "label": {
+              "th": "สแกนวงล้อเครบส์ (กด T)"
+            }
+          }
+        ],
+        "id": "S2"
+      },
+      {
+        "log": {
+          "th": "หาต้นเหตุที่ปลายลูกโซ่"
+        },
+        "objectives": [
+          {
+            "type": "PUZZLE",
+            "objectId": "OBJ_MET_KREBSBOARD",
+            "puzzleId": "PZ_KREBS",
+            "label": {
+              "th": "ไขปริศนาลูกโซ่อิเล็กตรอนที่แผ่นป้าย (กด F)"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_M5_DONE"
+          }
+        ],
+        "id": "S3"
+      },
+      {
+        "log": {
+          "th": "ทบทวนวัฏจักรเครบส์และการถ่ายทอดอิเล็กตรอน"
+        },
+        "objectives": [
+          {
+            "type": "QUIZ",
+            "quizSetId": "QZ_CH5_ETC",
+            "label": {
+              "th": "ตอบคำถามเรื่องการถ่ายทอดอิเล็กตรอน"
+            }
+          }
+        ],
+        "id": "S4"
+      }
+    ],
+    "rewards": [
+      {
+        "itemId": "INSIGHT_CRYSTAL",
+        "count": 50
+      },
+      {
+        "itemId": "GLUCOSE",
+        "count": 20000
+      },
+      {
+        "itemId": "EXP_DI",
+        "count": 3
+      },
+      {
+        "itemId": "RR_EXP",
+        "count": 650
+      },
+      {
+        "itemId": "GROWTH_FACTOR",
+        "count": 2
+      }
+    ],
+    "nextQuest": "MQ_5_06"
+  },
+  {
+    "id": "MQ_5_06",
+    "type": "MAIN",
+    "chapter": "CH5",
+    "title": {
+      "th": "หัวใจเตาหลอม"
+    },
+    "description": {
+      "th": "ซินดิเคตซ่อนเครื่องยับยั้งไว้ในเตาหลอมไมโทคอนเดรียใหญ่ — ถึงเวลาจุดไฟให้เมืองอีกครั้ง"
+    },
+    "bioTopics": [
+      "bio.animal.digestion",
+      "bio.animal.respiratory",
+      "bio.cell.cellular_respiration"
+    ],
+    "prerequisites": [
+      {
+        "type": "QUEST_COMPLETED",
+        "value": "MQ_5_05"
+      }
+    ],
+    "steps": [
+      {
+        "log": {
+          "th": "ไปเตาหลอมใหญ่ (เหนือ)"
+        },
+        "objectives": [
+          {
+            "type": "GOTO",
+            "locationId": "LOC_MET_HEART",
+            "radius": 20
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_M6_HEART"
+          }
+        ],
+        "id": "S1"
+      },
+      {
+        "log": {
+          "th": "สำรวจเตาหลอม"
+        },
+        "objectives": [
+          {
+            "type": "SCAN",
+            "targetId": "OBJ_MET_FURNACE",
+            "locationId": "LOC_MET_HEART",
+            "label": {
+              "th": "สแกนเตาหลอมไมโทคอนเดรีย (กด T)"
+            }
+          }
+        ],
+        "id": "S2"
+      },
+      {
+        "log": {
+          "th": "ทำลายไซยาโนคอร์"
+        },
+        "objectives": [
+          {
+            "type": "DEFEAT",
+            "enemyId": "EN_BOSS_CYANO",
+            "label": {
+              "th": "ทำลายไซยาโนคอร์ (หลบวงพลังงาน!)"
+            }
+          }
+        ],
+        "onStart": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_M6_BOSS"
+          },
+          {
+            "action": "SPAWN_ENEMY",
+            "enemyId": "EN_BOSS_CYANO",
+            "count": 1,
+            "locationId": "LOC_MET_HEART",
+            "level": 28,
+            "tag": "M6",
+            "aggro": true
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "WAIT",
+            "ms": 1000
+          },
+          {
+            "action": "CLEAR_ENEMIES",
+            "tag": "M6"
+          },
+          {
+            "action": "SET_FLAG",
+            "flag": "met_restored"
+          },
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_M6_AFTER"
+          }
+        ],
+        "id": "S3"
+      },
+      {
+        "log": {
+          "th": "บททดสอบของปราชญ์เครบิออน"
+        },
+        "objectives": [
+          {
+            "type": "QUIZ",
+            "npcId": "NPC_KREBION_HEART",
+            "quizSetId": "QZ_CH5_FINAL",
+            "dialogueId": "DLG_M6_EXAM",
+            "label": {
+              "th": "รับบททดสอบจากเครบิออน (กด F)"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_M6_PASS"
+          },
+          {
+            "action": "CHAPTER_CARD",
+            "top": "บทที่ 5 · จบ",
+            "title": "เตาที่มอดดับ"
+          }
+        ],
+        "id": "S4"
+      }
+    ],
+    "rewards": [
+      {
+        "itemId": "INSIGHT_CRYSTAL",
+        "count": 60
+      },
+      {
+        "itemId": "GLUCOSE",
+        "count": 30000
+      },
+      {
+        "itemId": "EXP_DI",
+        "count": 4
+      },
+      {
+        "itemId": "GROWTH_FACTOR",
+        "count": 3
+      },
+      {
+        "itemId": "MAT_SYN_GEAR",
+        "count": 4
+      },
+      {
+        "itemId": "RR_EXP",
+        "count": 850
+      }
+    ],
+    "nextQuest": null
+  },
+  {
+    "id": "MQ_6_01",
+    "type": "MAIN",
+    "chapter": "CH6",
+    "title": {
+      "th": "จดหมายตราราชวงศ์"
+    },
+    "description": {
+      "th": "โรคระบาดในอควอร์รา นครแห่งสายน้ำ บ้านเกิดของฮีม่า — ราชินีฮาร์วีน่าขอความช่วยเหลือ"
+    },
+    "bioTopics": [
+      "bio.animal.circulatory"
+    ],
+    "prerequisites": [
+      {
+        "type": "QUEST_COMPLETED",
+        "value": "MQ_5_06"
+      }
+    ],
+    "steps": [
+      {
+        "log": {
+          "th": "พบศาสตราจารย์ไลโซที่สถาบัน"
+        },
+        "objectives": [
+          {
+            "type": "TALK",
+            "npcId": "NPC_LYSO_ACAD",
+            "dialogueId": "DLG_A1_LYSO"
+          }
+        ],
+        "onStart": [
+          {
+            "action": "CHAPTER_CARD",
+            "top": "บทที่ 6",
+            "title": "โรคระบาดในเมืองแห่งสายน้ำ"
+          },
+          {
+            "action": "AMOEBY",
+            "text": "จดหมายตราราชวงศ์มาถึงสถาบัน! ไปหาศาสตราจารย์ไลโซกัน"
+          }
+        ],
+        "id": "S1"
+      },
+      {
+        "log": {
+          "th": "ขึ้นเรือเหาะที่ลานหลังสถาบัน"
+        },
+        "objectives": [
+          {
+            "type": "INTERACT",
+            "objectId": "OBJ_AIRSHIP_CITY",
+            "label": {
+              "th": "ขึ้นเรือเหาะไปอควอร์รา (กด F)"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "SET_FLAG",
+            "flag": "aquorra_unlocked"
+          },
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_A1_FLIGHT"
+          },
+          {
+            "action": "TELEPORT",
+            "locationId": "LOC_AQU_ARRIVE"
+          }
+        ],
+        "id": "S2"
+      },
+      {
+        "log": {
+          "th": "เข้าเฝ้าราชินีฮาร์วีน่าที่ลานพระราชวัง"
+        },
+        "objectives": [
+          {
+            "type": "QUIZ",
+            "npcId": "NPC_HARVENA",
+            "quizSetId": "QZ_CH6_INTRO",
+            "dialogueId": "DLG_A1_HARVENA",
+            "label": {
+              "th": "เข้าเฝ้าราชินีฮาร์วีน่า (กด F)"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_A1_DONE"
+          }
+        ],
+        "id": "S3"
+      }
+    ],
+    "rewards": [
+      {
+        "itemId": "INSIGHT_CRYSTAL",
+        "count": 55
+      },
+      {
+        "itemId": "GLUCOSE",
+        "count": 22000
+      },
+      {
+        "itemId": "EXP_DI",
+        "count": 3
+      },
+      {
+        "itemId": "RR_EXP",
+        "count": 700
+      }
+    ],
+    "nextQuest": "MQ_6_02",
+    "autoStart": true
+  },
+  {
+    "id": "MQ_6_02",
+    "type": "MAIN",
+    "chapter": "CH6",
+    "title": {
+      "th": "หัวใจที่เต้นผิดจังหวะ"
+    },
+    "description": {
+      "th": "ลิ้นของหัวใจยักษ์ในวิหารปิดไม่สนิท น้ำในคลองไหลย้อนไปมา"
+    },
+    "bioTopics": [
+      "bio.animal.circulatory"
+    ],
+    "prerequisites": [
+      {
+        "type": "QUEST_COMPLETED",
+        "value": "MQ_6_01"
+      }
+    ],
+    "steps": [
+      {
+        "log": {
+          "th": "ไปวิหารหัวใจ (ตะวันตก)"
+        },
+        "objectives": [
+          {
+            "type": "GOTO",
+            "locationId": "LOC_AQU_HEART",
+            "radius": 18
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_A2_TEMPLE"
+          }
+        ],
+        "id": "S1"
+      },
+      {
+        "log": {
+          "th": "ไล่แบคทีเรียและสำรวจหัวใจ"
+        },
+        "objectives": [
+          {
+            "type": "DEFEAT",
+            "enemyId": "EN_BAC_COCCI",
+            "count": 4,
+            "label": {
+              "th": "ไล่แบคทีเรียที่เกาะลิ้นหัวใจ"
+            }
+          },
+          {
+            "type": "SCAN",
+            "targetTag": "heart",
+            "count": 4,
+            "label": {
+              "th": "สแกนห้องบน ห้องล่าง ลิ้นหัวใจ และเอออร์ตา (กด T)"
+            }
+          }
+        ],
+        "onStart": [
+          {
+            "action": "SPAWN_ENEMY",
+            "enemyId": "EN_BAC_COCCI",
+            "count": 4,
+            "locationId": "LOC_AQU_HEART",
+            "level": 30,
+            "tag": "A2",
+            "element": "HYDRO",
+            "aggro": true
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "CLEAR_ENEMIES",
+            "tag": "A2"
+          },
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_A2_SCANNED"
+          }
+        ],
+        "id": "S2"
+      },
+      {
+        "log": {
+          "th": "ซ่อมทางไหลของเลือด"
+        },
+        "objectives": [
+          {
+            "type": "PUZZLE",
+            "objectId": "OBJ_AQU_HEARTBOARD",
+            "puzzleId": "PZ_HEART",
+            "label": {
+              "th": "บอกทางไหลของเลือดที่แผ่นจารึก (กด F)"
+            }
+          }
+        ],
+        "id": "S3"
+      },
+      {
+        "log": {
+          "th": "ทบทวนระบบหมุนเวียนเลือด"
+        },
+        "objectives": [
+          {
+            "type": "QUIZ",
+            "quizSetId": "QZ_CH6_HEART",
+            "label": {
+              "th": "ตอบคำถามเรื่องหัวใจ"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_A2_DONE"
+          }
+        ],
+        "id": "S4"
+      }
+    ],
+    "rewards": [
+      {
+        "itemId": "INSIGHT_CRYSTAL",
+        "count": 55
+      },
+      {
+        "itemId": "GLUCOSE",
+        "count": 22000
+      },
+      {
+        "itemId": "EXP_DI",
+        "count": 3
+      },
+      {
+        "itemId": "RR_EXP",
+        "count": 700
+      },
+      {
+        "itemId": "MAT_BAC_SLIME",
+        "count": 3
+      }
+    ],
+    "nextQuest": "MQ_6_03"
+  },
+  {
+    "id": "MQ_6_03",
+    "type": "MAIN",
+    "chapter": "CH6",
+    "title": {
+      "th": "คลองแดง คลองน้ำเงิน"
+    },
+    "description": {
+      "th": "ประตูน้ำของย่านคลองสับสน น้ำแดงกับน้ำน้ำเงินไหลผิดทาง"
+    },
+    "bioTopics": [
+      "bio.animal.blood",
+      "bio.animal.circulatory"
+    ],
+    "prerequisites": [
+      {
+        "type": "QUEST_COMPLETED",
+        "value": "MQ_6_02"
+      }
+    ],
+    "steps": [
+      {
+        "log": {
+          "th": "ไปย่านคลองแดง-คลองน้ำเงิน (ตะวันออก)"
+        },
+        "objectives": [
+          {
+            "type": "GOTO",
+            "locationId": "LOC_AQU_VESSELS",
+            "radius": 16
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_A3_VESSELS"
+          }
+        ],
+        "id": "S1"
+      },
+      {
+        "log": {
+          "th": "สำรวจหลอดเลือดและเม็ดเลือด"
+        },
+        "objectives": [
+          {
+            "type": "SCAN",
+            "targetTag": "vessel",
+            "count": 4,
+            "label": {
+              "th": "สแกนคลองหลอดเลือดแดง หลอดเลือดดำ หลอดเลือดฝอย และเม็ดเลือดแดง (กด T)"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_A3_SCANNED"
+          }
+        ],
+        "id": "S2"
+      },
+      {
+        "log": {
+          "th": "ตั้งประตูน้ำให้ถูก"
+        },
+        "objectives": [
+          {
+            "type": "PUZZLE",
+            "objectId": "OBJ_AQU_VESSELBOARD",
+            "puzzleId": "PZ_BLOOD",
+            "label": {
+              "th": "จับคู่ส่วนประกอบของเลือดที่แผ่นจารึก (กด F)"
+            }
+          }
+        ],
+        "id": "S3"
+      },
+      {
+        "log": {
+          "th": "ทบทวนเลือดและหลอดเลือด"
+        },
+        "objectives": [
+          {
+            "type": "QUIZ",
+            "quizSetId": "QZ_CH6_BLOOD",
+            "label": {
+              "th": "ตอบคำถามเรื่องเลือด"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_A3_DONE"
+          }
+        ],
+        "id": "S4"
+      }
+    ],
+    "rewards": [
+      {
+        "itemId": "INSIGHT_CRYSTAL",
+        "count": 55
+      },
+      {
+        "itemId": "GLUCOSE",
+        "count": 22000
+      },
+      {
+        "itemId": "EXP_DI",
+        "count": 3
+      },
+      {
+        "itemId": "RR_EXP",
+        "count": 700
+      },
+      {
+        "itemId": "GROWTH_FACTOR",
+        "count": 2
+      }
+    ],
+    "nextQuest": "MQ_6_04"
+  },
+  {
+    "id": "MQ_6_04",
+    "type": "MAIN",
+    "chapter": "CH6",
+    "title": {
+      "th": "ป้อมเม็ดเลือดขาว"
+    },
+    "description": {
+      "th": "เชื้อโรคบุกป้อมเม็ดเลือดขาว ทหารเฝ้าเมืองต้านไม่ไหว"
+    },
+    "bioTopics": [
+      "bio.animal.immune"
+    ],
+    "prerequisites": [
+      {
+        "type": "QUEST_COMPLETED",
+        "value": "MQ_6_03"
+      }
+    ],
+    "steps": [
+      {
+        "log": {
+          "th": "ไปป้อมเม็ดเลือดขาว (ตะวันตกเฉียงใต้)"
+        },
+        "objectives": [
+          {
+            "type": "GOTO",
+            "locationId": "LOC_AQU_FORT",
+            "radius": 18
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_A4_FORT"
+          }
+        ],
+        "id": "S1"
+      },
+      {
+        "log": {
+          "th": "ขับไล่เชื้อโรค"
+        },
+        "objectives": [
+          {
+            "type": "DEFEAT",
+            "enemyId": "EN_PHAGE_S",
+            "count": 3,
+            "label": {
+              "th": "ทำลายไวรัส"
+            }
+          },
+          {
+            "type": "DEFEAT",
+            "enemyId": "EN_BAC_BACIL",
+            "count": 3,
+            "label": {
+              "th": "ทำลายแบคทีเรีย"
+            }
+          }
+        ],
+        "onStart": [
+          {
+            "action": "SPAWN_ENEMY",
+            "enemyId": "EN_PHAGE_S",
+            "count": 3,
+            "locationId": "LOC_AQU_FORT",
+            "level": 31,
+            "tag": "A4",
+            "aggro": true
+          },
+          {
+            "action": "SPAWN_ENEMY",
+            "enemyId": "EN_BAC_BACIL",
+            "count": 3,
+            "locationId": "LOC_AQU_FORT",
+            "level": 31,
+            "tag": "A4",
+            "aggro": true
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "CLEAR_ENEMIES",
+            "tag": "A4"
+          },
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_A4_CLEARED"
+          }
+        ],
+        "id": "S2"
+      },
+      {
+        "log": {
+          "th": "มอบหมายหน้าที่ทหารเม็ดเลือดขาว"
+        },
+        "objectives": [
+          {
+            "type": "PUZZLE",
+            "objectId": "OBJ_AQU_FORTBOARD",
+            "puzzleId": "PZ_IMMUNE",
+            "label": {
+              "th": "จับคู่เซลล์ภูมิคุ้มกันกับหน้าที่ (กด F)"
+            }
+          }
+        ],
+        "id": "S3"
+      },
+      {
+        "log": {
+          "th": "ทบทวนระบบภูมิคุ้มกัน"
+        },
+        "objectives": [
+          {
+            "type": "QUIZ",
+            "quizSetId": "QZ_CH6_IMMUNE",
+            "label": {
+              "th": "ตอบคำถามเรื่องภูมิคุ้มกัน"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_A4_DONE"
+          }
+        ],
+        "id": "S4"
+      }
+    ],
+    "rewards": [
+      {
+        "itemId": "INSIGHT_CRYSTAL",
+        "count": 55
+      },
+      {
+        "itemId": "GLUCOSE",
+        "count": 22000
+      },
+      {
+        "itemId": "EXP_DI",
+        "count": 3
+      },
+      {
+        "itemId": "RR_EXP",
+        "count": 700
+      },
+      {
+        "itemId": "MAT_PHAGE_WING",
+        "count": 3
+      }
+    ],
+    "nextQuest": "MQ_6_05"
+  },
+  {
+    "id": "MQ_6_05",
+    "type": "MAIN",
+    "chapter": "CH6",
+    "title": {
+      "th": "หอกรองแห่งทะเลสาบ"
+    },
+    "description": {
+      "th": "หอกรองที่ทะเลสาบหน่วยไตหยุดทำงาน ของเสียสะสมในสายน้ำทั้งเมือง"
+    },
+    "bioTopics": [
+      "bio.animal.excretion"
+    ],
+    "prerequisites": [
+      {
+        "type": "QUEST_COMPLETED",
+        "value": "MQ_6_04"
+      }
+    ],
+    "steps": [
+      {
+        "log": {
+          "th": "ไปทะเลสาบหน่วยไต (ตะวันออกเฉียงใต้)"
+        },
+        "objectives": [
+          {
+            "type": "GOTO",
+            "locationId": "LOC_AQU_KIDNEY",
+            "radius": 16
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_A5_LAGOON"
+          }
+        ],
+        "id": "S1"
+      },
+      {
+        "log": {
+          "th": "สำรวจไตและหน่วยไต"
+        },
+        "objectives": [
+          {
+            "type": "SCAN",
+            "targetTag": "nephron",
+            "count": 4,
+            "label": {
+              "th": "สแกนไต โกลเมอรูลัส โบว์แมนแคปซูล และท่อหน่วยไต (กด T)"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_A5_SCANNED"
+          }
+        ],
+        "id": "S2"
+      },
+      {
+        "log": {
+          "th": "เปิดหอกรอง"
+        },
+        "objectives": [
+          {
+            "type": "PUZZLE",
+            "objectId": "OBJ_AQU_NEPHRONBOARD",
+            "puzzleId": "PZ_NEPHRON",
+            "label": {
+              "th": "ระบุหน้าที่ของหน่วยไตที่แผ่นจารึก (กด F)"
+            }
+          }
+        ],
+        "id": "S3"
+      },
+      {
+        "log": {
+          "th": "ทบทวนระบบขับถ่าย"
+        },
+        "objectives": [
+          {
+            "type": "QUIZ",
+            "quizSetId": "QZ_CH6_EXCRETE",
+            "label": {
+              "th": "ตอบคำถามเรื่องไต"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_A5_DONE"
+          }
+        ],
+        "id": "S4"
+      }
+    ],
+    "rewards": [
+      {
+        "itemId": "INSIGHT_CRYSTAL",
+        "count": 55
+      },
+      {
+        "itemId": "GLUCOSE",
+        "count": 22000
+      },
+      {
+        "itemId": "EXP_DI",
+        "count": 3
+      },
+      {
+        "itemId": "RR_EXP",
+        "count": 700
+      },
+      {
+        "itemId": "MAT_STORM_PEARL",
+        "count": 1
+      }
+    ],
+    "nextQuest": "MQ_6_06"
+  },
+  {
+    "id": "MQ_6_06",
+    "type": "MAIN",
+    "chapter": "CH6",
+    "title": {
+      "th": "เชื้อดื้อยา"
+    },
+    "description": {
+      "th": "ซินดิเคตเทยาปฏิชีวนะลงคลองทั้งเมือง เกิดโคโลนีเชื้อดื้อยาในหนองน้ำทางใต้"
+    },
+    "bioTopics": [
+      "bio.animal.circulatory",
+      "bio.animal.blood",
+      "bio.animal.immune",
+      "bio.animal.excretion"
+    ],
+    "prerequisites": [
+      {
+        "type": "QUEST_COMPLETED",
+        "value": "MQ_6_05"
+      }
+    ],
+    "steps": [
+      {
+        "log": {
+          "th": "ไปหนองน้ำพิษ (ใต้)"
+        },
+        "objectives": [
+          {
+            "type": "GOTO",
+            "locationId": "LOC_AQU_MARSH",
+            "radius": 24
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_A6_MARSH"
+          }
+        ],
+        "id": "S1"
+      },
+      {
+        "log": {
+          "th": "สำรวจหนองน้ำ"
+        },
+        "objectives": [
+          {
+            "type": "SCAN",
+            "targetId": "OBJ_AQU_MARSH",
+            "locationId": "LOC_AQU_MARSH",
+            "label": {
+              "th": "สแกนหนองน้ำพิษ (กด T)"
+            }
+          }
+        ],
+        "id": "S2"
+      },
+      {
+        "log": {
+          "th": "ปราบซูเปอร์บั๊ก"
+        },
+        "objectives": [
+          {
+            "type": "DEFEAT",
+            "enemyId": "EN_BOSS_SUPERBUG",
+            "label": {
+              "th": "ปราบซูเปอร์บั๊ก (ระวังโคโลนีที่แตกตัว!)"
+            }
+          }
+        ],
+        "onStart": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_A6_BOSS"
+          },
+          {
+            "action": "SPAWN_ENEMY",
+            "enemyId": "EN_BOSS_SUPERBUG",
+            "count": 1,
+            "locationId": "LOC_AQU_MARSH",
+            "level": 32,
+            "tag": "A6",
+            "aggro": true
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "WAIT",
+            "ms": 1000
+          },
+          {
+            "action": "CLEAR_ENEMIES",
+            "tag": "A6"
+          },
+          {
+            "action": "SET_FLAG",
+            "flag": "aqu_cured"
+          },
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_A6_AFTER"
+          }
+        ],
+        "id": "S3"
+      },
+      {
+        "log": {
+          "th": "บททดสอบของราชินีฮาร์วีน่า"
+        },
+        "objectives": [
+          {
+            "type": "QUIZ",
+            "npcId": "NPC_HARVENA_MARSH",
+            "quizSetId": "QZ_CH6_FINAL",
+            "dialogueId": "DLG_A6_EXAM",
+            "label": {
+              "th": "รับบททดสอบจากราชินี (กด F)"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_A6_PASS"
+          },
+          {
+            "action": "CHAPTER_CARD",
+            "top": "บทที่ 6 · จบ",
+            "title": "โรคระบาดในเมืองแห่งสายน้ำ"
+          }
+        ],
+        "id": "S4"
+      }
+    ],
+    "rewards": [
+      {
+        "itemId": "INSIGHT_CRYSTAL",
+        "count": 60
+      },
+      {
+        "itemId": "GLUCOSE",
+        "count": 32000
+      },
+      {
+        "itemId": "EXP_DI",
+        "count": 4
+      },
+      {
+        "itemId": "GROWTH_FACTOR",
+        "count": 3
+      },
+      {
+        "itemId": "MAT_BAC_SLIME",
+        "count": 5
+      },
+      {
+        "itemId": "RR_EXP",
+        "count": 900
+      }
+    ],
+    "nextQuest": "MQ_7_01"
+  },
+  {
+    "id": "MQ_7_01",
+    "type": "MAIN",
+    "chapter": "CH7",
+    "title": {
+      "th": "มหานครที่เงียบงัน"
+    },
+    "description": {
+      "th": "นิวรีออน มหานครแห่งสายฟ้าเงียบหายไปทั้งเมือง ลือกันว่าจักรพรรดิถูกควบคุมจิตใจ"
+    },
+    "bioTopics": [
+      "bio.animal.nervous"
+    ],
+    "prerequisites": [
+      {
+        "type": "QUEST_COMPLETED",
+        "value": "MQ_6_06"
+      }
+    ],
+    "steps": [
+      {
+        "log": {
+          "th": "พบศาสตราจารย์ไลโซที่สถาบัน"
+        },
+        "objectives": [
+          {
+            "type": "TALK",
+            "npcId": "NPC_LYSO_ACAD",
+            "dialogueId": "DLG_N1_LYSO"
+          }
+        ],
+        "onStart": [
+          {
+            "action": "CHAPTER_CARD",
+            "top": "บทที่ 7",
+            "title": "ราชาแห่งสายฟ้า"
+          },
+          {
+            "action": "AMOEBY",
+            "text": "ศาสตราจารย์ไลโซเรียกพบด่วน! ได้ยินว่าเรื่องใหญ่กว่าทุกครั้ง"
+          }
+        ],
+        "id": "S1"
+      },
+      {
+        "log": {
+          "th": "ขึ้นเรือเหาะที่ลานหลังสถาบัน"
+        },
+        "objectives": [
+          {
+            "type": "INTERACT",
+            "objectId": "OBJ_AIRSHIP_CITY",
+            "label": {
+              "th": "ขึ้นเรือเหาะไปนิวรีออน (กด F)"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "SET_FLAG",
+            "flag": "neurion_unlocked"
+          },
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_N1_FLIGHT"
+          },
+          {
+            "action": "TELEPORT",
+            "locationId": "LOC_NEU_ARRIVE"
+          }
+        ],
+        "id": "S2"
+      },
+      {
+        "log": {
+          "th": "พบหัวหน้าองครักษ์ที่จัตุรัสไซแนปส์"
+        },
+        "objectives": [
+          {
+            "type": "QUIZ",
+            "npcId": "NPC_NEUROS",
+            "quizSetId": "QZ_CH7_INTRO",
+            "dialogueId": "DLG_N1_NEUROS",
+            "label": {
+              "th": "คุยกับนิวรอส (กด F)"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_N1_DONE"
+          },
+          {
+            "action": "ADD_CHARACTER",
+            "charId": "NEUROS"
+          },
+          {
+            "action": "SET_FLAG",
+            "flag": "neuros_joined"
+          }
+        ],
+        "id": "S3"
+      }
+    ],
+    "rewards": [
+      {
+        "itemId": "INSIGHT_CRYSTAL",
+        "count": 60
+      },
+      {
+        "itemId": "GLUCOSE",
+        "count": 24000
+      },
+      {
+        "itemId": "EXP_DI",
+        "count": 3
+      },
+      {
+        "itemId": "RR_EXP",
+        "count": 750
+      }
+    ],
+    "nextQuest": "MQ_7_02",
+    "autoStart": true
+  },
+  {
+    "id": "MQ_7_02",
+    "type": "MAIN",
+    "chapter": "CH7",
+    "title": {
+      "th": "ทางด่วนแอกซอน"
+    },
+    "description": {
+      "th": "สายประสาทหลักของเมืองถูกตัด และทหารบลายต์ยึดรูปปั้นเซลล์ประสาทไว้"
+    },
+    "bioTopics": [
+      "bio.animal.nervous"
+    ],
+    "prerequisites": [
+      {
+        "type": "QUEST_COMPLETED",
+        "value": "MQ_7_01"
+      }
+    ],
+    "steps": [
+      {
+        "log": {
+          "th": "ไปทางด่วนแอกซอน (ตะวันตก)"
+        },
+        "objectives": [
+          {
+            "type": "GOTO",
+            "locationId": "LOC_NEU_NEURON",
+            "radius": 18
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_N2_AXON"
+          }
+        ],
+        "id": "S1"
+      },
+      {
+        "log": {
+          "th": "ไล่ทหารบลายต์และสำรวจเซลล์ประสาท"
+        },
+        "objectives": [
+          {
+            "type": "DEFEAT",
+            "enemyId": "EN_BT_CLUB",
+            "count": 3,
+            "label": {
+              "th": "ไล่ทหารบลายต์"
+            }
+          },
+          {
+            "type": "SCAN",
+            "targetTag": "neuron",
+            "count": 4,
+            "label": {
+              "th": "สแกนเดนไดรต์ ตัวเซลล์ แอกซอน และไซแนปส์ (กด T)"
+            }
+          }
+        ],
+        "onStart": [
+          {
+            "action": "SPAWN_ENEMY",
+            "enemyId": "EN_BT_CLUB",
+            "count": 3,
+            "locationId": "LOC_NEU_NEURON",
+            "level": 34,
+            "tag": "N2",
+            "element": "ELECTRO",
+            "aggro": true
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "CLEAR_ENEMIES",
+            "tag": "N2"
+          },
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_N2_SCANNED"
+          }
+        ],
+        "id": "S2"
+      },
+      {
+        "log": {
+          "th": "ต่อสายประสาทใหม่"
+        },
+        "objectives": [
+          {
+            "type": "PUZZLE",
+            "objectId": "OBJ_NEU_NEURONBOARD",
+            "puzzleId": "PZ_NEURON",
+            "label": {
+              "th": "บอกหน้าที่ของเซลล์ประสาทที่แผ่นจารึก (กด F)"
+            }
+          }
+        ],
+        "id": "S3"
+      },
+      {
+        "log": {
+          "th": "ทบทวนระบบประสาท"
+        },
+        "objectives": [
+          {
+            "type": "QUIZ",
+            "quizSetId": "QZ_CH7_NERVE",
+            "label": {
+              "th": "ตอบคำถามเรื่องระบบประสาท"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_N2_DONE"
+          }
+        ],
+        "id": "S4"
+      }
+    ],
+    "rewards": [
+      {
+        "itemId": "INSIGHT_CRYSTAL",
+        "count": 60
+      },
+      {
+        "itemId": "GLUCOSE",
+        "count": 24000
+      },
+      {
+        "itemId": "EXP_DI",
+        "count": 3
+      },
+      {
+        "itemId": "RR_EXP",
+        "count": 750
+      },
+      {
+        "itemId": "MAT_SYN_GEAR",
+        "count": 2
+      }
+    ],
+    "nextQuest": "MQ_7_03"
+  },
+  {
+    "id": "MQ_7_03",
+    "type": "MAIN",
+    "chapter": "CH7",
+    "title": {
+      "th": "สวนประสาทสัมผัส"
+    },
+    "description": {
+      "th": "ชาวเมืองมองไม่ชัด ได้ยินไม่ชัด — รูปปั้นตาและหูยักษ์ในสวนมัวหม่น"
+    },
+    "bioTopics": [
+      "bio.animal.senses"
+    ],
+    "prerequisites": [
+      {
+        "type": "QUEST_COMPLETED",
+        "value": "MQ_7_02"
+      }
+    ],
+    "steps": [
+      {
+        "log": {
+          "th": "ไปสวนประสาทสัมผัส (ตะวันออก)"
+        },
+        "objectives": [
+          {
+            "type": "GOTO",
+            "locationId": "LOC_NEU_SENSES",
+            "radius": 18
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_N3_GARDEN"
+          }
+        ],
+        "id": "S1"
+      },
+      {
+        "log": {
+          "th": "สำรวจอวัยวะรับความรู้สึก"
+        },
+        "objectives": [
+          {
+            "type": "SCAN",
+            "targetTag": "sense",
+            "count": 4,
+            "label": {
+              "th": "สแกนเลนส์ตา เรตินา คอเคลีย และช่องครึ่งวงกลม (กด T)"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_N3_SCANNED"
+          }
+        ],
+        "id": "S2"
+      },
+      {
+        "log": {
+          "th": "ปรับรูปปั้นในสวน"
+        },
+        "objectives": [
+          {
+            "type": "PUZZLE",
+            "objectId": "OBJ_NEU_SENSEBOARD",
+            "puzzleId": "PZ_SENSE",
+            "label": {
+              "th": "บอกหน้าที่ของอวัยวะรับความรู้สึกที่แผ่นจารึก (กด F)"
+            }
+          }
+        ],
+        "id": "S3"
+      },
+      {
+        "log": {
+          "th": "ทบทวนอวัยวะรับความรู้สึก"
+        },
+        "objectives": [
+          {
+            "type": "QUIZ",
+            "quizSetId": "QZ_CH7_SENSE",
+            "label": {
+              "th": "ตอบคำถามเรื่องอวัยวะรับความรู้สึก"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_N3_DONE"
+          }
+        ],
+        "id": "S4"
+      }
+    ],
+    "rewards": [
+      {
+        "itemId": "INSIGHT_CRYSTAL",
+        "count": 60
+      },
+      {
+        "itemId": "GLUCOSE",
+        "count": 24000
+      },
+      {
+        "itemId": "EXP_DI",
+        "count": 3
+      },
+      {
+        "itemId": "RR_EXP",
+        "count": 750
+      },
+      {
+        "itemId": "GROWTH_FACTOR",
+        "count": 2
+      }
+    ],
+    "nextQuest": "MQ_7_04"
+  },
+  {
+    "id": "MQ_7_04",
+    "type": "MAIN",
+    "chapter": "CH7",
+    "title": {
+      "th": "โรงหลอมการเคลื่อนไหว"
+    },
+    "description": {
+      "th": "หุ่นยามของเมืองหยุดนิ่ง และนักวิจัยซินดิเคตบุกเข้าโรงหลอม"
+    },
+    "bioTopics": [
+      "bio.animal.movement"
+    ],
+    "prerequisites": [
+      {
+        "type": "QUEST_COMPLETED",
+        "value": "MQ_7_03"
+      }
+    ],
+    "steps": [
+      {
+        "log": {
+          "th": "ไปโรงหลอมการเคลื่อนไหว (ตะวันตกเฉียงเหนือ)"
+        },
+        "objectives": [
+          {
+            "type": "GOTO",
+            "locationId": "LOC_NEU_FORGE",
+            "radius": 18
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_N4_FORGE"
+          }
+        ],
+        "id": "S1"
+      },
+      {
+        "log": {
+          "th": "ขับไล่นักวิจัยซินดิเคต"
+        },
+        "objectives": [
+          {
+            "type": "DEFEAT",
+            "enemyId": "EN_SYN_DOC",
+            "count": 3,
+            "label": {
+              "th": "ขับไล่นักวิจัยซินดิเคต"
+            }
+          }
+        ],
+        "onStart": [
+          {
+            "action": "SPAWN_ENEMY",
+            "enemyId": "EN_SYN_DOC",
+            "count": 3,
+            "locationId": "LOC_NEU_FORGE",
+            "level": 35,
+            "tag": "N4",
+            "aggro": true
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "CLEAR_ENEMIES",
+            "tag": "N4"
+          },
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_N4_CLEARED"
+          }
+        ],
+        "id": "S2"
+      },
+      {
+        "log": {
+          "th": "สำรวจโครงกระดูกและกล้ามเนื้อ"
+        },
+        "objectives": [
+          {
+            "type": "SCAN",
+            "targetTag": "motion",
+            "count": 4,
+            "label": {
+              "th": "สแกนกระดูก ข้อต่อ กล้ามเนื้อ และซาร์โคเมียร์ (กด T)"
+            }
+          }
+        ],
+        "id": "S3"
+      },
+      {
+        "log": {
+          "th": "ซ่อมหุ่นยาม"
+        },
+        "objectives": [
+          {
+            "type": "PUZZLE",
+            "objectId": "OBJ_NEU_FORGEBOARD",
+            "puzzleId": "PZ_MUSCLE",
+            "label": {
+              "th": "จับคู่ส่วนของระบบโครงร่างที่แผ่นจารึก (กด F)"
+            }
+          }
+        ],
+        "id": "S4"
+      },
+      {
+        "log": {
+          "th": "ทบทวนระบบโครงร่างและการเคลื่อนที่"
+        },
+        "objectives": [
+          {
+            "type": "QUIZ",
+            "quizSetId": "QZ_CH7_MOVE",
+            "label": {
+              "th": "ตอบคำถามเรื่องการเคลื่อนที่"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_N4_DONE"
+          }
+        ],
+        "id": "S5"
+      }
+    ],
+    "rewards": [
+      {
+        "itemId": "INSIGHT_CRYSTAL",
+        "count": 60
+      },
+      {
+        "itemId": "GLUCOSE",
+        "count": 24000
+      },
+      {
+        "itemId": "EXP_DI",
+        "count": 3
+      },
+      {
+        "itemId": "RR_EXP",
+        "count": 750
+      },
+      {
+        "itemId": "MAT_SYN_GEAR",
+        "count": 3
+      }
+    ],
+    "nextQuest": "MQ_7_05"
+  },
+  {
+    "id": "MQ_7_05",
+    "type": "MAIN",
+    "chapter": "CH7",
+    "title": {
+      "th": "หอฮอร์โมน"
+    },
+    "description": {
+      "th": "ทั้งเมืองตื่นตระหนกไม่หยุด ราวกับอะดรีนาลีนล้นเมือง — หอฮอร์โมนทำงานผิดปกติ"
+    },
+    "bioTopics": [
+      "bio.animal.endocrine",
+      "bio.animal.reproduction"
+    ],
+    "prerequisites": [
+      {
+        "type": "QUEST_COMPLETED",
+        "value": "MQ_7_04"
+      }
+    ],
+    "steps": [
+      {
+        "log": {
+          "th": "ไปหอฮอร์โมน (ตะวันออกเฉียงเหนือ)"
+        },
+        "objectives": [
+          {
+            "type": "GOTO",
+            "locationId": "LOC_NEU_SPIRE",
+            "radius": 18
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_N5_SPIRE"
+          }
+        ],
+        "id": "S1"
+      },
+      {
+        "log": {
+          "th": "สำรวจต่อมไร้ท่อ"
+        },
+        "objectives": [
+          {
+            "type": "SCAN",
+            "targetTag": "gland",
+            "count": 4,
+            "label": {
+              "th": "สแกนต่อมใต้สมอง ไทรอยด์ ตับอ่อน และต่อมหมวกไต (กด T)"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_N5_SCANNED"
+          }
+        ],
+        "id": "S2"
+      },
+      {
+        "log": {
+          "th": "ปรับสมดุลหอฮอร์โมน"
+        },
+        "objectives": [
+          {
+            "type": "PUZZLE",
+            "objectId": "OBJ_NEU_SPIREBOARD",
+            "puzzleId": "PZ_ENDOCRINE",
+            "label": {
+              "th": "จับคู่ต่อมไร้ท่อกับฮอร์โมนที่แผ่นจารึก (กด F)"
+            }
+          }
+        ],
+        "id": "S3"
+      },
+      {
+        "log": {
+          "th": "ทบทวนระบบต่อมไร้ท่อและการสืบพันธุ์"
+        },
+        "objectives": [
+          {
+            "type": "QUIZ",
+            "quizSetId": "QZ_CH7_HORMONE",
+            "label": {
+              "th": "ตอบคำถามเรื่องฮอร์โมน"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_N5_DONE"
+          }
+        ],
+        "id": "S4"
+      }
+    ],
+    "rewards": [
+      {
+        "itemId": "INSIGHT_CRYSTAL",
+        "count": 60
+      },
+      {
+        "itemId": "GLUCOSE",
+        "count": 24000
+      },
+      {
+        "itemId": "EXP_DI",
+        "count": 3
+      },
+      {
+        "itemId": "RR_EXP",
+        "count": 750
+      },
+      {
+        "itemId": "MAT_STORM_PEARL",
+        "count": 1
+      }
+    ],
+    "nextQuest": "MQ_7_06"
+  },
+  {
+    "id": "MQ_7_06",
+    "type": "MAIN",
+    "chapter": "CH7",
+    "title": {
+      "th": "ราชาแห่งสายฟ้า"
+    },
+    "description": {
+      "th": "เมดูซ่าพิษประสาทของคณะเอนโทรปีเกาะยอดหอสมอง ถึงเวลาปลดปล่อยจักรพรรดิ"
+    },
+    "bioTopics": [
+      "bio.animal.nervous",
+      "bio.animal.senses",
+      "bio.animal.movement",
+      "bio.animal.endocrine",
+      "bio.animal.reproduction",
+      "bio.animal.behavior"
+    ],
+    "prerequisites": [
+      {
+        "type": "QUEST_COMPLETED",
+        "value": "MQ_7_05"
+      }
+    ],
+    "steps": [
+      {
+        "log": {
+          "th": "ไปหอสมอง (เหนือ)"
+        },
+        "objectives": [
+          {
+            "type": "GOTO",
+            "locationId": "LOC_NEU_TOWER",
+            "radius": 22
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_N6_TOWER"
+          }
+        ],
+        "id": "S1"
+      },
+      {
+        "log": {
+          "th": "สำรวจสมองของเมือง"
+        },
+        "objectives": [
+          {
+            "type": "SCAN",
+            "targetId": "OBJ_NEU_BRAIN",
+            "locationId": "LOC_NEU_TOWER",
+            "label": {
+              "th": "สแกนสมองของนิวรีออน (กด T)"
+            }
+          }
+        ],
+        "id": "S2"
+      },
+      {
+        "log": {
+          "th": "ปราบเมดูซ่าพิษประสาท"
+        },
+        "objectives": [
+          {
+            "type": "DEFEAT",
+            "enemyId": "EN_BOSS_MEDUSA",
+            "label": {
+              "th": "ปราบเมดูซ่าพิษประสาท (ระวังโพลิปไฟฟ้า!)"
+            }
+          }
+        ],
+        "onStart": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_N6_BOSS"
+          },
+          {
+            "action": "SPAWN_ENEMY",
+            "enemyId": "EN_BOSS_MEDUSA",
+            "count": 1,
+            "locationId": "LOC_NEU_TOWER",
+            "level": 36,
+            "tag": "N6",
+            "aggro": true
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "WAIT",
+            "ms": 1000
+          },
+          {
+            "action": "CLEAR_ENEMIES",
+            "tag": "N6"
+          },
+          {
+            "action": "SET_FLAG",
+            "flag": "neu_freed"
+          },
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_N6_AFTER"
+          }
+        ],
+        "id": "S3"
+      },
+      {
+        "log": {
+          "th": "บททดสอบของจักรพรรดิคาฮาลิส"
+        },
+        "objectives": [
+          {
+            "type": "QUIZ",
+            "npcId": "NPC_CAJALIS",
+            "quizSetId": "QZ_CH7_FINAL",
+            "dialogueId": "DLG_N6_EXAM",
+            "label": {
+              "th": "รับบททดสอบจากจักรพรรดิ (กด F)"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_N6_PASS"
+          },
+          {
+            "action": "CHAPTER_CARD",
+            "top": "บทที่ 7 · จบ",
+            "title": "ราชาแห่งสายฟ้า"
+          }
+        ],
+        "id": "S4"
+      }
+    ],
+    "rewards": [
+      {
+        "itemId": "INSIGHT_CRYSTAL",
+        "count": 70
+      },
+      {
+        "itemId": "GLUCOSE",
+        "count": 34000
+      },
+      {
+        "itemId": "EXP_DI",
+        "count": 4
+      },
+      {
+        "itemId": "GROWTH_FACTOR",
+        "count": 3
+      },
+      {
+        "itemId": "MAT_SYN_GEAR",
+        "count": 4
+      },
+      {
+        "itemId": "RR_EXP",
+        "count": 950
+      }
+    ],
+    "nextQuest": "MQ_8_01"
+  },
+  {
+    "id": "MQ_8_01",
+    "type": "MAIN",
+    "chapter": "CH8",
+    "title": {
+      "th": "เสียงเรียกจากราก"
+    },
+    "description": {
+      "th": "ใบของต้นไม้แห่งชีวิตร่วงทั่วนครเซลลาเรีย ผู้ประกาศเอนโทรปีไปถึงรากของต้นไม้แล้ว"
+    },
+    "bioTopics": [
+      "bio.homeostasis"
+    ],
+    "prerequisites": [
+      {
+        "type": "QUEST_COMPLETED",
+        "value": "MQ_7_06"
+      }
+    ],
+    "steps": [
+      {
+        "log": {
+          "th": "พบศาสตราจารย์ไลโซที่สถาบัน"
+        },
+        "objectives": [
+          {
+            "type": "TALK",
+            "npcId": "NPC_LYSO_ACAD",
+            "dialogueId": "DLG_R1_LYSO"
+          }
+        ],
+        "onStart": [
+          {
+            "action": "CHAPTER_CARD",
+            "top": "บทสรุป",
+            "title": "รากแห่งชีวิต"
+          },
+          {
+            "action": "AMOEBY",
+            "text": "ใบไม้ร่วงลงมาทั่วเมืองเลย... ไปหาศาสตราจารย์ไลโซกันเถอะ"
+          }
+        ],
+        "id": "S1"
+      },
+      {
+        "log": {
+          "th": "ขึ้นเรือเหาะที่ลานหลังสถาบัน"
+        },
+        "objectives": [
+          {
+            "type": "INTERACT",
+            "objectId": "OBJ_AIRSHIP_CITY",
+            "label": {
+              "th": "ขึ้นเรือเหาะไปรากต้นไม้แห่งชีวิต (กด F)"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "SET_FLAG",
+            "flag": "roots_unlocked"
+          },
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_R1_FLIGHT"
+          },
+          {
+            "action": "TELEPORT",
+            "locationId": "LOC_ARB_ARRIVE"
+          }
+        ],
+        "id": "S2"
+      },
+      {
+        "log": {
+          "th": "พบปราชญ์ทั้งเจ็ดที่ค่าย"
+        },
+        "objectives": [
+          {
+            "type": "QUIZ",
+            "npcId": "NPC_ARB_HOOKIA",
+            "quizSetId": "QZ_CH8_INTRO",
+            "dialogueId": "DLG_R1_HOOKIA",
+            "label": {
+              "th": "คุยกับปราชญ์ฮูเคีย (กด F)"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_R1_DONE"
+          }
+        ],
+        "id": "S3"
+      }
+    ],
+    "rewards": [
+      {
+        "itemId": "INSIGHT_CRYSTAL",
+        "count": 70
+      },
+      {
+        "itemId": "GLUCOSE",
+        "count": 26000
+      },
+      {
+        "itemId": "EXP_DI",
+        "count": 3
+      },
+      {
+        "itemId": "RR_EXP",
+        "count": 800
+      }
+    ],
+    "nextQuest": "MQ_8_02",
+    "autoStart": true
+  },
+  {
+    "id": "MQ_8_02",
+    "type": "MAIN",
+    "chapter": "CH8",
+    "title": {
+      "th": "ศิลาแห่งความอบอุ่น"
+    },
+    "description": {
+      "th": "บลายต์ทำให้ความร้อนรอบศิลาแปรปรวน — ร่างกายต้องรักษาอุณหภูมิให้คงที่"
+    },
+    "bioTopics": [
+      "bio.homeostasis"
+    ],
+    "prerequisites": [
+      {
+        "type": "QUEST_COMPLETED",
+        "value": "MQ_8_01"
+      }
+    ],
+    "steps": [
+      {
+        "log": {
+          "th": "ไปศิลาแห่งความอบอุ่น"
+        },
+        "objectives": [
+          {
+            "type": "GOTO",
+            "locationId": "LOC_ARB_THERMO",
+            "radius": 18
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_R2_THERMO"
+          }
+        ],
+        "id": "S1"
+      },
+      {
+        "log": {
+          "th": "ขับไล่ศัตรูและสำรวจศิลา"
+        },
+        "objectives": [
+          {
+            "type": "DEFEAT",
+            "enemyId": "EN_BT_CLUB",
+            "count": 3,
+            "label": {
+              "th": "ขับไล่คณะเอนโทรปี"
+            }
+          },
+          {
+            "type": "SCAN",
+            "targetId": "OBJ_ARB_THERMO",
+            "locationId": "LOC_ARB_THERMO",
+            "label": {
+              "th": "สแกนศิลาแห่งความอบอุ่น (กด T)"
+            }
+          }
+        ],
+        "onStart": [
+          {
+            "action": "SPAWN_ENEMY",
+            "enemyId": "EN_BT_CLUB",
+            "count": 3,
+            "locationId": "LOC_ARB_THERMO",
+            "level": 38,
+            "tag": "R2",
+            "aggro": true,
+            "element": "PYRO"
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "CLEAR_ENEMIES",
+            "tag": "R2"
+          },
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_R2_SCANNED"
+          }
+        ],
+        "id": "S2"
+      },
+      {
+        "log": {
+          "th": "ฟื้นฟูศิลา"
+        },
+        "objectives": [
+          {
+            "type": "PUZZLE",
+            "objectId": "OBJ_ARB_THERMOBOARD",
+            "puzzleId": "PZ_THERMO",
+            "label": {
+              "th": "ฟื้นฟูศิลาที่แผ่นจารึก (กด F)"
+            }
+          }
+        ],
+        "id": "S3"
+      },
+      {
+        "log": {
+          "th": "ทบทวนดุลยภาพ"
+        },
+        "objectives": [
+          {
+            "type": "QUIZ",
+            "quizSetId": "QZ_CH8_THERMO",
+            "label": {
+              "th": "ตอบคำถามของปราชญ์"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_R2_DONE"
+          }
+        ],
+        "id": "S4"
+      }
+    ],
+    "rewards": [
+      {
+        "itemId": "INSIGHT_CRYSTAL",
+        "count": 70
+      },
+      {
+        "itemId": "GLUCOSE",
+        "count": 26000
+      },
+      {
+        "itemId": "EXP_DI",
+        "count": 3
+      },
+      {
+        "itemId": "RR_EXP",
+        "count": 800
+      },
+      {
+        "itemId": "GROWTH_FACTOR",
+        "count": 2
+      }
+    ],
+    "nextQuest": "MQ_8_03"
+  },
+  {
+    "id": "MQ_8_03",
+    "type": "MAIN",
+    "chapter": "CH8",
+    "title": {
+      "th": "ศิลาแห่งน้ำตาล"
+    },
+    "description": {
+      "th": "พลังงานของรากขึ้นลงไม่หยุด เหมือนน้ำตาลในเลือดที่ไม่มีใครคุม"
+    },
+    "bioTopics": [
+      "bio.homeostasis"
+    ],
+    "prerequisites": [
+      {
+        "type": "QUEST_COMPLETED",
+        "value": "MQ_8_02"
+      }
+    ],
+    "steps": [
+      {
+        "log": {
+          "th": "ไปศิลาแห่งน้ำตาล"
+        },
+        "objectives": [
+          {
+            "type": "GOTO",
+            "locationId": "LOC_ARB_GLUCOSE",
+            "radius": 18
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_R3_GLUCOSE"
+          }
+        ],
+        "id": "S1"
+      },
+      {
+        "log": {
+          "th": "สำรวจศิลา"
+        },
+        "objectives": [
+          {
+            "type": "SCAN",
+            "targetId": "OBJ_ARB_GLUCOSE",
+            "locationId": "LOC_ARB_GLUCOSE",
+            "label": {
+              "th": "สแกนศิลาแห่งน้ำตาล (กด T)"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_R3_SCANNED"
+          }
+        ],
+        "id": "S2"
+      },
+      {
+        "log": {
+          "th": "ฟื้นฟูศิลา"
+        },
+        "objectives": [
+          {
+            "type": "PUZZLE",
+            "objectId": "OBJ_ARB_GLUCOSEBOARD",
+            "puzzleId": "PZ_GLUCOSE",
+            "label": {
+              "th": "ฟื้นฟูศิลาที่แผ่นจารึก (กด F)"
+            }
+          }
+        ],
+        "id": "S3"
+      },
+      {
+        "log": {
+          "th": "ทบทวนดุลยภาพ"
+        },
+        "objectives": [
+          {
+            "type": "QUIZ",
+            "quizSetId": "QZ_CH8_GLUCOSE",
+            "label": {
+              "th": "ตอบคำถามของปราชญ์"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_R3_DONE"
+          }
+        ],
+        "id": "S4"
+      }
+    ],
+    "rewards": [
+      {
+        "itemId": "INSIGHT_CRYSTAL",
+        "count": 70
+      },
+      {
+        "itemId": "GLUCOSE",
+        "count": 26000
+      },
+      {
+        "itemId": "EXP_DI",
+        "count": 3
+      },
+      {
+        "itemId": "RR_EXP",
+        "count": 800
+      },
+      {
+        "itemId": "MAT_STORM_PEARL",
+        "count": 1
+      }
+    ],
+    "nextQuest": "MQ_8_04"
+  },
+  {
+    "id": "MQ_8_04",
+    "type": "MAIN",
+    "chapter": "CH8",
+    "title": {
+      "th": "ศิลาแห่งสายน้ำ"
+    },
+    "description": {
+      "th": "รากขาดน้ำสลับกับน้ำท่วม และคณะเอนโทรปีกำลังมุ่งไปขัดขวาง"
+    },
+    "bioTopics": [
+      "bio.homeostasis"
+    ],
+    "prerequisites": [
+      {
+        "type": "QUEST_COMPLETED",
+        "value": "MQ_8_03"
+      }
+    ],
+    "steps": [
+      {
+        "log": {
+          "th": "ไปศิลาแห่งสายน้ำ"
+        },
+        "objectives": [
+          {
+            "type": "GOTO",
+            "locationId": "LOC_ARB_WATER",
+            "radius": 18
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_R4_WATER"
+          }
+        ],
+        "id": "S1"
+      },
+      {
+        "log": {
+          "th": "ขับไล่ศัตรูและสำรวจศิลา"
+        },
+        "objectives": [
+          {
+            "type": "DEFEAT",
+            "enemyId": "EN_BT_CLUB",
+            "count": 3,
+            "label": {
+              "th": "ขับไล่คณะเอนโทรปี"
+            }
+          },
+          {
+            "type": "SCAN",
+            "targetId": "OBJ_ARB_WATER",
+            "locationId": "LOC_ARB_WATER",
+            "label": {
+              "th": "สแกนศิลาแห่งสายน้ำ (กด T)"
+            }
+          }
+        ],
+        "onStart": [
+          {
+            "action": "SPAWN_ENEMY",
+            "enemyId": "EN_BT_CLUB",
+            "count": 3,
+            "locationId": "LOC_ARB_WATER",
+            "level": 38,
+            "tag": "R4",
+            "aggro": true,
+            "element": "HYDRO"
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "CLEAR_ENEMIES",
+            "tag": "R4"
+          },
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_R4_SCANNED"
+          }
+        ],
+        "id": "S2"
+      },
+      {
+        "log": {
+          "th": "ฟื้นฟูศิลา"
+        },
+        "objectives": [
+          {
+            "type": "PUZZLE",
+            "objectId": "OBJ_ARB_WATERBOARD",
+            "puzzleId": "PZ_WATER",
+            "label": {
+              "th": "ฟื้นฟูศิลาที่แผ่นจารึก (กด F)"
+            }
+          }
+        ],
+        "id": "S3"
+      },
+      {
+        "log": {
+          "th": "ทบทวนดุลยภาพ"
+        },
+        "objectives": [
+          {
+            "type": "QUIZ",
+            "quizSetId": "QZ_CH8_WATER",
+            "label": {
+              "th": "ตอบคำถามของปราชญ์"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_R4_DONE"
+          }
+        ],
+        "id": "S4"
+      }
+    ],
+    "rewards": [
+      {
+        "itemId": "INSIGHT_CRYSTAL",
+        "count": 70
+      },
+      {
+        "itemId": "GLUCOSE",
+        "count": 26000
+      },
+      {
+        "itemId": "EXP_DI",
+        "count": 3
+      },
+      {
+        "itemId": "RR_EXP",
+        "count": 800
+      },
+      {
+        "itemId": "GROWTH_FACTOR",
+        "count": 2
+      }
+    ],
+    "nextQuest": "MQ_8_05"
+  },
+  {
+    "id": "MQ_8_05",
+    "type": "MAIN",
+    "chapter": "CH8",
+    "title": {
+      "th": "ศิลาแห่งโลกที่มีชีวิต"
+    },
+    "description": {
+      "th": "ดุลยภาพไม่ได้อยู่แค่ในร่างกาย แต่อยู่ในโลกทั้งใบ — และมีใครบางคนรออยู่ที่ศิลา"
+    },
+    "bioTopics": [
+      "bio.ecology.sustainability",
+      "bio.homeostasis"
+    ],
+    "prerequisites": [
+      {
+        "type": "QUEST_COMPLETED",
+        "value": "MQ_8_04"
+      }
+    ],
+    "steps": [
+      {
+        "log": {
+          "th": "ไปศิลาแห่งโลกที่มีชีวิต"
+        },
+        "objectives": [
+          {
+            "type": "GOTO",
+            "locationId": "LOC_ARB_WORLD",
+            "radius": 18
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_R5_WORLD"
+          }
+        ],
+        "id": "S1"
+      },
+      {
+        "log": {
+          "th": "สำรวจศิลา"
+        },
+        "objectives": [
+          {
+            "type": "SCAN",
+            "targetId": "OBJ_ARB_WORLD",
+            "locationId": "LOC_ARB_WORLD",
+            "label": {
+              "th": "สแกนศิลาแห่งโลกที่มีชีวิต (กด T)"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_R5_SCANNED"
+          }
+        ],
+        "id": "S2"
+      },
+      {
+        "log": {
+          "th": "ฟื้นฟูศิลา"
+        },
+        "objectives": [
+          {
+            "type": "PUZZLE",
+            "objectId": "OBJ_ARB_WORLDBOARD",
+            "puzzleId": "PZ_ECO",
+            "label": {
+              "th": "ฟื้นฟูศิลาที่แผ่นจารึก (กด F)"
+            }
+          }
+        ],
+        "id": "S3"
+      },
+      {
+        "log": {
+          "th": "ทบทวนดุลยภาพ"
+        },
+        "objectives": [
+          {
+            "type": "QUIZ",
+            "quizSetId": "QZ_CH8_WORLD",
+            "label": {
+              "th": "ตอบคำถามของปราชญ์"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_R5_DONE"
+          }
+        ],
+        "id": "S4"
+      }
+    ],
+    "rewards": [
+      {
+        "itemId": "INSIGHT_CRYSTAL",
+        "count": 70
+      },
+      {
+        "itemId": "GLUCOSE",
+        "count": 26000
+      },
+      {
+        "itemId": "EXP_DI",
+        "count": 3
+      },
+      {
+        "itemId": "RR_EXP",
+        "count": 800
+      },
+      {
+        "itemId": "MAT_SYN_GEAR",
+        "count": 3
+      }
+    ],
+    "nextQuest": "MQ_8_06"
+  },
+  {
+    "id": "MQ_8_06",
+    "type": "MAIN",
+    "chapter": "CH8",
+    "title": {
+      "th": "ผู้ประกาศเอนโทรปี"
+    },
+    "description": {
+      "th": "เผชิญหน้ากับผู้ประกาศเอนโทรปีที่เมล็ดหัวใจของต้นไม้แห่งชีวิต และพาฝาแฝดกลับบ้าน"
+    },
+    "bioTopics": [
+      "bio.homeostasis",
+      "bio.ecology.sustainability"
+    ],
+    "prerequisites": [
+      {
+        "type": "QUEST_COMPLETED",
+        "value": "MQ_8_05"
+      }
+    ],
+    "steps": [
+      {
+        "log": {
+          "th": "ไปลานเมล็ดหัวใจ (เหนือ)"
+        },
+        "objectives": [
+          {
+            "type": "GOTO",
+            "locationId": "LOC_ARB_ARENA",
+            "radius": 22
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_R6_ARENA"
+          }
+        ],
+        "id": "S1"
+      },
+      {
+        "log": {
+          "th": "สำรวจเมล็ดหัวใจ"
+        },
+        "objectives": [
+          {
+            "type": "SCAN",
+            "targetId": "OBJ_ARB_SEED",
+            "locationId": "LOC_ARB_ARENA",
+            "label": {
+              "th": "สแกนเมล็ดหัวใจแห่งต้นไม้แห่งชีวิต (กด T)"
+            }
+          }
+        ],
+        "id": "S2"
+      },
+      {
+        "log": {
+          "th": "ปราบผู้ประกาศเอนโทรปี"
+        },
+        "objectives": [
+          {
+            "type": "DEFEAT",
+            "enemyId": "EN_BOSS_HERALD",
+            "label": {
+              "th": "ปราบผู้ประกาศเอนโทรปี (ธาตุของเขาเปลี่ยนทุกครั้งที่โล่แตก!)"
+            }
+          }
+        ],
+        "onStart": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_R6_BOSS"
+          },
+          {
+            "action": "SPAWN_ENEMY",
+            "enemyId": "EN_BOSS_HERALD",
+            "count": 1,
+            "locationId": "LOC_ARB_ARENA",
+            "level": 40,
+            "tag": "R6",
+            "aggro": true
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "WAIT",
+            "ms": 1000
+          },
+          {
+            "action": "CLEAR_ENEMIES",
+            "tag": "R6"
+          },
+          {
+            "action": "SET_FLAG",
+            "flag": "arb_healed"
+          },
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_R6_AFTER"
+          }
+        ],
+        "id": "S3"
+      },
+      {
+        "log": {
+          "th": "บททดสอบสุดท้ายแห่งวิทาเรีย"
+        },
+        "objectives": [
+          {
+            "type": "QUIZ",
+            "npcId": "NPC_HOOKIA_SEED",
+            "quizSetId": "QZ_FINAL_EXAM",
+            "dialogueId": "DLG_R6_EXAM",
+            "label": {
+              "th": "รับบททดสอบสุดท้ายจากปราชญ์ฮูเคีย (กด F)"
+            }
+          }
+        ],
+        "onComplete": [
+          {
+            "action": "PLAY_DIALOGUE",
+            "dialogueId": "DLG_R6_PASS"
+          },
+          {
+            "action": "SET_FLAG",
+            "flag": "game_complete"
+          },
+          {
+            "action": "CHAPTER_CARD",
+            "top": "บทสรุป · จบ",
+            "title": "ตำนานธาตุแห่งชีวิต"
+          }
+        ],
+        "id": "S4"
+      }
+    ],
+    "rewards": [
+      {
+        "itemId": "INSIGHT_CRYSTAL",
+        "count": 160
+      },
+      {
+        "itemId": "GLUCOSE",
+        "count": 50000
+      },
+      {
+        "itemId": "EXP_DI",
+        "count": 6
+      },
+      {
+        "itemId": "GROWTH_FACTOR",
+        "count": 5
+      },
+      {
+        "itemId": "MAT_GOLEM_CORE",
+        "count": 2
+      },
+      {
+        "itemId": "RR_EXP",
+        "count": 1500
+      }
+    ],
+    "nextQuest": null
+  }
+]

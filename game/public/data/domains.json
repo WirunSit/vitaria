@@ -1,0 +1,51 @@
+[
+  {
+    "id": "DOM_LIBRARY",
+    "type": "BOOK",
+    "name": {
+      "th": "ห้องสมุดแห่งการสังเกต"
+    },
+    "desc": {
+      "th": "ห้องสมุดโบราณที่เก็บบันทึกของนักวิทยาศาสตร์รุ่นแรก ๆ — ตำราทาเลนต์ที่ได้ขึ้นกับวันในสัปดาห์"
+    },
+    "topic": "bio.intro",
+    "art": "ENV_Cytoria_EnzymeGrove",
+    "enemies": [
+      "EN_BAC_COCCI",
+      "EN_BAC_BACIL"
+    ]
+  },
+  {
+    "id": "DOM_FOSSIL",
+    "type": "ORE",
+    "name": {
+      "th": "ถ้ำฟอสซิลและแร่"
+    },
+    "desc": {
+      "th": "ถ้ำหินปูนที่สะสมแร่จากซากสิ่งมีชีวิตนับล้านปี — ได้แร่อัปเกรดอาวุธและกลูโคส"
+    },
+    "topic": "bio.chem",
+    "art": "ENV_Cytoria_MitosisSpire",
+    "enemies": [
+      "EN_BAC_BACIL",
+      "EN_PHAGE_S"
+    ]
+  },
+  {
+    "id": "DOM_CULTURE",
+    "type": "RELIC",
+    "name": {
+      "th": "ห้องเพาะเลี้ยงเซลล์"
+    },
+    "desc": {
+      "th": "ห้องแล็บเพาะเลี้ยงเนื้อเยื่อของสถาบัน — แหล่ง Bio-Relic หลัก"
+    },
+    "topic": "bio.cell",
+    "art": "ENV_Cytoria_MembraneLake",
+    "enemies": [
+      "EN_BAC_COCCI",
+      "EN_PHAGE_S",
+      "EN_BAC_BACIL"
+    ]
+  }
+]
