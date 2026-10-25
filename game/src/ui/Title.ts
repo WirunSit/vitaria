@@ -1,18 +1,32 @@
 import { avatarPlaceholder, img } from '../core/Assets';
 import { sfx } from '../core/Audio';
-import { hasSave } from '../core/Save';
-import { esc, h, openModal } from './UI';
+import { hasSave, importSave, loadSave, pickSaveFile, saveSummary } from '../core/Save';
+import { canFullscreen, enterFullscreen, isFullscreen, isIOS, isStandalone, isTouch } from '../core/Device';
+import { esc, h, openModal, toast } from './UI';
+
+/** On phones, starting the game also goes fullscreen (needs the tap that started it). */
+function phoneFullscreen() {
+  if (isTouch && !isFullscreen() && canFullscreen()) void enterFullscreen();
+}
 
 export function showTitle(onContinue: () => void, onNew: (name: string, gender: 'M' | 'F') => void) {
+  const saved = hasSave() ? loadSave() : null;
+  const iosHint = isTouch && isIOS && !isStandalone() && !canFullscreen();
   const root = h(`<div class="title-screen with-bg">
     <img src="assets/ui/LOGO_Vitaria.png" class="title-logo-img" style="display:none" alt="">
     <h1 class="title-logo">VITARIA</h1>
     <div class="title-sub">ตำนานธาตุแห่งชีวิต</div>
     <div style="opacity:.75;font-size:16px">เกมผจญภัยเรียนรู้ชีววิทยา ม.ปลาย</div>
     <div class="title-buttons">
-      ${hasSave() ? '<button class="btn" id="t-cont">▶ เล่นต่อ</button>' : ''}
-      <button class="btn ${hasSave() ? 'secondary' : ''}" id="t-new">✦ เริ่มการผจญภัยใหม่</button>
+      ${saved ? '<button class="btn" id="t-cont">▶ เล่นต่อ</button>' : ''}
+      <button class="btn ${saved ? 'secondary' : ''}" id="t-new">✦ เริ่มการผจญภัยใหม่</button>
     </div>
+    ${saved ? `<div class="title-save">💾 ${esc(saveSummary(saved))}</div>` : ''}
+    <div class="title-tools">
+      <button class="btn secondary small" id="t-import">📥 นำเข้าเซฟจากไฟล์</button>
+      ${isTouch && canFullscreen() ? '<button class="btn secondary small" id="t-fs">⛶ เต็มจอ</button>' : ''}
+    </div>
+    ${iosHint ? '<div class="title-hint">📱 เล่นเต็มจอบน iPhone: กดปุ่ม <b>แชร์</b> ⬆️ แล้วเลือก <b>"เพิ่มไปยังหน้าจอโฮม"</b> จากนั้นเปิดเกมจากไอคอนบนหน้าจอ</div>' : ''}
     <div class="title-foot">Vertical Slice v0.2 · ภาพประกอบสร้างด้วย AI ตามแนวทางใน GPT_IMAGE_PROMPTS.md</div>
   </div>`);
   const close = openModal(root);
@@ -26,12 +40,28 @@ export function showTitle(onContinue: () => void, onNew: (name: string, gender: 
   logo.addEventListener('load', useImage);
   if (logo.complete) useImage();
   const cont = root.querySelector('#t-cont') as HTMLButtonElement | null;
-  if (cont) cont.onclick = () => { sfx.ui(); close(); onContinue(); };
+  if (cont) cont.onclick = () => { sfx.ui(); phoneFullscreen(); close(); onContinue(); };
   (root.querySelector('#t-new') as HTMLButtonElement).onclick = () => {
     sfx.ui();
+    phoneFullscreen();
     const go = () => { close(); showCreate(onNew); };
-    if (!hasSave()) return go();
-    confirmBox('เริ่มเกมใหม่จะ <b>ลบข้อมูลที่บันทึกไว้</b> ทั้งหมด ต้องการดำเนินการต่อหรือไม่?', go);
+    if (!saved) return go();
+    confirmBox('เริ่มเกมใหม่จะ <b>ลบข้อมูลที่บันทึกไว้</b> ทั้งหมด ต้องการดำเนินการต่อหรือไม่?<br><span style="font-size:15px;opacity:.8">(ถ้าอยากเก็บไว้ ให้กด "ส่งออกเซฟ" ในเมนูเกมก่อน)</span>', go);
+  };
+  (root.querySelector('#t-fs') as HTMLButtonElement | null)?.addEventListener('click', () => { sfx.ui(); void enterFullscreen(); });
+  (root.querySelector('#t-import') as HTMLButtonElement).onclick = async () => {
+    sfx.ui();
+    const s = await pickSaveFile();
+    if (!s) return;
+    if (s === 'invalid') { toast('ไฟล์นี้ไม่ใช่เซฟของ VITARIA'); return; }
+    const msg = `นำเข้าเซฟนี้?<br><b>${esc(saveSummary(s))}</b>${saved ? '<br><span style="font-size:15px;opacity:.8">เซฟเดิมในเครื่องนี้จะถูกแทนที่</span>' : ''}`;
+    confirmBox(msg, () => {
+      if (!importSave(s)) { toast('บันทึกไม่สำเร็จ (พื้นที่เบราว์เซอร์เต็ม?)'); return; }
+      toast('นำเข้าเซฟแล้ว ✓');
+      phoneFullscreen();
+      close();
+      onContinue();
+    });
   };
 }
 

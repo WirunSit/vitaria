@@ -1,4 +1,4 @@
-/** Keyboard + mouse state. `pressed` sets are cleared at the end of every frame. */
+/** Keyboard + mouse (+ on-screen touch controls) state. `pressed` sets are cleared at the end of every frame. */
 export class Input {
   private down = new Set<string>();
   private pressedSet = new Set<string>();
@@ -6,6 +6,12 @@ export class Input {
   mouseDX = 0;
   mouseDY = 0;
   wheel = 0;
+  /** Analog move from the touch joystick (x = right, y = back), each -1..1; 0 when unused. */
+  moveX = 0;
+  moveY = 0;
+  /** Touch-drag camera turn, in screen pixels this frame (kept apart from mouse so it can use its own sensitivity). */
+  touchDX = 0;
+  touchDY = 0;
   locked = false;
   /**
    * 'drag' = free cursor, hold right (or middle) mouse and drag to turn the camera; a quick right-click still dashes.
@@ -27,7 +33,7 @@ export class Input {
       this.down.delete(e.code);
       this.releasedSet.add(e.code);
     });
-    window.addEventListener('blur', () => { this.down.clear(); this.endDrag(); });
+    window.addEventListener('blur', () => { this.down.clear(); this.endDrag(); this.moveX = this.moveY = 0; });
     canvas.addEventListener('mousedown', (e) => {
       if (this.mode === 'drag' && (e.button === 1 || e.button === 2)) {
         e.preventDefault();
@@ -92,6 +98,28 @@ export class Input {
   /** Called when the browser drops pointer lock by itself (e.g. the player pressed Esc). */
   onLockLost?: () => void;
 
+  /** On-screen button pressed (behaves like a key going down). */
+  virtualDown(code: string) {
+    if (!this.down.has(code)) this.pressedSet.add(code);
+    this.down.add(code);
+  }
+  /** On-screen button released. */
+  virtualUp(code: string) {
+    if (!this.down.delete(code)) return;
+    this.releasedSet.add(code);
+  }
+  /** One-shot tap of a key (down + up in the same frame). */
+  tap(code: string) {
+    this.pressedSet.add(code);
+    this.releasedSet.add(code);
+  }
+  /** Drop every held key/button (e.g. when a menu opens under a finger). */
+  releaseAll() {
+    for (const c of this.down) this.releasedSet.add(c);
+    this.down.clear();
+    this.moveX = this.moveY = 0;
+  }
+
   isDown(code: string) { return this.enabled && this.down.has(code); }
   pressed(code: string) { return this.enabled && this.pressedSet.has(code); }
   released(code: string) { return this.enabled && this.releasedSet.has(code); }
@@ -103,6 +131,8 @@ export class Input {
     this.releasedSet.clear();
     this.mouseDX = 0;
     this.mouseDY = 0;
+    this.touchDX = 0;
+    this.touchDY = 0;
     this.wheel = 0;
   }
 }

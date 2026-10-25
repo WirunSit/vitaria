@@ -1,3 +1,4 @@
+import { isTouch } from './Device';
 import { newGear, type GearSave, type SlotId } from '../gear/Gear';
 import { newAtp, type AtpState } from '../domain/Atp';
 
@@ -37,6 +38,8 @@ export function newGacha(): GachaSave {
 export interface SaveData {
   version: 1;
   createdAt: string;
+  /** ISO time of the last write (shown on the title screen). */
+  savedAt?: string;
   playerName: string;
   gender: 'M' | 'F';
   rr: number;
@@ -67,6 +70,8 @@ export interface SaveData {
 }
 
 const KEY = 'vitaria_save_v1';
+/** The previous good save — used if the main one is ever corrupted (e.g. the phone killed the tab mid-write). */
+const BACKUP_KEY = 'vitaria_save_v1_backup';
 
 export function newSave(playerName: string, gender: 'M' | 'F'): SaveData {
   return {
@@ -98,19 +103,20 @@ export function newSave(playerName: string, gender: 'M' | 'F'): SaveData {
     gacha: newGacha(),
     gear: newGear(),
     atp: newAtp(),
-    settings: { mouseSens: 1, invertY: false, shadows: true, playReminderMin: 60, gachaEnabled: true, camMode: 'drag', graphics: 'high' },
+    // phones/tablets start on lighter graphics; players can raise it in the menu
+    settings: { mouseSens: 1, invertY: false, shadows: !isTouch, playReminderMin: 60, gachaEnabled: true, camMode: 'drag', graphics: isTouch ? 'low' : 'high' },
   };
 }
 
 export function hasSave(): boolean {
-  try { return !!localStorage.getItem(KEY); } catch { return false; }
+  try { return !!localStorage.getItem(KEY) || !!localStorage.getItem(BACKUP_KEY); } catch { return false; }
 }
 
-export function loadSave(): SaveData | null {
+/** Parse + upgrade a save from JSON text; null if it isn't a VITARIA save. */
+export function parseSave(raw: string): SaveData | null {
   try {
-    const raw = localStorage.getItem(KEY);
-    if (!raw) return null;
     const s = JSON.parse(raw) as SaveData;
+    if (!s || typeof s !== 'object' || s.version !== 1 || typeof s.playerName !== 'string' || !s.chars || !s.quests) return null;
     // forward-compatible defaults
     const d = newSave(s.playerName, s.gender);
     return {
@@ -127,8 +133,23 @@ export function loadSave(): SaveData | null {
   }
 }
 
+export function loadSave(): SaveData | null {
+  try {
+    const main = localStorage.getItem(KEY);
+    const s = main ? parseSave(main) : null;
+    if (s) return s;
+    const bak = localStorage.getItem(BACKUP_KEY);
+    return bak ? parseSave(bak) : null;
+  } catch {
+    return null;
+  }
+}
+
 export function writeSave(s: SaveData): boolean {
   try {
+    s.savedAt = new Date().toISOString();
+    const prev = localStorage.getItem(KEY);
+    if (prev && prev.length > 2) localStorage.setItem(BACKUP_KEY, prev);
     localStorage.setItem(KEY, JSON.stringify(s));
     return true;
   } catch {
@@ -137,7 +158,61 @@ export function writeSave(s: SaveData): boolean {
 }
 
 export function deleteSave() {
-  try { localStorage.removeItem(KEY); } catch { /* ignore */ }
+  try { localStorage.removeItem(KEY); localStorage.removeItem(BACKUP_KEY); } catch { /* ignore */ }
+}
+
+/** Ask the browser not to clear our storage when the device runs low on space (best effort, silent). */
+export function requestPersistentStorage() {
+  try { void navigator.storage?.persist?.(); } catch { /* ignore */ }
+}
+
+/** Short description of a save for the title screen / import confirmation. */
+export function saveSummary(s: SaveData): string {
+  const hrs = Math.floor(s.stats.playSeconds / 3600), mins = Math.floor((s.stats.playSeconds % 3600) / 60);
+  const play = hrs > 0 ? `${hrs} ชม. ${mins} นาที` : `${mins} นาที`;
+  const when = s.savedAt ? new Date(s.savedAt).toLocaleString('th-TH', { dateStyle: 'medium', timeStyle: 'short' }) : '';
+  const done = Object.values(s.quests).filter((q) => q.state === 'COMPLETED').length;
+  return `${s.playerName} · RR ${s.rr} · เควสสำเร็จ ${done} · เล่นไป ${play}${when ? ` · บันทึกล่าสุด ${when}` : ''}`;
+}
+
+/** Download the save as a file (to keep a copy or move it to another device). */
+export function exportSaveFile(s: SaveData) {
+  const blob = new Blob([JSON.stringify(s)], { type: 'application/json' });
+  const a = document.createElement('a');
+  const day = todayStr();
+  a.href = URL.createObjectURL(blob);
+  a.download = `vitaria-save-${s.playerName.replace(/[^\p{L}\p{N}_-]+/gu, '') || 'player'}-${day}.json`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+}
+
+/** Let the player pick a save file; resolves with the parsed save (or null if cancelled / not a save). */
+export function pickSaveFile(): Promise<SaveData | null | 'invalid'> {
+  return new Promise((resolve) => {
+    const inp = document.createElement('input');
+    inp.type = 'file';
+    inp.accept = '.json,application/json';
+    inp.onchange = async () => {
+      const f = inp.files?.[0];
+      if (!f) return resolve(null);
+      resolve(parseSave(await f.text()) ?? 'invalid');
+    };
+    inp.click();
+  });
+}
+
+/** Replace the stored save with an imported one. */
+export function importSave(s: SaveData): boolean {
+  try {
+    const prev = localStorage.getItem(KEY);
+    if (prev) localStorage.setItem(BACKUP_KEY, prev);
+    localStorage.setItem(KEY, JSON.stringify(s));
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 export function todayStr(): string {

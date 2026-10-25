@@ -180,6 +180,10 @@ export class PlayerController {
       this.camYaw -= input.mouseDX * 0.0024 * sens;
       this.camPitch = THREE.MathUtils.clamp(this.camPitch + input.mouseDY * 0.0022 * sens, -0.6, 1.25);
     }
+    if (input.touchDX || input.touchDY) {
+      this.camYaw -= input.touchDX * 0.0055 * sens;
+      this.camPitch = THREE.MathUtils.clamp(this.camPitch + input.touchDY * 0.0045 * sens, -0.6, 1.25);
+    }
     if (input.wheel) this.camDist = THREE.MathUtils.clamp(this.camDist + input.wheel * 0.8, 2.5, 12);
 
     const ctl = this.canControl && m.alive;
@@ -194,6 +198,7 @@ export class PlayerController {
       if (input.isDown('KeyS') || input.isDown('ArrowDown')) mv.z += 1;
       if (input.isDown('KeyA') || input.isDown('ArrowLeft')) mv.x -= 1;
       if (input.isDown('KeyD') || input.isDown('ArrowRight')) mv.x += 1;
+      if (input.enabled && (input.moveX || input.moveY)) { mv.x += input.moveX; mv.z += input.moveY; }
     }
     const moving = mv.lengthSq() > 0;
     if (moving) {

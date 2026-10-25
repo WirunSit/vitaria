@@ -22,8 +22,8 @@ import { data } from './core/Data';
 import { bus } from './core/EventBus';
 import { Input } from './core/Input';
 import { ambience, music, setListener, setVolumes, sfx, unlockAudio, type MusicScene, type Surface } from './core/Audio';
-import { loadSave, newSave, writeSave, deleteSave, todayStr, type SaveData } from './core/Save';
-import { ELEMENT_COLOR, type Element, type QuestAction } from './core/types';
+import { loadSave, newSave, writeSave, deleteSave, importSave, todayStr, type SaveData } from './core/Save';
+import { ELEMENT_COLOR, ELEMENT_GLYPH, type Element, type QuestAction } from './core/types';
 import { World, type Interactable, type Scannable } from './world/World';
 import { Combat } from './combat/Combat';
 import { REACTION_INFO, type ReactionId } from './combat/Elements';
@@ -34,7 +34,9 @@ import type { Enemy } from './enemies/Enemy';
 import { PlayerController } from './player/PlayerController';
 import { AmoebyModel, type CharModel } from './player/CharacterModel';
 import { createCharacterModel } from './models/CharacterModels';
-import { charArtName } from './core/Assets';
+import { charArtName, skillArtName } from './core/Assets';
+import { isTouch } from './core/Device';
+import { TouchControls } from './ui/TouchControls';
 import { PartyMember, expToNext, levelCap } from './player/Party';
 import { QuestManager, type QuestApi } from './quest/QuestManager';
 import { Learning } from './learning/Learning';
@@ -136,6 +138,8 @@ export class Game {
   private autosaveT = 0;
   private playReminderT = 0;
   private interactList: { key: string; label: string; icon: string; act: () => void }[] = [];
+  /** On-screen controls (phones / tablets only). */
+  private touch: TouchControls | null = null;
   private deadHandled = false;
   private gameTime = 0;
   private bossShieldOpen = false;
@@ -161,12 +165,16 @@ export class Game {
     this.renderer.toneMappingExposure = LOOK.v2 ? 1.45 : 1.05; // v2 value measured against Genshin meadow shots (lit grass ≈ #8bc274)
     if (LOOK.v2) this.renderer.domElement.style.filter = 'saturate(1.0) contrast(1.02)';
     this.input = new Input(canvas);
+    if (isTouch) {
+      this.touch = new TouchControls(this.input, canvas);
+      this.touch.onInteract = (i) => { if (this.running && !isModalOpen()) this.interactList[i]?.act(); };
+    }
     window.addEventListener('resize', () => this.resize());
     this.resize();
     onModalChange((open) => {
       this.input.enabled = !open;
       document.body.classList.toggle('modal-open', open);
-      if (open) this.input.releaseLock();
+      if (open) { this.input.releaseLock(); this.touch?.reset(); }
       else this.input.endFrame(); // drop keys that were used to close the modal
     });
     // Browsers swallow the first Esc while the mouse is locked: treat losing the lock as "open menu".
@@ -237,6 +245,7 @@ export class Game {
 
   showTitle() {
     this.inTitle = true;
+    document.body.classList.remove('playing');
     music.setScene('title');
     ambience.silence();
     document.getElementById('hud')!.innerHTML = '';
@@ -285,6 +294,10 @@ export class Game {
 
     this.hud = new HUD(this.world);
     this.hud.onPartyClick((i) => this.player.switchTo(i));
+    // touch: tap the minimap for the map, the quest tracker for the quest log
+    this.hud.root.querySelector('.hud-minimap')?.addEventListener('click', () => this.input.tap('KeyM'));
+    this.hud.root.querySelector('.hud-quest')?.addEventListener('click', () => this.input.tap('KeyJ'));
+    document.body.classList.add('playing');
 
     // world state from save
     for (const id of save.world.chests) this.world.openChestVisual(id, true);
@@ -332,7 +345,9 @@ export class Game {
     this.writeSave();
     if (!save.flags.seen_help) {
       save.flags.seen_help = true;
-      setTimeout(() => this.amoebySay('กดเมาส์ขวาค้างแล้วลากเพื่อหมุนกล้อง · WASD หรือลูกศรเพื่อเดิน · กด H ดูวิธีเล่นทั้งหมด', 7000), 1500);
+      setTimeout(() => this.amoebySay(isTouch
+        ? 'ลากนิ้วซ้ายเพื่อเดิน · ลากบนจอฝั่งขวาเพื่อหมุนกล้อง · ปุ่ม ☰ มุมขวาบน มีวิธีเล่นทั้งหมด'
+        : 'กดเมาส์ขวาค้างแล้วลากเพื่อหมุนกล้อง · WASD หรือลูกศรเพื่อเดิน · กด H ดูวิธีเล่นทั้งหมด', 7000), 1500);
     }
   }
 
@@ -417,7 +432,7 @@ export class Game {
   }
 
   applySettings() {
-    this.input.setMode(this.save.settings.camMode);
+    this.input.setMode(isTouch ? 'drag' : this.save.settings.camMode);
     const gq = this.save.settings.graphics ?? 'high';
     const sv = this.save.settings.sfxVol ?? 0.75;
     setVolumes({ music: this.save.settings.musicVol ?? 0.5, sfx: sv, amb: sv * 0.8 });
@@ -764,6 +779,13 @@ export class Game {
       dailyReview: () => this.dailyReview(),
       saveNow: () => this.writeSave(),
       quitToTitle: () => { this.writeSave(); this.running = false; this.combat.dispose(); this.wui.clear(); location.reload(); },
+      loadImported: (imp) => {
+        // stop autosaving the current game first, or the reload's save-on-exit would overwrite the import
+        this.running = false;
+        this.inTitle = true;
+        if (!importSave(imp)) { toast('บันทึกไม่สำเร็จ (พื้นที่เบราว์เซอร์เต็ม?)'); return; }
+        location.reload();
+      },
       settingsChanged: () => this.applySettings(),
     };
   }
@@ -1569,5 +1591,22 @@ export class Game {
       atp: (regenAtp(s), s.atp.cur),
       domain: this.domain.run ? { name: this.domain.run.def.name.th, wave: this.domain.run.wave, waves: this.domain.run.waves, time: this.domain.run.timeLeft, mod: this.domain.run.mod.th, state: this.domain.run.state } : null,
     });
+    if (this.touch) {
+      const m = this.player.active;
+      this.touch.update({
+        elementUnlocked: s.systems.includes('ELEMENT'),
+        color: ELEMENT_COLOR[m.element],
+        glyph: ELEMENT_GLYPH[m.element],
+        skillArt: skillArtName(m.id),
+        cdE: m.cdE,
+        cdQ: m.cdQ,
+        energyPct: Math.min(1, m.energy / m.def.burstCost),
+        burstReady: m.burstReady,
+        hasScanner: s.systems.includes('SCANNER'),
+        scanning: this.scanning,
+        antibiotic: s.inventory.ANTIBIOTIC ?? 0,
+        interacts: this.scanning ? [] : this.interactList,
+      });
+    }
   }
 }

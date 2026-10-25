@@ -8,7 +8,8 @@ import { ARB, ARB_SIZE, inRoots } from '../world/Roots';
 import { ZEP, ZEP_SIZE, inZepheria } from '../world/Zepheria';
 import { data } from '../core/Data';
 import { ELEMENT_COLOR, ELEMENT_GLYPH, ELEMENT_TH, type CodexDef } from '../core/types';
-import type { SaveData } from '../core/Save';
+import { exportSaveFile, pickSaveFile, saveSummary, type SaveData } from '../core/Save';
+import { canFullscreen, isFullscreen, isTouch, toggleFullscreen } from '../core/Device';
 import { avatarPlaceholder, charArtName, elementIcon, iconSources, img, itemIcon, splashSources } from '../core/Assets';
 import { sfx, setVolumes } from '../core/Audio';
 import { starStr, starsFor, type Learning } from '../learning/Learning';
@@ -18,6 +19,7 @@ import { hasKit } from '../combat/Skills';
 import { WORLD_SIZE } from '../world/Terrain';
 import { esc, fmtText, getGender, h, openModal, toast } from './UI';
 import { topicLabel } from './QuizUI';
+import { confirmBox } from './Title';
 import { renderRelicTab, renderWeaponTab, openInventory } from './GearUI';
 
 export interface MenuHost {
@@ -43,6 +45,8 @@ export interface MenuHost {
   dailyReview(): void;
   saveNow(): void;
   quitToTitle(): void;
+  /** Replace the current game with an imported save and restart. */
+  loadImported(s: SaveData): void;
   settingsChanged(): void;
 }
 
@@ -378,7 +382,7 @@ export function openEscMenu(host: MenuHost, actions: { codex: () => void; quests
     <button class="btn secondary" data-a="help">❓ วิธีเล่น (H)</button>
     <button class="btn secondary" data-a="credits">🙏 เครดิตโมเดล 3D</button>
     <div class="row" style="justify-content:space-between;margin-top:6px">
-      <label style="font-size:15px">ความไวเมาส์ <input type="range" min="0.3" max="2.5" step="0.1" value="${host.save.settings.mouseSens}" id="sens"></label>
+      <label style="font-size:15px">${isTouch ? 'ความไวการหมุนกล้อง' : 'ความไวเมาส์'} <input type="range" min="0.3" max="2.5" step="0.1" value="${host.save.settings.mouseSens}" id="sens"></label>
       <label style="font-size:15px"><input type="checkbox" id="shadows" ${host.save.settings.shadows ? 'checked' : ''}> เงา</label>
       <label style="font-size:15px"><input type="checkbox" id="showfps" ${host.save.settings.showFps ? 'checked' : ''}> แสดง FPS</label>
       <label style="font-size:15px">เพลง <input type="range" min="0" max="1" step="0.05" value="${host.save.settings.musicVol ?? 0.5}" id="musicvol"></label>
@@ -386,7 +390,7 @@ export function openEscMenu(host: MenuHost, actions: { codex: () => void; quests
       <label style="font-size:15px"><input type="checkbox" id="newgrass" ${host.save.settings.oldGrass ? '' : 'checked'}> หญ้าแบบใหม่</label>
       <label style="font-size:15px"><input type="checkbox" id="lookv2" ${host.save.settings.lookV2 === false ? '' : 'checked'}> ภาพแบบใหม่ (สีธรรมชาติ น้ำ ภูเขาไกล · มีผลหลังโหลดเกมใหม่)</label>
     </div>
-    <label style="font-size:15px">หมุนกล้อง
+    <label style="font-size:15px;${isTouch ? 'display:none' : ''}">หมุนกล้อง
       <select id="cammode">
         <option value="drag" ${host.save.settings.camMode !== 'lock' ? 'selected' : ''}>กดเมาส์ขวาค้างแล้วลาก</option>
         <option value="lock" ${host.save.settings.camMode === 'lock' ? 'selected' : ''}>ล็อกเมาส์ (แบบ Genshin บน PC)</option>
@@ -398,10 +402,14 @@ export function openEscMenu(host: MenuHost, actions: { codex: () => void; quests
         <option value="low" ${host.save.settings.graphics === 'low' ? 'selected' : ''}>ต่ำ (เครื่องช้า)</option>
       </select></label>
     <label style="font-size:14px;opacity:.85"><input type="checkbox" id="gacha" ${host.save.settings.gachaEnabled ? 'checked' : ''}> เปิดระบบสุ่ม Gene Wish <span style="opacity:.7">(ปิด = แลกตัวละครด้วยราคาคงที่ · โหมดห้องเรียน)</span></label>
-    <div class="row" style="justify-content:space-between">
+    <div class="row" style="justify-content:space-between;flex-wrap:wrap;gap:8px">
       <button class="btn secondary small" data-a="save">💾 บันทึก</button>
+      <button class="btn secondary small" data-a="export">📤 ส่งออกเซฟ</button>
+      <button class="btn secondary small" data-a="import">📥 นำเข้าเซฟ</button>
+      ${canFullscreen() ? `<button class="btn secondary small" data-a="fs">⛶ ${isFullscreen() ? 'ออกจากเต็มจอ' : 'เต็มจอ'}</button>` : ''}
       <button class="btn secondary small" data-a="title">🏠 กลับหน้าแรก</button>
     </div>
+    <div style="font-size:13px;opacity:.65">เกมบันทึกอัตโนมัติในเบราว์เซอร์นี้ · "ส่งออกเซฟ" เพื่อเก็บสำรองหรือย้ายไปเล่นต่อเครื่องอื่น</div>
   </div></div>`);
   const close = openModal(root);
   const onKey = (e: KeyboardEvent) => { if (e.code === 'Escape') { e.preventDefault(); done(); } };
@@ -412,6 +420,16 @@ export function openEscMenu(host: MenuHost, actions: { codex: () => void; quests
     const a = b.dataset.a!;
     if (a === 'resume') return done();
     if (a === 'save') { host.saveNow(); toast('บันทึกเกมแล้ว 💾'); return; }
+    if (a === 'export') { host.saveNow(); exportSaveFile(host.save); toast('ดาวน์โหลดไฟล์เซฟแล้ว 📤'); return; }
+    if (a === 'fs') { void toggleFullscreen(); done(); return; }
+    if (a === 'import') {
+      void pickSaveFile().then((imp) => {
+        if (!imp) return;
+        if (imp === 'invalid') { toast('ไฟล์นี้ไม่ใช่เซฟของ VITARIA'); return; }
+        confirmBox(`นำเข้าเซฟนี้แทนเกมปัจจุบัน?<br><b>${esc(saveSummary(imp))}</b>`, () => { done(); host.loadImported(imp); });
+      });
+      return;
+    }
     if (a === 'title') { done(); host.quitToTitle(); return; }
     done();
     if (a === 'daily') host.dailyReview();
@@ -456,8 +474,21 @@ export function openCredits() {
 // ------------------------------------------------------------------ Help
 export function openHelp() {
   const { body } = menuShell('วิธีเล่น', '❓');
+  const touchHelp = `<div class="help-grid" style="margin-bottom:16px">
+      <span class="k">นิ้วซ้าย (ครึ่งจอซ้าย)</span><span>จอยสติ๊กเดิน — แตะตรงไหนก็ได้ทางซ้ายแล้วลาก</span>
+      <span class="k">ลากนิ้วบนจอ (ฝั่งขวา)</span><span>หมุนกล้อง · ใช้สองนิ้วถ่าง/หุบ = ซูม</span>
+      <span class="k">⚔</span><span>โจมตี · กดค้างแล้วปล่อย = โจมตีหนัก</span>
+      <span class="k">⤒ / »</span><span>กระโดด (กดกลางอากาศ = ร่อน) / หลบ (กดค้างขณะเดิน = วิ่งเร็ว)</span>
+      <span class="k">ปุ่มสกิล</span><span>สกิลธาตุ (E) และท่าไม้ตาย (Q) ด้านขวาล่าง</span>
+      <span class="k">แตะรูปตัวละคร</span><span>สลับตัวละคร</span>
+      <span class="k">ป้ายเหนือปุ่ม</span><span>คุย / ตรวจสอบ / เปิดหีบ</span>
+      <span class="k">🔬 / 💊</span><span>Bio-Scanner / ยาปฏิชีวนะ</span>
+      <span class="k">แผนที่มุมซ้าย / เควส</span><span>แตะเพื่อเปิดแผนที่ / รายการเควส</span>
+      <span class="k">📜 🗺️ 🎒 🧬 ⛶ ☰</span><span>เควส · แผนที่ · กระเป๋า · ตัวละคร · เต็มจอ · เมนู</span>
+    </div>`;
   body.innerHTML = `<div class="body"><div class="detail">
-    <div class="help-grid">
+    ${isTouch ? touchHelp : ''}
+    <div class="help-grid" ${isTouch ? 'style="display:none"' : ''}>
       <span class="k">W A S D / ลูกศร</span><span>เดิน (กดค้าง Shift = วิ่งเร็ว)</span>
       <span class="k">เมาส์ขวาค้าง + ลาก</span><span>หมุนกล้อง (ปุ่มกลางก็ได้) · ล้อเมาส์ = ซูม · เปลี่ยนเป็นแบบล็อกเมาส์ได้ในเมนู Esc</span>
       <span class="k">Space</span><span>กระโดด · กดอีกครั้งกลางอากาศ = ร่อน (เมื่อได้ปีกซามารา)</span>

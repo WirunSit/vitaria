@@ -2,6 +2,7 @@ import { data } from '../core/Data';
 import type { DialogueNode } from '../core/types';
 import { sfx } from '../core/Audio';
 import { fmtText, h, openModal, speaker, speakerPortrait } from './UI';
+import { isTouch } from '../core/Device';
 
 /** Plays a dialogue by id. Resolves when finished. Unknown ids resolve immediately. */
 export function playDialogue(id: string): Promise<void> {
@@ -50,7 +51,7 @@ export function playDialogue(id: string): Promise<void> {
         <div class="dlg-box">
           ${sp.name ? `<div class="dlg-name" style="color:${sp.color}">${sp.name}</div>` : ''}
           <div class="dlg-text" style="${n.speaker === 'NARRATOR' ? 'font-style:italic;color:var(--cream-dim)' : ''}"></div>
-          ${isChoice ? '' : '<div class="dlg-next">▼ คลิก / Space</div>'}
+          ${isChoice ? '' : `<div class="dlg-next">▼ ${isTouch ? 'แตะเพื่อไปต่อ' : 'คลิก / Space'}</div>`}
         </div>
         ${isChoice ? `<div class="dlg-choices">${(n.choices ?? []).map((c, i) => `<button class="dlg-choice" data-i="${i}">${fmtText(c.text.th)}</button>`).join('')}</div>` : ''}
       `;
