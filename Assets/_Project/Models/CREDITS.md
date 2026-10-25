@@ -41,7 +41,6 @@
 | `NAT_Crystal4` | Ice Cluster 3 (free) | chrismartin1337 | CC BY 4.0 | [Sketchfab](https://sketchfab.com/3d-models/ice-cluster-3-free-79897b4d55654eac8347913f0bacfb73) |
 | `NAT_Flowers` | Stylized Flowers and Dandelions | BotanicalBlackSmith | CC BY 4.0 | [Sketchfab](https://sketchfab.com/3d-models/stylized-flowers-and-dandelions-bffdeb9b066c43ac9456d9899e37d509) |
 | `NAT_GlowPlants` | Glowing Plants | bluewombat | CC BY 4.0 | [Sketchfab](https://sketchfab.com/3d-models/glowing-plants-0b80514d84c04589b5897e86e4764080) |
-| `NPC_AnimeGirl` | 3D Anime Character girl for Blender C1 | Youcef.Solo | CC BY 4.0 | [Sketchfab](https://sketchfab.com/3d-models/3d-anime-character-girl-for-blender-c1-4592848f6d2d47d1b0544e1ddbbc6e87) |
 | `NPC_LittleWitch` | 2016. Halloween little witch | goblin165cm | CC BY 4.0 | [Sketchfab](https://sketchfab.com/3d-models/2016-halloween-little-witch-ccc023590bfb4789af9322864e42d1ab) |
 | `NAT_Pine1` | Stylize Tree Lowpoly | udayjeet | CC BY 4.0 | [Sketchfab](https://sketchfab.com/3d-models/stylize-tree-lowpoly-dcf20a5a86784331a34657e94442511f) |
 | `NAT_Pine2` | Stylized Pine Tree Tree | Batuhan13 | CC BY 4.0 | [Sketchfab](https://sketchfab.com/3d-models/stylized-pine-tree-tree-deadcadc915545a7b4701dbe6eb419e8) |

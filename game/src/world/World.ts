@@ -338,14 +338,13 @@ export class World {
 
   /**
    * Townsfolk that only add life (no dialogue): the mushroom merchant by the giant mushrooms on the Zepheria
-   * taxonomy island, and two downloaded girls by the Cellaria fountain. Rigged models with no clips are posed
+   * taxonomy island, and a little witch by the Cellaria fountain. Rigged models with no clips are posed
    * out of their T-pose; every one gets a gentle breathing sway.
    */
   private buildAmbientNpcs() {
     const isle = ISLANDS.find((i) => i.id === 'taxon')!;
     const list = [
       { file: 'npcs/NPC_MushroomMerchant.glb', x: ZEP.x + isle.x + 6, z: ZEP.z + isle.z + 7, h: 1.7, face: { x: ZEP.x + isle.x, z: ZEP.z + isle.z }, away: true },
-      { file: 'npcs/NPC_AnimeGirl.glb', x: 7, z: -1255, h: 1.55, face: { x: 0, z: -1240 }, away: false },
       { file: 'npcs/NPC_LittleWitch.glb', x: -7, z: -1256, h: 1.2, face: { x: 0, z: -1240 }, away: false },
     ];
     for (const n of list) {

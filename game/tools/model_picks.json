@@ -453,18 +453,6 @@
       "anims": 0
     },
     {
-      "code": "NP-07",
-      "dir": "NPCs",
-      "name": "NPC_AnimeGirl",
-      "faces": 40000,
-      "src": "Sketchfab",
-      "title": "3D Anime Character girl for Blender C1",
-      "author": "Youcef.Solo",
-      "license": "CC BY 4.0",
-      "url": "https://sketchfab.com/3d-models/3d-anime-character-girl-for-blender-c1-4592848f6d2d47d1b0544e1ddbbc6e87",
-      "anims": 0
-    },
-    {
       "code": "NP-10",
       "dir": "NPCs",
       "name": "NPC_LittleWitch",
