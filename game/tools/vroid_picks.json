@@ -228,5 +228,15 @@
   "license": "VRoid Hub · ห้ามใช้ในนามองค์กร",
   "src": "VRoid Hub",
   "url": "https://hub.vroid.com/characters/6608986823099270676/models/940430863078135671"
+ },
+ {
+  "name": "NPC_VillagerFoss",
+  "dir": "NPCs",
+  "file": "VillagerFoss.vrm",
+  "title": "蓮瀬 Ver1.03",
+  "author": "ﾏﾚｰﾊﾞｸﾞ",
+  "license": "VRoid Hub · ใช้ได้ทั้งหมด",
+  "src": "VRoid Hub",
+  "url": "https://hub.vroid.com/characters/7119930859945091306/models/2780430848768364428"
  }
 ]

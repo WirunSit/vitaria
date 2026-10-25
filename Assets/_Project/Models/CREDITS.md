@@ -178,6 +178,7 @@
 | `NPC_DrChimera` | Anime Boy | Jonathan Chen | VRoid Hub · ต้องระบุเครดิต | [VRoid Hub](https://hub.vroid.com/characters/7171210035569000445/models/8481347267083016813) |
 | `NPC_GrannyZephyra` | 利用OK 魔女風目隠れオッドアイレディ | pinehead | VRoid Hub · ต้องระบุเครดิต | [VRoid Hub](https://hub.vroid.com/characters/958381910122292531/models/2217970458745246747) |
 | `NPC_UncleER` | 男騎士くん | teradora | VRoid Hub · ห้ามใช้ในนามองค์กร | [VRoid Hub](https://hub.vroid.com/characters/6608986823099270676/models/940430863078135671) |
+| `NPC_VillagerFoss` | 蓮瀬 Ver1.03 | ﾏﾚｰﾊﾞｸﾞ | VRoid Hub · ใช้ได้ทั้งหมด | [VRoid Hub](https://hub.vroid.com/characters/7119930859945091306/models/2780430848768364428) |
 | `BGM ทุ่งหญ้า (กลางวัน 1)` | Relaxing Orchestra / Ambient beat / Initiate landing | migfus20, Tausdei, Alexandr Zhelanov | CC BY 4.0 | [OpenGameArt](https://opengameart.org/content/relaxing-orchestra-ambient-beat-and-initiate-landing-migfus20-vs-tausdei-vs-zhelanov) |
 | `BGM ทุ่งหญ้า (กลางวัน 2)` | Forest Ambience | TinyWorlds | CC0 | [OpenGameArt](https://opengameart.org/content/forest-ambience) |
 | `BGM กลางคืน` | Mysterious Ambience (song21) | cynicmusic / pixelsphere.org | CC0 | [OpenGameArt](https://opengameart.org/content/mysterious-ambience-song21) |
