@@ -1151,7 +1151,11 @@ export class Game {
     if (this.scanProgress < 1) {
       this.scanProgress += dt / (known ? 0.4 : 1.0);
       if (Math.floor(this.scanProgress * 10) !== Math.floor((this.scanProgress - dt) * 10)) sfx.scan();
-      if (this.scanProgress >= 1) {
+      if (this.scanProgress >= 1 && !best.codexId) {
+        // a landmark with no codex entry (e.g. the academy airship): tell the player it is not what the quest wants
+        sideToast(`🔍 ${best.label}: ไม่ใช่ออร์แกเนลล์ ไม่นับในภารกิจสแกน`, 2500);
+        this.scanTarget.known = true;
+      } else if (this.scanProgress >= 1) {
         const isNew = this.unlockCodex(best.codexId);
         bus.emit('Scanned', { targetId: best.id, tags: best.tags });
         if (isNew) { this.giveItem('INSIGHT_CRYSTAL', 5); this.addRRExp(50); }
@@ -1556,9 +1560,17 @@ export class Game {
       const idx = tracked.step.objectives.findIndex((o, i) => (tracked.progress[i] ?? 0) < (o.count ?? 1));
       const o = tracked.step.objectives[Math.max(0, idx)];
       const t = this.quests.targets()[0];
+      let objective = idx < 0 ? tracked.step.log.th : this.quests.objectiveText(o, tracked.progress[idx] ?? 0);
+      if (idx >= 0 && o.type === 'SCAN' && o.targetTag && (o.count ?? 1) > 1) {
+        // "scan all N" quests: once only a few are left, name them so the player knows what is still missing
+        const seen = s.quests[tracked.quest.id]?.seen ?? [];
+        const left = new Map<string, string>();
+        for (const sc of this.world.scannables) if (sc.tags.includes(o.targetTag) && !seen.includes(`${idx}:${sc.id}`)) left.set(sc.id, sc.label.replace(/\s*\(.*\)$/, ''));
+        if (left.size > 0 && left.size <= 3) objective += ` · ยังขาด: ${[...left.values()].join(', ')}`;
+      }
       quest = {
         title: tracked.quest.title.th,
-        objective: idx < 0 ? tracked.step.log.th : this.quests.objectiveText(o, tracked.progress[idx] ?? 0),
+        objective,
         dist: t ? Math.hypot(t.x - this.player.pos.x, t.z - this.player.pos.z) : null,
         type: tracked.quest.type,
       };

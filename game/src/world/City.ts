@@ -81,11 +81,26 @@ export class City {
       }
       const prop = CITY_PROPS[d.id];
       if (prop) void propSlot(g, prop[0], { w: prop[1], h: prop[2] });
-      if (d.codex) {
+      if (d.id === 'ORG_MEMBRANE') {
+        // the membrane is the whole city wall: scan it from anywhere along the ring (one id, so it still counts once)
+        const R = CITY_RADIUS + 3;
+        for (let k = 0; k < 40; k++) {
+          const a = (k / 40) * Math.PI * 2, probe = new THREE.Object3D();
+          probe.position.set(Math.cos(a) * R, 5, Math.sin(a) * R);
+          this.root.add(probe);
+          this.scannables.push({ id: d.id, codexId: d.codex, tags: ['organelle'], obj: probe, radius: d.r, label: d.label });
+        }
+      } else if (d.codex) {
         const probe = new THREE.Object3D();
-        probe.position.set(d.x, d.id === 'ORG_MEMBRANE' ? 6 : 4, d.z);
+        probe.position.set(d.x, 4, d.z);
         this.root.add(probe);
         this.scannables.push({ id: d.id, codexId: d.codex, tags: ['organelle'], obj: probe, radius: d.r, label: d.label });
+      } else {
+        // landmarks that are not organelles (academy, airship dock): scanning them says so instead of silently doing nothing
+        const probe = new THREE.Object3D();
+        probe.position.set(d.x, 4, d.z);
+        this.root.add(probe);
+        this.scannables.push({ id: d.id, codexId: '', tags: ['landmark'], obj: probe, radius: d.r, label: d.label });
       }
     }
     this.buildDecor();
