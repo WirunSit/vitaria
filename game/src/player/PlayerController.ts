@@ -14,6 +14,8 @@ import type { PartyMember } from './Party';
 
 const GRAVITY = -24;
 const RUN = 6.2;
+/** seconds E must be held for a character's hold-E skill (a quicker tap uses the normal skill) */
+const HOLD_E = 0.35;
 const SPRINT = 9.5;
 const DASH = 15;
 /** uphill slope (rise/run) from which walking turns into climbing (~40°) */
@@ -52,6 +54,10 @@ export class PlayerController {
   private swingLast = false;
   private comboWindow = 0;
   private holdT = 0;
+  /** E held this long so far (only for kits with a hold-E skill; < 0 = not charging) */
+  private eHoldT = -1;
+  /** riding a wind lift (Alvi's hold E): glide allowed without the samara wings, auto-glide at the top */
+  private windborne = false;
   private switchCd = 0;
   private sprinting = false;
   moveSpeed = 0;
@@ -119,6 +125,7 @@ export class PlayerController {
     this.pos.y = this.world.groundH(p.x, p.z);
     this.velY = 0;
     this.gliding = false;
+    this.windborne = false;
     this.amoebyPos.copy(this.pos).add(new THREE.Vector3(1, 2, 0));
   }
 
@@ -126,6 +133,7 @@ export class PlayerController {
     if (i === this.activeIndex || i >= this.party.length) return false;
     if (!this.party[i].alive || this.switchCd > 0) return false;
     this.activeIndex = i;
+    this.eHoldT = -1;
     this.switchCd = 1;
     this.attackT = -1;
     this.combo = 0;
@@ -163,6 +171,13 @@ export class PlayerController {
         this.iframeT = Math.max(this.iframeT, duration + 0.1);
       },
       activeMember: () => this.active,
+      launch: (vy) => {
+        this.velY = vy;
+        this.onGround = false;
+        this.gliding = false;
+        this.windborne = true;
+        this.iframeT = Math.max(this.iframeT, 0.5);
+      },
     };
   }
   onHeal?: (n: number) => void;
@@ -295,16 +310,19 @@ export class PlayerController {
         this.velY = 8.6;
         this.onGround = false;
         sfx.jump();
-      } else if (!this.onGround && this.gliderUnlocked && this.stamina > 5) {
+      } else if (!this.onGround && (this.gliderUnlocked || this.windborne) && this.stamina > 5) {
         const ground = this.world.groundH(this.pos.x, this.pos.z);
         if (this.gliding) this.gliding = false;
         else if (this.pos.y - ground > 1.6 || this.world.updraftAt(this.pos.x, this.pos.z, this.pos.y) > 0) this.gliding = true;
       }
     }
+    // a wind lift floats into a glide at the top of the rise (Space drops out of it, as with any glide)
+    if (this.windborne && !this.gliding && !this.onGround && this.velY <= 0.5 && this.stamina > 5) this.gliding = true;
     if (this.gliding) {
       const lift = this.world.updraftAt(this.pos.x, this.pos.z, this.pos.y);
       this.velY = lift > 0 ? Math.min(lift, this.velY + 18 * dt) : -2.4;
-      this.stamina -= 4 * dt;
+      // Alvi's passive "ร่อนตามลม": the party spends 20% less stamina gliding
+      this.stamina -= 4 * dt * (this.party.some((p) => p.id === 'ALVI') ? 0.8 : 1);
       this.staminaIdle = 0;
       if (this.stamina <= 0) this.gliding = false;
     } else {
@@ -319,6 +337,7 @@ export class PlayerController {
       this.velY = 0;
       this.onGround = true;
       this.gliding = false;
+      this.windborne = false;
     } else if (this.pos.y > gh + 0.05) {
       this.onGround = false;
     }
@@ -349,7 +368,24 @@ export class PlayerController {
         }
         this.holdT = 0;
       }
-      if (input.pressed('KeyE') && m.cdE <= 0) {
+      // a kit with a hold-E skill waits to see whether E is tapped or held
+      if (kit.skillHold) {
+        if (input.pressed('KeyE') && m.cdE <= 0) this.eHoldT = 0;
+        if (this.eHoldT >= 0) {
+          if (input.isDown('KeyE')) this.eHoldT += dt;
+          const held = this.eHoldT >= HOLD_E, tapped = !held && !input.isDown('KeyE');
+          if (held || tapped) {
+            this.eHoldT = -1;
+            this.faceTarget();
+            m.cdE = held ? kit.skillHold(this.kitCtx()) : kit.skill(this.kitCtx());
+            this.attackT = 0;
+            this.attackDur = 0.45;
+            this.attackKind = 'skill';
+            this.attackHitDone = true;
+            bus.emit('SkillUsed', { charId: m.id, kind: 'E' });
+          }
+        }
+      } else if (input.pressed('KeyE') && m.cdE <= 0) {
         this.faceTarget();
         m.cdE = kit.skill(this.kitCtx());
         this.attackT = 0;

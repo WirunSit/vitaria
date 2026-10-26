@@ -1000,6 +1000,12 @@ export class Game {
       this.amoebySay('ได้ "น้ำตาลโมเลกุลเดี่ยว" แล้ว! กด C แล้วใช้มันเพิ่มเลเวลตัวละครได้นะ', 8000);
     }
 
+    // first time Alvi is out with skills unlocked: teach the hold-E wind lift
+    if (!s.flags.hint_alvi_lift && this.player.active.id === 'ALVI' && s.systems.includes('ELEMENT') && !isModalOpen() && !this.quests.isBusy) {
+      s.flags.hint_alvi_lift = true;
+      this.amoebySay('อัลวีหายใจลึก ๆ ได้นะ! กด E ค้างไว้ ลมจะยกตัวลอยขึ้นสูง แล้วค่อย ๆ ร่อนลงมา ใช้ข้ามหน้าผาหรือมองหาทางได้เลย', 9000);
+    }
+
     // out-of-combat reaction quiz
     if (this.pendingReactionQuiz.length && !this.inCombat() && !this.quests.isBusy && !this.bossShieldOpen) {
       const r = this.pendingReactionQuiz.shift()!;

@@ -26,6 +26,8 @@ export interface KitCtx {
   healActive: (amount: number) => void;
   /** Move the player quickly along `dir` (default: facing). Grants i-frames. */
   dash: (distance: number, duration: number, dir?: THREE.Vector3) => void;
+  /** Throw the player straight up at `vy` m/s on a wind current: they float down on their own at the top. */
+  launch: (vy: number) => void;
   activeMember: () => PartyMember;
 }
 
@@ -190,6 +192,8 @@ export interface Kit {
   charged: (ctx: KitCtx) => void;
   chargedStamina: number;
   skill: (ctx: KitCtx) => number;  // returns cooldown
+  /** optional hold-E version (fires once E has been held HOLD_E seconds; a quick tap still uses `skill`) */
+  skillHold?: (ctx: KitCtx) => number;
   burst: (ctx: KitCtx) => void;
 }
 
@@ -435,6 +439,31 @@ export const KITS: Record<string, Kit> = {
       }));
       sfx.skill();
       return 10;
+    },
+    /**
+     * Hold E — "หายใจลึก (Deep Breath)": a rising column of air under Alvi pulls nearby enemies in, hits them, and
+     * carries Alvi about 12 m up; at the top the wind lets him float down (glide) even before the samara wings.
+     */
+    skillHold(ctx) {
+      const at = ctx.pos.clone();
+      const member = ctx.member, combat = ctx.combat;
+      const cast = combat.newCast();
+      for (const e of combat.enemiesInRadius(at, member.cons >= 1 ? 9 : 7)) {
+        if (e.isBoss) continue;
+        const dir = at.clone().sub(e.pos).setY(0);
+        e.vel.add(dir.normalize().multiplyScalar(Math.min(12, dir.length() * 3)));
+      }
+      if (member.cons >= 4) member.addBuff('alvi_c4', 'dr', 0.25, 6);
+      combat.hitArea(at.clone().setY(at.y + 1), 4, { member, mult: 2.4, element: 'ANEMO', icd: null, dmgBonus: skillBonus(member), particles: { count: 4, castId: cast } });
+      combat.addEffect(new RingPulse(at.clone().setY(at.y + 0.1), 4.5, ELEMENT_COLOR.ANEMO));
+      efx()?.inhale(at.clone().setY(at.y + 1), 'ANEMO', 3.5);
+      const column = new THREE.Object3D();
+      column.position.copy(at);
+      const twister = efx()?.tornado(column, 7, 1.1);
+      combat.addEffect(new Timed(column, 1.3, () => {}, () => twister?.stop()));
+      ctx.launch(24);
+      sfx.skill();
+      return 15;
     },
     burst(ctx) {
       const member = ctx.member, combat = ctx.combat, world = ctx.world;

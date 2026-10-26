@@ -496,7 +496,7 @@ export function openHelp() {
       <span class="k">Space</span><span>กระโดด · กดอีกครั้งกลางอากาศ = ร่อน (เมื่อได้ปีกซามารา)</span>
       <span class="k">Shift / คลิกขวา</span><span>หลบ (ใช้ความอึด มีช่วงอมตะสั้น ๆ)</span>
       <span class="k">คลิกซ้าย</span><span>โจมตี · กดค้างแล้วปล่อย = โจมตีหนัก</span>
-      <span class="k">E</span><span>สกิลธาตุ (ได้ลูกแสง ATP เติมพลังงาน)</span>
+      <span class="k">E</span><span>สกิลธาตุ (ได้ลูกแสง ATP เติมพลังงาน) · อัลวี: กดค้าง = ลมยกตัวลอยขึ้นแล้วร่อนลง</span>
       <span class="k">Q</span><span>ท่าไม้ตาย (เมื่อพลังงานเต็ม)</span>
       <span class="k">1–4</span><span>สลับตัวละคร</span>
       <span class="k">F</span><span>คุย / ตรวจสอบ / เปิดหีบ / เก็บของ</span>
