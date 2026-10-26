@@ -124,6 +124,26 @@ def remove_bg(im: Image.Image, thresh: int = 34) -> Image.Image:
     return res
 
 
+def npc_sheet_cutout(im: Image.Image, thresh: int = 16) -> Image.Image:
+    """Background removal for a whole NPC sheet (full body left, bust right). The bust is cut off by the top and
+    bottom edges, so seeding there floods white hats, lab coats and aprons: seed only from places that are always
+    background — the left and right edges and the strips above/below the full-body figure — with a tight threshold."""
+    rgb = im.convert("RGB")
+    key = (255, 0, 255)
+    w, h = rgb.size
+    seeds = [(0, y) for y in range(0, h, 8)] + [(w - 1, y) for y in range(0, h, 8)] +             [(x, 0) for x in range(0, int(w * 0.36), 8)] + [(x, h - 1) for x in range(0, int(w * 0.36), 8)]
+    for sx, sy in seeds:
+        r, g, b = rgb.getpixel((sx, sy))
+        if (r, g, b) == key or max(r, g, b) - min(r, g, b) > 40 or (r + g + b) / 3 < 150:
+            continue
+        ImageDraw.floodfill(rgb, (sx, sy), key, thresh=thresh)
+    mask = Image.eval(ImageChops.difference(rgb, Image.new("RGB", rgb.size, key)).convert("L"), lambda v: 0 if v < 8 else 255)
+    mask = mask.filter(ImageFilter.MinFilter(3)).filter(ImageFilter.GaussianBlur(1.2))
+    res = im.copy()
+    res.putalpha(ImageChops.multiply(im.getchannel("A"), mask))
+    return res
+
+
 def grid(im: Image.Image, cols: int, rows: int) -> list[Image.Image]:
     cw, ch = im.width / cols, im.height / rows
     return [im.crop((round(c * cw), round(r * ch), round((c + 1) * cw), round((r + 1) * ch))) for r in range(rows) for c in range(cols)]
@@ -335,6 +355,11 @@ def companion():
         bg = Image.new("RGBA", icon.size, (207, 227, 245, 255))
         bg.alpha_composite(icon)
         save_png(bg, out("characters", "CHR_Companion_Icon.png"))
+    sheet = load("Characters/Companion/CHR_Companion_Portraits.png")
+    if sheet:  # GPT art: one 4x2 expression sheet, cut like the playable characters'
+        for emo, cell in zip(EMOTIONS, grid(sheet, 4, 2)):
+            save_webp(trim(cell), out("characters", f"CHR_Companion_Portrait_{emo}.webp"))
+        return
     for f in sorted(d.glob("CHR_Companion_Portrait_*.png")) if d.exists() else []:
         save_webp(trim(Image.open(f).convert("RGBA")), out("characters", f.stem + ".webp"))
 
@@ -344,7 +369,10 @@ def npcs():
         name = f.stem.replace("NPC_", "").replace("_Sheet", "")
         im = Image.open(f).convert("RGBA")
         w, h = im.size
-        bust = remove_bg(im.crop((int(w * 0.40), 0, w, h)))
+        if name == 'EntropyHerald':  # older sheet layout (not redrawn for the 3D models): the original cut suits it
+            bust = remove_bg(im.crop((int(w * 0.40), 0, w, h)))
+        else:  # Lila's white hat brim has a faint outline where it meets the background: flood more tightly there
+            bust = npc_sheet_cutout(im, 6 if name == 'RangerLila' else 16).crop((int(w * 0.40), 0, w, h))
         # the full-body figure may leak in from the left edge: keep only the main blob
         save_webp(keep_main(bust), out("characters", f"NPC_{name}_Portrait.webp"))
         face = im.crop((int(w * 0.48), 0, int(w * 0.96), int(h * 0.62)))
