@@ -156,6 +156,8 @@
 | `PRP_DNA` | DNA Ribbon Molecular Model | S.Duce | CC BY 4.0 | [Sketchfab](https://sketchfab.com/3d-models/e3f82ab0c50a490bbace8d5ccc4698b8) |
 | `PRP_Bookshelf` | Closet of Young Warrior | PatriciaDobbins | CC BY 4.0 | [Sketchfab](https://sketchfab.com/3d-models/0698dad7bd1547e38ecd8e0d8080e329) |
 | `PRP_StrawHat` | Asian Conical Hat | MushyDay | CC BY 4.0 | [Sketchfab](https://sketchfab.com/3d-models/4eed68df8fb84284a91f42a6c6e4569c) |
+| `CHR_Sion` | Fauntleroy Bubbleduck | Silver | VRoid Hub · ต้องระบุเครดิต | [VRoid Hub](https://hub.vroid.com/characters/4839078180469132008/models/3428426232545159710) |
+| `CHR_Sira` | 錬金術師のワンピース / 錬金術師の少女 | マユラ | VRoid Hub · ห้ามใช้เชิงพาณิชย์ | [VRoid Hub](https://hub.vroid.com/characters/1880767666855927745/models/3171992335144963851) |
 | `CHR_Alvi` | Hiiragi Yu1 ファンタジー | しーぜ | VRoid Hub · ห้ามแจกต่อ | [VRoid Hub](https://hub.vroid.com/characters/6415961155302263873/models/2417131184333170844) |
 | `CHR_Chloren` | 妖精ちゃん 森の妖精 | 田中 | VRoid Hub · ห้ามใช้เชิงพาณิชย์ | [VRoid Hub](https://hub.vroid.com/characters/2551658023389611705/models/7886204033965452427) |
 | `CHR_Hema` | エフェニ・エトワール Efffrene/ver.000 | Fou8A | VRoid Hub · ต้องระบุเครดิต | [VRoid Hub](https://hub.vroid.com/characters/7720110230278329206/models/7597316024053104803) |
@@ -179,6 +181,7 @@
 | `NPC_GrannyZephyra` | 利用OK 魔女風目隠れオッドアイレディ | pinehead | VRoid Hub · ต้องระบุเครดิต | [VRoid Hub](https://hub.vroid.com/characters/958381910122292531/models/2217970458745246747) |
 | `NPC_UncleER` | 男騎士くん | teradora | VRoid Hub · ห้ามใช้ในนามองค์กร | [VRoid Hub](https://hub.vroid.com/characters/6608986823099270676/models/940430863078135671) |
 | `NPC_VillagerFoss` | 蓮瀬 Ver1.03 | ﾏﾚｰﾊﾞｸﾞ | VRoid Hub · ใช้ได้ทั้งหมด | [VRoid Hub](https://hub.vroid.com/characters/7119930859945091306/models/2780430848768364428) |
+| `NPC_Ribo` | ほしくま | ラオ | VRoid Hub · ต้องระบุเครดิต · ห้ามหารายได้ | [VRoid Hub](https://hub.vroid.com/characters/2364972722387776315/models/8033775402360285161) |
 | `BGM ทุ่งหญ้า (กลางวัน 1)` | Relaxing Orchestra / Ambient beat / Initiate landing | migfus20, Tausdei, Alexandr Zhelanov | CC BY 4.0 | [OpenGameArt](https://opengameart.org/content/relaxing-orchestra-ambient-beat-and-initiate-landing-migfus20-vs-tausdei-vs-zhelanov) |
 | `BGM ทุ่งหญ้า (กลางวัน 2)` | Forest Ambience | TinyWorlds | CC0 | [OpenGameArt](https://opengameart.org/content/forest-ambience) |
 | `BGM กลางคืน` | Mysterious Ambience (song21) | cynicmusic / pixelsphere.org | CC0 | [OpenGameArt](https://opengameart.org/content/mysterious-ambience-song21) |

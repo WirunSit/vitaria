@@ -1216,6 +1216,22 @@
   "url": "https://sketchfab.com/3d-models/4eed68df8fb84284a91f42a6c6e4569c"
  },
  {
+  "name": "CHR_Sion",
+  "title": "Fauntleroy Bubbleduck",
+  "author": "Silver",
+  "license": "VRoid Hub · ต้องระบุเครดิต",
+  "src": "VRoid Hub",
+  "url": "https://hub.vroid.com/characters/4839078180469132008/models/3428426232545159710"
+ },
+ {
+  "name": "CHR_Sira",
+  "title": "錬金術師のワンピース / 錬金術師の少女",
+  "author": "マユラ",
+  "license": "VRoid Hub · ห้ามใช้เชิงพาณิชย์",
+  "src": "VRoid Hub",
+  "url": "https://hub.vroid.com/characters/1880767666855927745/models/3171992335144963851"
+ },
+ {
   "name": "CHR_Alvi",
   "title": "Hiiragi Yu1 ファンタジー",
   "author": "しーぜ",
@@ -1398,6 +1414,14 @@
   "license": "VRoid Hub · ใช้ได้ทั้งหมด",
   "src": "VRoid Hub",
   "url": "https://hub.vroid.com/characters/7119930859945091306/models/2780430848768364428"
+ },
+ {
+  "name": "NPC_Ribo",
+  "title": "ほしくま",
+  "author": "ラオ",
+  "license": "VRoid Hub · ต้องระบุเครดิต · ห้ามหารายได้",
+  "src": "VRoid Hub",
+  "url": "https://hub.vroid.com/characters/2364972722387776315/models/8033775402360285161"
  },
  {
   "name": "BGM ทุ่งหญ้า (กลางวัน 1)",
