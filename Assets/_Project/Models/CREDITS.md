@@ -157,7 +157,7 @@
 | `PRP_Bookshelf` | Closet of Young Warrior | PatriciaDobbins | CC BY 4.0 | [Sketchfab](https://sketchfab.com/3d-models/0698dad7bd1547e38ecd8e0d8080e329) |
 | `PRP_StrawHat` | Asian Conical Hat | MushyDay | CC BY 4.0 | [Sketchfab](https://sketchfab.com/3d-models/4eed68df8fb84284a91f42a6c6e4569c) |
 | `CHR_Sion` | Fauntleroy Bubbleduck | Silver | VRoid Hub · ต้องระบุเครดิต | [VRoid Hub](https://hub.vroid.com/characters/4839078180469132008/models/3428426232545159710) |
-| `CHR_Sira` | 錬金術師のワンピース / 錬金術師の少女 | マユラ | VRoid Hub · ห้ามใช้เชิงพาณิชย์ | [VRoid Hub](https://hub.vroid.com/characters/1880767666855927745/models/3171992335144963851) |
+| `CHR_Sira` | MLORD 氷獄 (ถอดดาบใหญ่ที่หลังออก · ลด texture เป็น 1024) | oroteden | VRoid Hub · ห้ามแจกต่อ | [VRoid Hub](https://hub.vroid.com/characters/3520592432245535328/models/5828199459713768342) |
 | `CHR_Alvi` | Hiiragi Yu1 ファンタジー | しーぜ | VRoid Hub · ห้ามแจกต่อ | [VRoid Hub](https://hub.vroid.com/characters/6415961155302263873/models/2417131184333170844) |
 | `CHR_Chloren` | 妖精ちゃん 森の妖精 | 田中 | VRoid Hub · ห้ามใช้เชิงพาณิชย์ | [VRoid Hub](https://hub.vroid.com/characters/2551658023389611705/models/7886204033965452427) |
 | `CHR_Hema` | エフェニ・エトワール Efffrene/ver.000 | Fou8A | VRoid Hub · ต้องระบุเครดิต | [VRoid Hub](https://hub.vroid.com/characters/7720110230278329206/models/7597316024053104803) |

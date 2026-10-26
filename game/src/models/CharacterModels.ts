@@ -443,6 +443,20 @@ export class GlbCharacterModel implements CharModel {
   dispose() { this.root.removeFromParent(); }
 }
 
+/** Parts of a downloaded model left out of the game, by node name (Sira's MLORD carries a huge sword on her back). */
+const HIDDEN_PARTS: Record<string, string[]> = {
+  'characters/CHR_Sira.vrm': ['Group24860', 'Group24875', 'Group24890', 'Group24905'],
+};
+
+function hideParts(vrm: VRM, file: string) {
+  const names = HIDDEN_PARTS[file];
+  if (!names) return;
+  for (const n of names) {
+    const part = vrm.scene.getObjectByName(n);
+    if (part) part.visible = false;
+  }
+}
+
 /** Factory used everywhere a character/NPC body is needed. `file` e.g. "characters/CHR_Sira.vrm". */
 export function createCharacterModel(file: string | null, app: Appearance, element: Element, weapon: WeaponType, animFor: string | null = null): CharModel {
   const fallback = new CharacterModel(app, element, weapon);
@@ -453,6 +467,10 @@ export function createCharacterModel(file: string | null, app: Appearance, eleme
     return new SwappableModel(fallback, pending);
   }
   if (!file || !hasModel(file)) return fallback;
-  const pending = loadVRM(file).then((vrm) => (vrm ? new VrmCharacterModel(vrm, app, element, weapon, animFor) : null));
+  const pending = loadVRM(file).then((vrm) => {
+    if (!vrm) return null;
+    hideParts(vrm, file);
+    return new VrmCharacterModel(vrm, app, element, weapon, animFor);
+  });
   return new SwappableModel(fallback, pending);
 }
