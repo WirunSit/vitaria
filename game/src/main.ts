@@ -3,6 +3,7 @@ import { installDevice } from './core/Device';
 import { requestPersistentStorage } from './core/Save';
 import { data } from './core/Data';
 import { Game } from './Game';
+import { installHeightFog } from './render/Look';
 import * as ModelLib from './models/ModelLibrary';
 import * as WeaponLib from './models/WeaponModels';
 import * as PropLib from './models/PropModels';
@@ -10,6 +11,7 @@ import * as PropLib from './models/PropModels';
 async function boot() {
   installImageFallback();
   installDevice();
+  installHeightFog();
   requestPersistentStorage();
   const overlay = document.getElementById('overlay')!;
   overlay.innerHTML = `<div class="title-screen" id="loading" style="background:linear-gradient(rgba(6,10,24,.35),rgba(6,10,24,.8)),url(assets/ui/KEY_MainVisual.jpg) center/cover"><div class="title-logo" style="font-size:64px">VITARIA</div>

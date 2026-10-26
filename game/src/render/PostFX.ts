@@ -5,6 +5,7 @@ import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPa
 import { OutputPass } from 'three/examples/jsm/postprocessing/OutputPass.js';
 import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js';
 import { FXAAShader } from 'three/examples/jsm/shaders/FXAAShader.js';
+import { GradeShader, LOOK } from './Look';
 
 /**
  * Bloom post-processing (soft glow on bright spots: Vital Cores, crystals, sun, skill effects).
@@ -15,6 +16,8 @@ export class PostFX {
   composer: EffectComposer;
   bloom: UnrealBloomPass;
   private fxaa: ShaderPass;
+  /** look v3 colour grade (null when off) */
+  private grade: ShaderPass | null = null;
   enabled = true;
 
   constructor(private renderer: THREE.WebGLRenderer, scene: THREE.Scene, camera: THREE.Camera) {
@@ -25,6 +28,7 @@ export class PostFX {
     this.bloom = new UnrealBloomPass(new THREE.Vector2(size.x, size.y), 0.42, 0.55, 1.15);
     this.composer.addPass(this.bloom);
     this.composer.addPass(new OutputPass());
+    if (LOOK.v3) { this.grade = new ShaderPass(GradeShader); this.composer.addPass(this.grade); }
     this.fxaa = new ShaderPass(FXAAShader);
     this.composer.addPass(this.fxaa);
     this.setSize(size.x, size.y);
@@ -36,6 +40,9 @@ export class PostFX {
     this.composer.setSize(w, h);
     (this.fxaa.material.uniforms.resolution.value as THREE.Vector2).set(1 / (w * pr), 1 / (h * pr));
   }
+
+  /** 0..1 — warmer highlights toward sunset (look v3). */
+  setWarm(k: number) { if (this.grade) this.grade.uniforms.uWarm.value = k; }
 
   render(scene: THREE.Scene, camera: THREE.Camera) {
     if (this.enabled) this.composer.render();

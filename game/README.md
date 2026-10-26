@@ -1,4 +1,4 @@
-# VITARIA — ตัวเกม (v0.4)
+# VITARIA — ตัวเกม (v0.17)
 
 เกม Open-World Action RPG สอนชีววิทยา ม.ปลาย — เวอร์ชันเว็บ (Three.js + TypeScript) เปิดเล่นในเบราว์เซอร์ได้ทันที
 

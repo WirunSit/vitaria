@@ -105,7 +105,9 @@ export class GroundMask {
           uniform float uGroundOn;
           varying vec2 vGroundUV;
           varying vec2 vWorldXZ;
-          float gHash(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }`)
+          float gHash(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
+          float gN(vec2 p) { vec2 i = floor(p), f = fract(p); f = f * f * (3.0 - 2.0 * f);
+            return mix(mix(gHash(i), gHash(i + vec2(1, 0)), f.x), mix(gHash(i + vec2(0, 1)), gHash(i + vec2(1, 1)), f.x), f.y); }`)
         .replace('#include <color_fragment>', `#include <color_fragment>
           if (uGroundOn > 0.5) {
             // Genshin-green meadow: pull red down relative to green (gold patches become sunlit yellow-green), +15% saturation
@@ -124,6 +126,14 @@ export class GroundMask {
             float grain = gHash(floor(vWorldXZ * 1.3)) * 0.08;
             vec3 sand = mix(vec3(0.42, 0.29, 0.15), vec3(0.66, 0.5, 0.29), smoothstep(0.5, 0.95, m)) * (clamp(tex, 0.8, 1.12) + grain);
             sand *= mix(0.82, 1.0, smoothstep(0.32, 0.5, m));
+            ${LOOK.v3 ? `
+            // look v3: big bare plazas get worn tone patches, scattered pebbles and grass creeping in near the rim
+            sand *= mix(0.92, 1.07, gN(vWorldXZ * 0.22) * 0.6 + gN(vWorldXZ * 0.8 + 5.0) * 0.4);
+            vec2 pc = vWorldXZ * 3.0;
+            vec2 pf = fract(pc) - 0.5 - (vec2(gHash(floor(pc)), gHash(floor(pc) + 9.0)) - 0.5) * 0.5;
+            float peb = (1.0 - smoothstep(0.09, 0.13, length(pf))) * step(0.82, gHash(floor(pc) + 4.0));
+            sand = mix(sand, sand * 0.8 + vec3(0.03, 0.04, 0.06), peb * 0.8);
+            sand = mix(sand, viv * 0.92, 0.85 * smoothstep(0.62, 0.72, gN(vWorldXZ * 0.7 + 13.0)) * (1.0 - smoothstep(0.6, 0.92, m)));` : ''}
             diffuseColor.rgb = mix(viv, sand, dirt);
           }`);
     };

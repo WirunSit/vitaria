@@ -66,7 +66,7 @@ export interface SaveData {
   gacha: GachaSave;
   gear: GearSave;
   atp: AtpState;
-  settings: { mouseSens: number; invertY: boolean; shadows: boolean; playReminderMin: number; gachaEnabled: boolean; camMode: 'drag' | 'lock'; graphics: 'high' | 'medium' | 'low'; showFps?: boolean; oldGrass?: boolean; lookV2?: boolean; musicVol?: number; sfxVol?: number };
+  settings: { mouseSens: number; invertY: boolean; shadows: boolean; playReminderMin: number; gachaEnabled: boolean; camMode: 'drag' | 'lock'; graphics: 'high' | 'medium' | 'low'; showFps?: boolean; oldGrass?: boolean; lookV2?: boolean; lookV3?: boolean; musicVol?: number; sfxVol?: number };
 }
 
 const KEY = 'vitaria_save_v1';

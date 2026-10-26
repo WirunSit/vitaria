@@ -389,6 +389,7 @@ export function openEscMenu(host: MenuHost, actions: { codex: () => void; quests
       <label style="font-size:15px">เสียงเอฟเฟกต์ <input type="range" min="0" max="1" step="0.05" value="${host.save.settings.sfxVol ?? 0.75}" id="sfxvol"></label>
       <label style="font-size:15px"><input type="checkbox" id="newgrass" ${host.save.settings.oldGrass ? '' : 'checked'}> หญ้าแบบใหม่</label>
       <label style="font-size:15px"><input type="checkbox" id="lookv2" ${host.save.settings.lookV2 === false ? '' : 'checked'}> ภาพแบบใหม่ (สีธรรมชาติ น้ำ ภูเขาไกล · มีผลหลังโหลดเกมใหม่)</label>
+      <label style="font-size:15px"><input type="checkbox" id="lookv3" ${host.save.settings.lookV3 === false ? '' : 'checked'}> ภาพมิติลึก (หมอกตามความสูง เงานุ่ม ป่าบนเขา · มีผลหลังโหลดเกมใหม่)</label>
     </div>
     <label style="font-size:15px;${isTouch ? 'display:none' : ''}">หมุนกล้อง
       <select id="cammode">
@@ -450,6 +451,7 @@ export function openEscMenu(host: MenuHost, actions: { codex: () => void; quests
   (root.querySelector('#musicvol') as HTMLInputElement).oninput = (e) => { host.save.settings.musicVol = +(e.target as HTMLInputElement).value; vol(); };
   (root.querySelector('#sfxvol') as HTMLInputElement).oninput = (e) => { host.save.settings.sfxVol = +(e.target as HTMLInputElement).value; vol(); sfx.ui(); };
   (root.querySelector('#lookv2') as HTMLInputElement).onchange = (e) => { host.save.settings.lookV2 = (e.target as HTMLInputElement).checked; host.saveNow(); toast('จะเปลี่ยนเมื่อโหลดเกมใหม่ (กด F5)'); };
+  (root.querySelector('#lookv3') as HTMLInputElement).onchange = (e) => { host.save.settings.lookV3 = (e.target as HTMLInputElement).checked; host.saveNow(); toast('จะเปลี่ยนเมื่อโหลดเกมใหม่ (กด F5)'); };
   (root.querySelector('#newgrass') as HTMLInputElement).onchange = (e) => { host.save.settings.oldGrass = !(e.target as HTMLInputElement).checked; host.settingsChanged(); host.saveNow(); };
   (root.querySelector('#showfps') as HTMLInputElement).onchange = (e) => { host.save.settings.showFps = (e.target as HTMLInputElement).checked; host.settingsChanged(); host.saveNow(); };
   (root.querySelector('#shadows') as HTMLInputElement).onchange = (e) => { host.save.settings.shadows = (e.target as HTMLInputElement).checked; host.settingsChanged(); };

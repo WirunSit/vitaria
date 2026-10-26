@@ -24,12 +24,20 @@ import type { Appearance } from '../core/types';
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import { LOOK } from '../render/Look';
 import { Backdrop } from '../render/Backdrop';
+import { buildPavedCircle } from './Plaza';
 
 function mergeGeos(list: THREE.BufferGeometry[]): THREE.BufferGeometry {
   return mergeGeometries(list.map((g) => g.toNonIndexed()))!;
 }
 
 /** Chest models whose lid swings open, with the height (fraction) where the lid starts. */
+/** look v3 sunset palette (hemi sky0/ground0 = the v2 daytime fill it blends from) */
+const V3_DUSK = {
+  skyLow: new THREE.Color('#ffb27e'), skyHigh: new THREE.Color('#6f86cc'), haze: new THREE.Color('#b9a3c9'), sun: new THREE.Color('#ff9a5c'),
+  sky0: new THREE.Color(0xbcd8f5), sky: new THREE.Color('#9fa7e6'), ground0: new THREE.Color(0x8a9a70), ground: new THREE.Color('#b58a62'),
+};
+/** the flat plaza in front of the new-game spawn point */
+const START_PLAZA = { x: 0, z: 15 };
 const CHEST_SEAM: Record<string, [number, 'auto' | 'cut']> = { PRP_Chest: [0.55, 'auto'], PRP_Chest_Silver: [0.55, 'cut'] };
 
 export interface Collider { x: number; z: number; r: number; id?: string }
@@ -101,6 +109,8 @@ export class World {
   roots!: Roots;
   /** 0 (night) … 1 (full day), set by setTimeOfDay */
   daylight = 1;
+  /** 0..1 sunset strength (look v3 only; drives the warm colour grade) */
+  duskK = 0;
   zepheria!: Zepheria;
   plotsHealthy = false;
   statuePos = new THREE.Vector3();
@@ -120,7 +130,7 @@ export class World {
       { x: door.x, z: door.z, r: 14, h: 4 },
       { x: arena.x, z: arena.z, r: 22, h: 2 },
       { x: gate.x, z: gate.z, r: 16, h: 2.5 },
-      { x: 0, z: 15, r: 12, h: 1.5 },
+      { x: START_PLAZA.x, z: START_PLAZA.z, r: 12, h: 1.5 },
     ]);
     // chapter 1 sites: level the spire plaza and the base of the tower
     for (const [id, r] of [['LOC_SPIRE', 19], ['LOC_SPIRE_TOWER', 11]] as const) {
@@ -134,6 +144,7 @@ export class World {
     this.root.add(this.terrain.build());
     applyDetailTexture(this.terrain.mesh.material as THREE.MeshToonMaterial, 'TEX_Ground_Cytoria', 55);
     this.buildGround();
+    if (LOOK.v3) this.root.add(buildPavedCircle(START_PLAZA.x, this.terrain.height(START_PLAZA.x, START_PLAZA.z), START_PLAZA.z, 6.4));
 
     // lights
     // look v2: a bluer sky fill and a green-earth bounce give cool, coloured shadows instead of grey ones
@@ -146,6 +157,11 @@ export class World {
     sc.left = -45; sc.right = 45; sc.top = 45; sc.bottom = -45; sc.near = 1; sc.far = 220;
     this.sun.shadow.bias = -0.0008;
     this.sun.shadow.normalBias = 0.04;
+    if (LOOK.v3) {
+      // look v3: softer, lighter shadows (anime shadows are a tint, not a hole)
+      this.sun.shadow.radius = 4;
+      this.sun.shadow.intensity = 0.72;
+    }
     scene.add(this.sun, this.sun.target);
 
     this.sky = this.buildSky();
@@ -173,7 +189,7 @@ export class World {
     this.scannables.push(...this.sites.scannables);
     // no grass on structures, paths and plazas
     for (const l of data.locations.values()) if (!l.type || l.type === 'domain') this.grassBlock.push({ x: l.x, z: l.z, r: l.id.startsWith('LOC_') ? 3 : 5 });
-    for (const f of this.terrain.flats) this.grassBlock.push({ x: f.x, z: f.z, r: f.r * 0.9 });
+    for (const f of this.terrain.flats) this.grassBlock.push({ x: f.x, z: f.z, r: f.r * (LOOK.v3 && this.isStartPlaza(f) ? 0.62 : 0.9) });
     for (const c of this.colliders) if (c.r >= 1.5 && Math.hypot(c.x, c.z) < 200) this.grassBlock.push({ x: c.x, z: c.z, r: c.r + 0.4 });
     this.genovia = new Genovia();
     this.root.add(this.genovia.root);
@@ -244,6 +260,7 @@ export class World {
       mushroom: { file: 'NAT_MushroomTree', sway: 0.01, far: 300 },
       blooms: { file: 'NAT_Flowers', split: true, sway: 0.1, far: 80, lodDist: 35 },
       glow: { file: 'NAT_GlowPlants', split: true, sway: 0.06, far: 90 },
+      ridge: { ...PAINTED_TREES, far: 380, lodDist: 45 },
     };
     const S: Record<string, FloraSpot[]> = Object.fromEntries(Object.keys(T).map((k) => [k, []]));
     const at = (k: string, x: number, z: number, height: number, sink = 0.1) => S[k].push({ x, y: this.h(x, z) - sink, z, rot: rot(), scale: height });
@@ -295,6 +312,42 @@ export class World {
       at('boulder', x, z, hgt, 0.5); solid(x, z, hgt * 0.42); n++;
     }
     for (const g of this.groves) if (r() < 0.12) { const [x, z] = near(g.x, g.z, 2.5, 4.5); if (this.floraFree(x, z, 0.4)) at('mossy', x, z, 0.4 + r() * 0.5, 0.05); }
+    // look v3: a few bushes, flower beds and stones around the start plaza (paths in and out stay open)
+    if (LOOK.v3) {
+      const q = this.rng(281);
+      const kinds = ['bush', 'blooms', 'rocks', 'bush', 'blooms', 'mossy', 'bush', 'rocks'];
+      for (let i = 0, n = 0; i < 80 && n < kinds.length; i++) {
+        const a = q() * Math.PI * 2, d = 8.6 + q() * 2.4;
+        const x = START_PLAZA.x + Math.cos(a) * d, z = START_PLAZA.z + Math.sin(a) * d;
+        // a path leaves the plaza in this direction: keep it clear
+        const ox = START_PLAZA.x + Math.cos(a) * 13.5, oz = START_PLAZA.z + Math.sin(a) * 13.5;
+        if (this.ground.dirtAt(ox, oz) > 0.25 || !this.floraFree(x, z, 1.2)) continue;
+        const k = kinds[n];
+        const put = (kk: string, px: number, pz: number, hgt: number, sink: number) => S[kk].push({ x: px, y: this.h(px, pz) - sink, z: pz, rot: q() * Math.PI * 2, scale: hgt });
+        if (k === 'bush') { put('bush', x, z, 1.0 + q() * 0.5, 0.1); put('blooms', x + 1.1, z + 0.4, 0.5, 0.02); }
+        else if (k === 'blooms') for (let j = 0; j < 4; j++) put('blooms', x + (q() - 0.5) * 2.2, z + (q() - 0.5) * 2.2, 0.45 + q() * 0.3, 0.02);
+        else if (k === 'rocks') { put('rocks', x, z, 1.1 + q() * 0.6, 0.25); put('rocks', x + 0.9, z - 0.5, 0.5, 0.1); solid(x, z, 0.6); }
+        else put('mossy', x, z, 0.6 + q() * 0.3, 0.05);
+        n++;
+      }
+    }
+    // look v3: clumps of big trees up the boundary mountains, so the ring has a forest silhouette instead of a bare wall
+    // (own random stream, so every other placement and variant stays exactly as before)
+    if (LOOK.v3) {
+      const q = this.rng(271);
+      for (let i = 0, n = 0; i < 900 && n < 28; i++) {
+        const a = q() * Math.PI * 2, d = 152 + q() * 26;
+        const x = Math.cos(a) * d, z = Math.sin(a) * d;
+        if (this.terrain.normalAt(x, z).y < 0.6 || this.h(x, z) > 46 || !this.floraFree(x, z, 4)) continue;
+        for (let k = 0; k < 3 + Math.floor(q() * 4); k++) {
+          const b = q() * Math.PI * 2, e = q() * 9, px = x + Math.cos(b) * e, pz = z + Math.sin(b) * e;
+          if (this.terrain.normalAt(px, pz).y < 0.55 || this.ground.dirtAt(px, pz) > 0.05 || !this.floraFree(px, pz, 2)) continue; // keep paths (e.g. to the city gate) open
+          S.ridge.push({ x: px, y: this.h(px, pz) - 0.5, z: pz, rot: q() * Math.PI * 2, scale: 9 + q() * 5 });
+          solid(px, pz, 0.6);
+        }
+        n++;
+      }
+    }
 
     // Zepheria islands
     const onIsle = (id: string, k: string, n: number, h0: number, h1: number, pad: number, col = 0) => {
@@ -333,7 +386,7 @@ export class World {
       at(big ? 'boulder' : 'rocks', x, z, hgt, 0.4); solid(x, z, hgt * 0.42); n++;
     }
 
-    for (const k of Object.keys(T)) if (S[k].length) this.root.add(plantFlora(T[k], S[k], r));
+    for (const k of Object.keys(T)) if (S[k].length) this.root.add(plantFlora(T[k], S[k], k === 'ridge' ? this.rng(272) : r));
   }
 
   /**
@@ -484,6 +537,19 @@ export class World {
     (this.scene.fog as THREE.Fog).color.copy(u.bottom.value as THREE.Color);
     // look v2: aerial perspective tinted toward the sky blue, so distance reads as depth instead of white-out
     if (LOOK.v2) (this.scene.fog as THREE.Fog).color.lerp(u.top.value as THREE.Color, 0.22);
+    // look v3: a pink-orange sunset sky, violet haze and warm light instead of a grey-brown dusk
+    this.duskK = LOOK.v3 ? Math.max(0, dusk) : 0;
+    if (LOOK.v3) {
+      const k = this.duskK;
+      this.hemi.color.copy(V3_DUSK.sky0).lerp(V3_DUSK.sky, k * 0.5);
+      this.hemi.groundColor.copy(V3_DUSK.ground0).lerp(V3_DUSK.ground, k);
+      (u.bottom.value as THREE.Color).lerp(V3_DUSK.skyLow, k * 0.55);
+      (u.top.value as THREE.Color).lerp(V3_DUSK.skyHigh, k * 0.4);
+      (this.scene.fog as THREE.Fog).color.copy(u.bottom.value as THREE.Color).lerp(u.top.value as THREE.Color, 0.22).lerp(V3_DUSK.haze, k * 0.45);
+      this.sun.color.lerp(V3_DUSK.sun, k * 0.5);
+      this.sun.intensity += 0.35 * k; // low sun still lights the meadow
+      this.hemi.intensity += 0.25 * k;
+    }
     // shared sun / sky / daylight for every region's water
     WATER_ENV.sun.value.copy(dir);
     WATER_ENV.day.value = 0.25 + 0.75 * day;
@@ -745,6 +811,8 @@ export class World {
 
   /** Bare earth (Genshin-style): worn paths between the landmarks, dirt plazas, a few bald patches. */
   readonly ground = new GroundMask(WORLD_SIZE);
+  private isStartPlaza(f: { x: number; z: number }) { return f.x === START_PLAZA.x && f.z === START_PLAZA.z; }
+
   private buildGround() {
     const t = this.terrain;
     const bad = (x: number, z: number) => Math.hypot(x, z) > WORLD_RADIUS - 14 || isWater(x, z, t.height(x, z) - 0.4) || t.normalAt(x, z).y < 0.8;
@@ -770,7 +838,8 @@ export class World {
       const a = nodes[best[0]], b = nodes[best[1]];
       this.ground.path(a.x, a.z, b.x, b.z, 2.4, bad);
     }
-    for (const f of t.flats) if (Math.hypot(f.x, f.z) < WORLD_RADIUS) this.ground.stamp(f.x, f.z, f.r * 0.7, 2.5);
+    // look v3: the start plaza is a smaller paved circle with grass closing in, not a 25 m bare disc
+    for (const f of t.flats) if (Math.hypot(f.x, f.z) < WORLD_RADIUS) this.ground.stamp(f.x, f.z, f.r * (LOOK.v3 && this.isStartPlaza(f) ? 0.48 : 0.7), 2.5);
     this.ground.patches((x, z) => !bad(x, z));
     this.ground.finish();
     this.ground.applyTo(t.mesh.material as THREE.MeshToonMaterial);

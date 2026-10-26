@@ -10,6 +10,7 @@ import { inZepheria } from './world/Zepheria';
 import { LAKE } from './world/Terrain';
 import { runBasePairPuzzle, runBeakPuzzle, runPunnettPuzzle, runPyramidPuzzle, runTissuePuzzle, runFlowerPuzzle, runPhotoPuzzle, runHormonePuzzle, runDigestPuzzle, runBreathPuzzle, runGlycoPuzzle, runKrebsPuzzle, runHeartPuzzle, runBloodPuzzle, runImmunePuzzle, runNephronPuzzle, runNeuronPuzzle, runSensePuzzle, runMusclePuzzle, runEndocrinePuzzle, runThermoPuzzle, runGlucosePuzzle, runWaterPuzzle, runEcoPuzzle, runTaxonomyPuzzle } from './ui/Puzzles';
 import { PostFX } from './render/PostFX';
+import { ContactShadow } from './render/ContactShadow';
 import { Ambient } from './render/Ambient';
 import { QuestGuide } from './render/QuestGuide';
 import { Grass } from './world/Grass';
@@ -194,6 +195,8 @@ export class Game {
   private grass!: Grass;
   private ambient!: Ambient;
   private guide!: QuestGuide;
+  /** look v3 soft shadow under the active character's feet */
+  private contact: ContactShadow | null = null;
 
   resize() {
     const w = window.innerWidth, hgt = window.innerHeight;
@@ -238,6 +241,7 @@ export class Game {
     this.scene.add(this.ambient.points);
     this.guide = new QuestGuide();
     this.scene.add(this.guide.root);
+    if (LOOK.v3) { this.contact = new ContactShadow(); this.scene.add(this.contact.mesh); }
     this.resize();
     this.mapImage = HUD.buildMapImage(this.world, 512);
     this.loop();
@@ -954,9 +958,11 @@ export class Game {
     this.domain.update(dt);
     this.combat.update(dt);
     this.world.setTimeOfDay(s.timeOfDay, this.player.pos);
+    this.postfx?.setWarm(this.world.duskK * 1.5);
     this.world.update(dt, this.player.pos);
     WIND.time.value += dt;
     this.grass.update(this.player.pos);
+    this.contact?.update(this.player.pos, this.world.groundH(this.player.pos.x, this.player.pos.z), !this.scanning);
     const sunUp = Math.sin(((s.timeOfDay - 6) / 24) * Math.PI * 2);
     this.updateAudio(dt, THREE.MathUtils.smoothstep(sunUp, -0.15, 0.25));
     this.ambient.update(dt, this.player.pos, THREE.MathUtils.smoothstep(sunUp, -0.15, 0.25), !inCity(this.player.pos.x, this.player.pos.z) && !inGenovia(this.player.pos.x, this.player.pos.z) && !inMetabolis(this.player.pos.x, this.player.pos.z) && !inNeurion(this.player.pos.x, this.player.pos.z) && !this.domain.active, this.player.moveSpeed);

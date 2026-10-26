@@ -53,7 +53,9 @@ export class QuestGuide {
     this.root.visible = dist > 7;
     this.root.position.set(target.x, groundY(target.x, target.z), target.z);
     const pulse = 0.5 + 0.5 * Math.sin(this.t * 3);
-    (this.beam.material as THREE.MeshBasicMaterial).opacity = 0.55 + pulse * 0.35;
+    // full strength from afar; dims to 40% up close so it stops outshining the characters
+    const near = 0.4 + 0.6 * THREE.MathUtils.smoothstep(dist, 15, 60);
+    (this.beam.material as THREE.MeshBasicMaterial).opacity = (0.55 + pulse * 0.35) * near;
     const rs = 1 + ((this.t * 0.8) % 1) * 1.6;
     this.ring.scale.setScalar(rs);
     (this.ring.material as THREE.MeshBasicMaterial).opacity = 1 - ((this.t * 0.8) % 1);

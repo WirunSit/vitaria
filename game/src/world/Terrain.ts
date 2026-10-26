@@ -45,6 +45,23 @@ export function isWater(x: number, z: number, h: number) {
 export interface Flatten { x: number; z: number; r: number; h: number }
 const GOLD = new THREE.Color('#d7bd63'), DEEP = new THREE.Color('#6f9a45');
 
+/**
+ * look v3: sunlit warm patches and cooler blue-green hollows ~60–100 m across (Genshin meadows read as large
+ * patches of light, not one flat green), a finer ±8% brightness breakup and a little extra saturation.
+ * Shared by the ground and the grass field so blades always match the soil under them.
+ */
+const V3_WARM = new THREE.Color('#b4d77a'), V3_COOL = new THREE.Color('#6cc895'), V3_GREY = new THREE.Color();
+function v3Meadow(x: number, z: number, c: THREE.Color) {
+  const big = fbm(x * 0.012 + 200, z * 0.012 - 80, 3);
+  const mid = fbm(x * 0.045 - 30, z * 0.045 + 12, 2);
+  c.lerp(V3_WARM, smoothstep(0.55, 0.75, big) * 0.4).lerp(V3_COOL, smoothstep(0.45, 0.28, big) * 0.3);
+  c.multiplyScalar(1.02 + (mid - 0.5) * 0.16);
+  const l = c.r * 0.3 + c.g * 0.59 + c.b * 0.11;
+  return c.lerp(V3_GREY.setRGB(l, l, l), -0.1);
+}
+/** look v3 boundary mountains: dark/light canopy blotches so the ring reads as forest, lighter crests */
+const V3_FOREST = new THREE.Color('#2f5a44'), V3_FOREST_HI = new THREE.Color('#4c7a50'), V3_CREST = new THREE.Color('#9fb79a');
+
 /** Height field for "Cell Hollow" (หุบเซลล์). */
 export class Terrain {
   mesh!: THREE.Mesh;
@@ -101,7 +118,8 @@ export class Terrain {
     if (this.normalAt(x, z).y < 0.84) return null;
     const k = fbm(x * 0.03 + 50, z * 0.03, 3);
     out.set(LOOK.v2 ? V2_GREEN : '#93b551').lerp(LOOK.v2 ? V2_GOLD : GOLD, smoothstep(0.35, 0.65, k)).lerp(DEEP, smoothstep(0.62, 0.85, fbm(x * 0.08, z * 0.08, 2)) * 0.5);
-    return out.multiplyScalar(1.05);
+    out.multiplyScalar(1.05);
+    return LOOK.v3 ? v3Meadow(x, z, out) : out;
   }
 
   build(): THREE.Mesh {
@@ -134,6 +152,15 @@ export class Terrain {
         // look v2: the bounding ring is wooded mountain green; rock bands only on steep faces; snow just on the tips
         tmp.lerp(cMount, smoothstep(140, 175, Math.hypot(x, z)) * 0.85);
         tmp.lerp(cRock.clone().lerp(cStrata, 0.5 + 0.5 * Math.sin(h * 0.55 + fbm(x * 0.05, z * 0.05, 2) * 4)), smoothstep(0.3, 0.5, slope));
+        if (LOOK.v3) {
+          if (slope < 0.3 && h < 30) v3Meadow(x, z, tmp);
+          const ring = smoothstep(150, 172, Math.hypot(x, z));
+          if (ring > 0) {
+            const canopy = fbm(x * 0.09, z * 0.09, 3);
+            tmp.lerp(V3_FOREST.clone().lerp(V3_FOREST_HI, smoothstep(0.4, 0.65, canopy)), ring * 0.9 * (1 - smoothstep(0.4, 0.6, slope) * 0.5));
+            tmp.lerp(V3_CREST, ring * smoothstep(55, 68, h) * 0.35);
+          }
+        }
         if (h > 52) tmp.lerp(cSnow, smoothstep(52, 62, h) * 0.9);
       } else {
         tmp.lerp(cRock, smoothstep(0.18, 0.35, slope));

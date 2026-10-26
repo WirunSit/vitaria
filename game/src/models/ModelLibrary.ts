@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { GLTFLoader, type GLTF } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { clone as skeletonClone } from 'three/examples/jsm/utils/SkeletonUtils.js';
+import { LOOK } from '../render/Look';
 import { VRMLoaderPlugin, VRMUtils, type MToonMaterial, type VRM } from '@pixiv/three-vrm';
 import { toonGradient } from '../world/Materials';
 
@@ -46,9 +47,13 @@ export async function loadVRM(rel: string): Promise<VRM | null> {
       // soft rim light on the silhouette (MToon's parametric rim) so characters stand out from the scenery
       for (const m of (Array.isArray(mesh.material) ? mesh.material : [mesh.material]) as (THREE.Material & Partial<MToonMaterial>)[]) {
         if (!(m as { isMToonMaterial?: boolean }).isMToonMaterial || !m.parametricRimColorFactor) continue;
-        if (m.parametricRimColorFactor.getHex() === 0) m.parametricRimColorFactor = new THREE.Color(0.32, 0.34, 0.4);
-        m.parametricRimFresnelPowerFactor = 3.2;
+        // unset or near-black authored rims (many VRoid exports ship #0e0e0e) get ours; real authored rims are kept
+        const rim = m.parametricRimColorFactor;
+        if (rim.getHex() === 0 || (LOOK.v3 && Math.max(rim.r, rim.g, rim.b) < 0.05)) m.parametricRimColorFactor = LOOK.v3 ? new THREE.Color(0.42, 0.46, 0.56) : new THREE.Color(0.32, 0.34, 0.4);
+        m.parametricRimFresnelPowerFactor = LOOK.v3 ? 4 : 3.2;
         m.parametricRimLiftFactor = 0.02;
+        // look v3: let half the rim show on the shaded side too, so the silhouette reads against bright scenery
+        if (LOOK.v3) m.rimLightingMixFactor = 0.5;
       }
     });
     return vrm;

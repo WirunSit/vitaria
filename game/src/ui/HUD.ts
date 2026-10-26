@@ -82,9 +82,10 @@ export class HUD {
     }
     this.mmCtx = (this.els['hud-minimap'].querySelector('canvas') as HTMLCanvasElement).getContext('2d')!;
     this.minimapBg = HUD.buildMapImage(world, 256);
+    // the four keys used most, on readable chips; Z only while carrying antibiotics; H lists everything else
     this.els['hud-keys'].innerHTML = `
-      <div>J เควส · K Bio-Pedia · C ตัวละคร · B กระเป๋า · M แผนที่</div>
-      <div>T สแกน · Z ยาปฏิชีวนะ · G Gene Wish · Esc เมนู · H วิธีเล่น</div>`;
+      <div class="keychips"><span><kbd>J</kbd>เควส</span><span><kbd>M</kbd>แผนที่</span><span><kbd>T</kbd>สแกน</span><span class="kz"><kbd>Z</kbd>ยาปฏิชีวนะ</span><span><kbd>Esc</kbd>เมนู</span></div>
+      <div class="keyall"><kbd>H</kbd> ดูปุ่มทั้งหมด</div>`;
   }
 
   /** Minimap background for Cellaria (covers the city centre ±CITY_MAP_R metres). */
@@ -282,6 +283,7 @@ export class HUD {
       <div class="hud-chip">${itemIcon('INSIGHT_CRYSTAL')} ${s.insight.toLocaleString()}</div>
       <div class="hud-chip">${itemIcon('GLUCOSE')} ${s.glucose.toLocaleString()}</div>
       ${s.antibiotic > 0 ? `<div class="hud-chip">${itemIcon('ANTIBIOTIC')} ×${s.antibiotic}</div>` : ''}`);
+    this.els['hud-keys'].classList.toggle('has-z', s.antibiotic > 0);
 
     // party
     const partyKey = s.party.map((p) => p.id).join(',') + getGender();
