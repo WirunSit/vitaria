@@ -110,14 +110,14 @@
   "url": "https://hub.vroid.com/characters/6546391280923613832/models/3517193298699033227"
  },
  {
-  "name": "NPC_Paimon",
+  "name": "NPC_Vita",
   "dir": "NPCs",
-  "file": "Paimon.vrm",
-  "title": "Paimon 0.1 (แฟนเมดจาก Genshin Impact — ลิขสิทธิ์ตัวละคร HoYoverse)",
-  "author": "zero",
-  "license": "VRoid Hub · ห้ามแจกต่อ",
+  "file": "Vita.vrm",
+  "title": "ヴォルフォ (ปีกปรับเป็นสีขาวโปร่งแสงในเกม)",
+  "author": "ocemot",
+  "license": "VRoid Hub · ห้ามแจกต่อ · ห้ามใช้เชิงพาณิชย์",
   "src": "VRoid Hub",
-  "url": "https://hub.vroid.com/characters/4663497166806139528/models/2110905384497128098"
+  "url": "https://hub.vroid.com/characters/4663686068587614159/models/2316492869377313970"
  },
  {
   "name": "NPC_SageLinnara",

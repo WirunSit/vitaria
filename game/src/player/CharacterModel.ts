@@ -380,8 +380,29 @@ export class CharacterModel implements CharModel {
 function easeOut(t: number) { return 1 - (1 - t) * (1 - t); }
 
 /** Amoeby — the floating amoeba mascot. */
-/** The floating companion. A VRoid model (npcs/NPC_Paimon.vrm) when present, else the procedural amoeba blob. */
-const COMPANION_VRM = 'npcs/NPC_Paimon.vrm';
+/** The floating companion. A VRoid model (npcs/NPC_Vita.vrm) when present, else the procedural amoeba blob. */
+const COMPANION_VRM = 'npcs/NPC_Vita.vrm';
+/** Vita's butterfly wings (cyan in the original model): repainted as glowing, half-see-through white */
+const COMPANION_WING_MATERIALS = new Set(['マテリアル 1']);
+
+function paintGlowingWings(vrm: VRM) {
+  vrm.scene.traverse((o) => {
+    const mesh = o as THREE.Mesh;
+    if (!mesh.isMesh) return;
+    for (const m of (Array.isArray(mesh.material) ? mesh.material : [mesh.material]) as THREE.MeshStandardMaterial[]) {
+      if (!COMPANION_WING_MATERIALS.has(m.name)) continue;
+      m.map = null; // the cyan texture would tint the white
+      m.color.set(0xffffff);
+      (m as unknown as { shadeColorFactor?: THREE.Color }).shadeColorFactor?.set(0xffffff);
+      m.emissive.set(0xffffff);
+      m.emissiveIntensity = 0.44; // a soft glow (2.2 bloomed far too bright)
+      m.transparent = true;
+      m.opacity = 0.5;
+      m.depthWrite = false;
+      m.needsUpdate = true;
+    }
+  });
+}
 
 export class AmoebyModel {
   root = new THREE.Group();
@@ -440,6 +461,7 @@ export class AmoebyModel {
     const vrm = await loadVRM(COMPANION_VRM);
     if (!vrm) return;
     for (const c of [...this.root.children]) this.root.remove(c); // drop the blob
+    paintGlowingWings(vrm);
     fitToHeight(vrm.scene, 0.9);
     vrm.scene.position.y = -0.55; // the follow point is ~shoulder height: hang the body around it
     this.root.add(vrm.scene);

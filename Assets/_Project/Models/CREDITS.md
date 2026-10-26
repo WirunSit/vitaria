@@ -166,7 +166,7 @@
 | `CHR_Neuros` | ロード Preset Challenge 2024 | JagaBuster | VRoid Hub · ห้ามแจกต่อ · ห้ามใช้เชิงพาณิชย์ | [VRoid Hub](https://hub.vroid.com/characters/8214362038404153074/models/3244050647909509889) |
 | `NPC_RangerLila` | Actor4 魔法使い | つあ a.k.a 開星 ヨキ | VRoid Hub | [VRoid Hub](https://hub.vroid.com/characters/1544837030744498397/models/7881216394337592558) |
 | `NPC_CityGuard` | Actor1 アルケミスト | つあ a.k.a 開星 ヨキ | VRoid Hub | [VRoid Hub](https://hub.vroid.com/characters/6546391280923613832/models/3517193298699033227) |
-| `NPC_Paimon` | Paimon 0.1 (แฟนเมดจาก Genshin Impact — ลิขสิทธิ์ตัวละคร HoYoverse) | zero | VRoid Hub · ห้ามแจกต่อ | [VRoid Hub](https://hub.vroid.com/characters/4663497166806139528/models/2110905384497128098) |
+| `NPC_Vita` | ヴォルフォ (ปีกปรับเป็นสีขาวโปร่งแสงในเกม) | ocemot | VRoid Hub · ห้ามแจกต่อ · ห้ามใช้เชิงพาณิชย์ | [VRoid Hub](https://hub.vroid.com/characters/4663686068587614159/models/2316492869377313970) |
 | `NPC_SageLinnara` | アバター＊無料DL | 藤依ひな | VRoid Hub | [VRoid Hub](https://hub.vroid.com/characters/2878129923101138674/models/80963258769705464) |
 | `NPC_AuntieGolgi` | デイヴィス家のメアリー | 歩留マリ | VRoid Hub | [VRoid Hub](https://hub.vroid.com/characters/4332181192017932171/models/8221630384582996054) |
 | `NPC_LostTwin` | VRoidダーク恍惚なる闇 | クランク | VRoid Hub · ห้ามใช้หารายได้ | [VRoid Hub](https://hub.vroid.com/characters/6984475036783114177/models/3705415764528957479) |
