@@ -56,9 +56,18 @@ export class QuestManager {
       const q = data.quests.get(id);
       const step = q?.steps[p.stepIndex ?? 0];
       if (!q || !step) continue;
+      this.countHeldItems(q); // also repairs saves where the items were picked up before this step began
       const done = step.objectives.every((o, i) => (p.progress?.[i] ?? 0) >= (o.count ?? 1));
       if (done) { this.completeStep(q); continue; } // saved mid-transition: resume
-      for (const a of step.onStart ?? []) if (a.action === 'SPAWN_ENEMY') this.api.spawnEnemies(a);
+      // the save may have been written mid-onStart (tab closed during a dialogue): re-apply its state changes too
+      const s = this.save();
+      for (const a of step.onStart ?? []) {
+        if (a.action === 'SPAWN_ENEMY') this.api.spawnEnemies(a);
+        else if (a.action === 'SET_FLAG' && !!s.flags[String(a.flag)] !== (a.value !== false)) this.api.setFlag(String(a.flag), a.value !== false);
+        else if (a.action === 'ADD_CHARACTER' && !s.unlockedChars.includes(String(a.charId))) this.api.addCharacter(String(a.charId));
+        else if (a.action === 'UNLOCK_SYSTEM' && !s.systems.includes(String(a.systemId))) this.api.unlockSystem(String(a.systemId));
+        else if (a.action === 'UNLOCK_CODEX') this.api.unlockCodex(String(a.codexId));
+      }
       // re-offer gate-less quizzes that were interrupted
       if (step.objectives.some((o) => o.type === 'QUIZ' && !o.npcId)) this.enterStep(q, p.stepIndex ?? 0, true);
     }
@@ -105,11 +114,29 @@ export class QuestManager {
     this.enterStep(q, 0);
   }
 
+  /**
+   * COLLECT objectives count what the player already holds: pickups can be grabbed before their step begins
+   * (the molecule pickups appear while the player is still walking to the plains) and would otherwise be lost.
+   */
+  private countHeldItems(q: QuestDef) {
+    const p = this.state[q.id];
+    const inv = this.save().inventory;
+    q.steps[p.stepIndex ?? 0].objectives.forEach((o, i) => {
+      if (o.type !== 'COLLECT' || !o.itemId) return;
+      p.progress ??= [];
+      p.progress[i] = Math.max(p.progress[i] ?? 0, Math.min(o.count ?? 1, inv[o.itemId] ?? 0));
+    });
+  }
+
   private enterStep(q: QuestDef, i: number, resume = false) {
     const step = q.steps[i];
+    if (!resume) this.countHeldItems(q);
     this.api.questChanged();
     this.queue(async () => {
       if (!resume) for (const a of step.onStart ?? []) await this.runAction(a);
+      // already satisfied on entry (all items held): finish it now, nothing else will
+      const p = this.state[q.id];
+      if (p.stepIndex === i && step.objectives.every((o, k) => (p.progress?.[k] ?? 0) >= (o.count ?? 1))) { this.completeStep(q); return; }
       // auto-launch quiz/puzzle objectives that have no NPC/object gate
       for (const o of step.objectives) {
         if (o.type === 'QUIZ' && !o.npcId) await this.launchQuiz(o);

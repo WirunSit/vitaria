@@ -751,7 +751,7 @@
           {
             "type": "DEFEAT",
             "enemyTag": "virus",
-            "count": 4,
+            "count": 3,
             "label": {
               "th": "กำจัดเฟจโดรน"
             }
