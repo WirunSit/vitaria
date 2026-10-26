@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { Terrain, WATER_LEVEL, WORLD_RADIUS, WORLD_SIZE, LAKE, fbm, isWater } from './Terrain';
+import { Terrain, WATER_LEVEL, WORLD_RADIUS, WORLD_SIZE, LAKE, fbm, isWater, isGrassyColor } from './Terrain';
 import { GroundMask } from './Ground';
 import { ExperimentPlant, planterBox } from './ExperimentPlant';
 import { toon, glow, addOutline } from './Materials';
@@ -864,11 +864,46 @@ export class World {
 
   /** Grass colour for the shader grass field, or null where it shouldn't grow (water, slopes, sites, other zones). */
   grassColorAt(x: number, z: number): THREE.Color | null {
+    if (LOOK.v3 && Math.hypot(x, z) > WORLD_RADIUS) return this.regionGrassAt(x, z);
     if (Math.hypot(x, z) > WORLD_RADIUS - 12) return null;
     for (const l of this.grassBlock) if ((x - l.x) ** 2 + (z - l.z) ** 2 < l.r * l.r) return null;
     return this.terrain.grassColor(x, z);
   }
   private grassBlock: { x: number; z: number; r: number }[] = [];
+
+  /**
+   * look v3: the grass field also grows in the green regions (Florantis, Aquorra, the Roots), in the colour of the
+   * soil under it — only on grassy ground (not paths, paving, sand or rock), gentle slopes, and clear of buildings,
+   * props and quest spots.
+   */
+  private regionGrassAt(x: number, z: number): THREE.Color | null {
+    const ground = inFlorantis(x, z) ? this.florantis.ground : inAquorra(x, z) ? this.aquorra.ground : inRoots(x, z) ? this.roots.ground : null;
+    const c = ground?.colorAt(x, z);
+    if (!c || !isGrassyColor(c)) return null;
+    const e = 0.8, h = this.h(x, z);
+    if (inAquorra(x, z) && h < 0.4) return null; // canal banks and the marsh stay bare
+    const nx = this.h(x + e, z) - this.h(x - e, z), nz = this.h(x, z + e) - this.h(x, z - e);
+    if (2 * e / Math.hypot(nx, 2 * e, nz) < 0.84) return null;
+    return this.regionBlocked(x, z) ? null : c;
+  }
+
+  /** colliders and quest spots outside Cytoria, bucketed in 8 m cells (built on first use) */
+  private regionBlocks: Map<number, { x: number; z: number; r: number }[]> | null = null;
+  private regionBlocked(x: number, z: number) {
+    const key = (i: number, j: number) => (i + 4096) * 8192 + (j + 4096);
+    if (!this.regionBlocks) {
+      const map = new Map<number, { x: number; z: number; r: number }[]>();
+      const add = (b: { x: number; z: number; r: number }) => {
+        for (let i = Math.floor((b.x - b.r) / 8); i <= Math.floor((b.x + b.r) / 8); i++)
+          for (let j = Math.floor((b.z - b.r) / 8); j <= Math.floor((b.z + b.r) / 8); j++) (map.get(key(i, j)) ?? map.set(key(i, j), []).get(key(i, j))!).push(b);
+      };
+      for (const c of this.colliders) if (Math.hypot(c.x, c.z) > WORLD_RADIUS) add({ x: c.x, z: c.z, r: c.r + 0.4 });
+      for (const l of data.locations.values()) if (Math.hypot(l.x, l.z) > WORLD_RADIUS) add({ x: l.x, z: l.z, r: 4 });
+      this.regionBlocks = map;
+    }
+    for (const b of this.regionBlocks.get(key(Math.floor(x / 8), Math.floor(z / 8))) ?? []) if ((x - b.x) ** 2 + (z - b.z) ** 2 < b.r * b.r) return true;
+    return false;
+  }
   /** the old sparse straw tufts — hidden while the shader grass field is on */
   tufts: THREE.Object3D | null = null;
 

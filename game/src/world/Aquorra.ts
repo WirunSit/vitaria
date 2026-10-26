@@ -3,6 +3,7 @@ import { hasFlora, plantFlora, PAINTED_TREES, type FloraSet, type FloraSpot } fr
 import { toon, glow, addOutline, toonGradient } from './Materials';
 import { fbm } from './Terrain';
 import type { Collider, Scannable } from './World';
+import { RegionGround } from './RegionGround';
 import { buildAirship } from './Genovia';
 import { hasProp, propSlot } from '../models/PropModels';
 import { regionWater } from '../render/Water';
@@ -129,6 +130,8 @@ function bridgeSpots() {
 
 export class Aquorra {
   root = new THREE.Group();
+  /** ground colours (look v3 meadow patches) and a sampler for the grass field */
+  ground!: RegionGround;
   colliders: Collider[] = [];
   scannables: Scannable[] = [];
   private water!: THREE.Mesh;
@@ -216,6 +219,7 @@ export class Aquorra {
     mesh.receiveShadow = true;
     mesh.userData.noShadow = true;
     this.root.add(mesh);
+    this.ground = new RegionGround(mesh, AQU.x, AQU.z, AQU_SIZE, seg, true);
   }
 
   // ---------------------------------------------------------------- sites

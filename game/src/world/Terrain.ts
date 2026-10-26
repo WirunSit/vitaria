@@ -51,13 +51,17 @@ const GOLD = new THREE.Color('#d7bd63'), DEEP = new THREE.Color('#6f9a45');
  * Shared by the ground and the grass field so blades always match the soil under them.
  */
 const V3_WARM = new THREE.Color('#b4d77a'), V3_COOL = new THREE.Color('#6cc895'), V3_GREY = new THREE.Color();
-function v3Meadow(x: number, z: number, c: THREE.Color) {
+export function v3Meadow(x: number, z: number, c: THREE.Color) {
   const big = fbm(x * 0.012 + 200, z * 0.012 - 80, 3);
   const mid = fbm(x * 0.045 - 30, z * 0.045 + 12, 2);
   c.lerp(V3_WARM, smoothstep(0.55, 0.75, big) * 0.4).lerp(V3_COOL, smoothstep(0.45, 0.28, big) * 0.3);
   c.multiplyScalar(1.02 + (mid - 0.5) * 0.16);
   const l = c.r * 0.3 + c.g * 0.59 + c.b * 0.11;
   return c.lerp(V3_GREY.setRGB(l, l, l), -0.1);
+}
+/** A meadow colour (green clearly ahead of red and blue), as opposed to sand, rock, paving or snow. */
+export function isGrassyColor(c: THREE.Color) {
+  return c.g > c.r * 1.12 && c.g > c.b * 1.05 && c.g - Math.min(c.r, c.b) > 0.04;
 }
 /** look v3 boundary mountains: dark/light canopy blotches so the ring reads as forest, lighter crests */
 const V3_FOREST = new THREE.Color('#2f5a44'), V3_FOREST_HI = new THREE.Color('#4c7a50'), V3_CREST = new THREE.Color('#9fb79a');

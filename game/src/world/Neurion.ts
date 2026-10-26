@@ -3,6 +3,7 @@ import { hasFlora, plantFlora, PAINTED_TREES, type FloraSet, type FloraSpot } fr
 import { toon, glow, addOutline, toonGradient } from './Materials';
 import { fbm } from './Terrain';
 import type { Collider, Scannable } from './World';
+import { RegionGround } from './RegionGround';
 import { buildAirship } from './Genovia';
 import { hasProp, propSlot } from '../models/PropModels';
 
@@ -103,6 +104,8 @@ function pulseTexture() {
 
 export class Neurion {
   root = new THREE.Group();
+  /** ground colours (look v3 meadow patches) and a sampler for the grass field */
+  ground!: RegionGround;
   colliders: Collider[] = [];
   scannables: Scannable[] = [];
   private freed = false;
@@ -195,6 +198,7 @@ export class Neurion {
     mesh.receiveShadow = true;
     mesh.userData.noShadow = true;
     this.root.add(mesh);
+    this.ground = new RegionGround(mesh, NEU.x, NEU.z, NEU_SIZE, seg, true);
   }
 
   /** Axon cables beside every avenue: a glowing tube whose texture scrolls (signal pulses), with myelin sleeves. */

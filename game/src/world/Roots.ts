@@ -3,6 +3,7 @@ import { hasFlora, plantFlora, PAINTED_TREES, type FloraSet, type FloraSpot } fr
 import { toon, glow, addOutline, toonGradient } from './Materials';
 import { fbm } from './Terrain';
 import type { Collider, Scannable } from './World';
+import { RegionGround } from './RegionGround';
 import { buildAirship } from './Genovia';
 import { propSlot } from '../models/PropModels';
 
@@ -100,6 +101,8 @@ export function arbHeightLocal(x: number, z: number): number {
 
 export class Roots {
   root = new THREE.Group();
+  /** ground colours (look v3 meadow patches) and a sampler for the grass field */
+  ground!: RegionGround;
   colliders: Collider[] = [];
   scannables: Scannable[] = [];
   private healed = false;
@@ -190,6 +193,7 @@ export class Roots {
     mesh.receiveShadow = true;
     mesh.userData.noShadow = true;
     this.root.add(mesh);
+    this.ground = new RegionGround(mesh, ARB.x, ARB.z, ARB_SIZE, seg, true);
   }
 
   /** Seven glowing veins winding from the valley rim to the Heart Seed; their light flows inward. */

@@ -27,7 +27,7 @@ export function showTitle(onContinue: () => void, onNew: (name: string, gender: 
       ${isTouch && canFullscreen() ? '<button class="btn secondary small" id="t-fs">⛶ เต็มจอ</button>' : ''}
     </div>
     ${iosHint ? '<div class="title-hint">📱 เล่นเต็มจอบน iPhone: กดปุ่ม <b>แชร์</b> ⬆️ แล้วเลือก <b>"เพิ่มไปยังหน้าจอโฮม"</b> จากนั้นเปิดเกมจากไอคอนบนหน้าจอ</div>' : ''}
-    <div class="title-foot">v0.17.2 · ภาพประกอบสร้างด้วย AI ตามแนวทางใน GPT_IMAGE_PROMPTS.md</div>
+    <div class="title-foot">v0.18.0 · ภาพประกอบสร้างด้วย AI ตามแนวทางใน GPT_IMAGE_PROMPTS.md</div>
   </div>`);
   const close = openModal(root);
   // text logo by default; swap to the GPT logo image once it loads successfully

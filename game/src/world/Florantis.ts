@@ -3,6 +3,7 @@ import { PAINTED_TREES, hasFlora, plantFlora, type FloraSet, type FloraSpot } fr
 import { toon, glow, addOutline, toonGradient } from './Materials';
 import { fbm } from './Terrain';
 import type { Collider, Scannable } from './World';
+import { RegionGround } from './RegionGround';
 import { applyDetailTexture, hasProp, propSlot } from '../models/PropModels';
 import { buildAirship } from './Genovia';
 import { ExperimentPlant, planterBox } from './ExperimentPlant';
@@ -137,6 +138,8 @@ function leafTexture() {
 
 export class Florantis {
   root = new THREE.Group();
+  /** ground colours (look v3 meadow patches) and a sampler for the grass field */
+  ground!: RegionGround;
   colliders: Collider[] = [];
   scannables: Scannable[] = [];
   /** canopy materials of the landmark trees: grey while the forest is sick, vivid once restored */
@@ -254,6 +257,7 @@ export class Florantis {
     mesh.userData.noShadow = true;
     this.root.add(mesh);
     applyDetailTexture(mesh.material as THREE.MeshToonMaterial, 'TEX_Ground_Cytoria', 50);
+    this.ground = new RegionGround(mesh, FLO.x, FLO.z, FLO_SIZE, seg, false);
   }
 
   // ---------------------------------------------------------------- landmarks
