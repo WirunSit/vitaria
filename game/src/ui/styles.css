@@ -509,3 +509,51 @@ body.touch.playing:not(.modal-open) #touch { display: block; }
   align-items: center; justify-content: center; gap: 14px; font-size: 18px; text-align: center; padding: 24px; }
 #rotate-hint > div:first-child { font-size: 54px; }
 body.touch.portrait #rotate-hint { display: flex; }
+
+/* ================================================================== loading screens (ui/Loading.ts) */
+.loader { position: fixed; inset: 0; z-index: 200; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: var(--st, 0) var(--sr, 0) var(--sb, 0) var(--sl, 0); color: var(--cream); font-family: var(--font); text-align: center;
+  background: linear-gradient(rgba(6,10,24,.42), rgba(6,10,24,.9)), var(--ld-img, none) center / cover, radial-gradient(ellipse at 50% 38%, #1f2c56 0%, #0b1020 72%);
+  background-color: #0b1020; transition: opacity .5s ease; }
+.loader.out { opacity: 0; pointer-events: none; }
+.loader.ready { cursor: pointer; }
+.ld-center { display: flex; flex-direction: column; align-items: center; gap: clamp(8px, 2.2vmin, 16px); width: min(440px, 80vw); }
+.ld-logo { font-family: 'Cinzel', var(--font-head); font-weight: 700; font-size: clamp(42px, 10vmin, 92px); letter-spacing: .16em; margin-right: -.16em;
+  color: var(--gold); text-shadow: 0 0 28px rgba(232,196,104,.55), 0 4px 0 #6d5420; line-height: 1; }
+.ld-sub { font-family: var(--font-head); font-size: clamp(16px, 3.4vmin, 24px); opacity: .9; margin-top: -4px; }
+/* a little cell: spinning membrane with drifting organelles (transform/opacity only, so it stays smooth while the game loads) */
+.ld-cell { position: relative; width: clamp(46px, 10vmin, 68px); aspect-ratio: 1; margin: 4px 0; }
+.ld-cell::before { content: ''; position: absolute; inset: 0; border-radius: 50%; border: 3px solid rgba(232,196,104,.18);
+  border-top-color: var(--gold); border-right-color: rgba(95,212,176,.85); animation: ld-spin 1.1s linear infinite; }
+.ld-cell i { position: absolute; left: 50%; top: 50%; width: 22%; height: 22%; margin: -11% 0 0 -11%; border-radius: 50%; background: var(--anemo);
+  box-shadow: 0 0 10px currentColor; animation: ld-orbit 2.4s ease-in-out infinite; }
+.ld-cell i:nth-child(2) { background: var(--gold); animation-delay: -.8s; width: 16%; height: 16%; margin: -8% 0 0 -8%; }
+.ld-cell i:nth-child(3) { background: var(--pyro); animation-delay: -1.6s; width: 13%; height: 13%; margin: -6.5% 0 0 -6.5%; }
+@keyframes ld-spin { to { transform: rotate(360deg); } }
+@keyframes ld-orbit { 0% { transform: rotate(0deg) translateX(110%) scale(1); opacity: .95; } 50% { transform: rotate(180deg) translateX(150%) scale(.75); opacity: .6; } 100% { transform: rotate(360deg) translateX(110%) scale(1); opacity: .95; } }
+.ld-bar { width: 100%; height: 7px; border-radius: 99px; background: rgba(255,255,255,.13); overflow: hidden; box-shadow: inset 0 1px 2px rgba(0,0,0,.4); }
+.ld-fill { width: 0; height: 100%; border-radius: 99px; background: linear-gradient(90deg, var(--anemo), var(--gold)); transition: width .35s ease;
+  box-shadow: 0 0 12px rgba(232,196,104,.6); }
+.ld-label { width: 100%; display: flex; justify-content: space-between; gap: 12px; font-size: 14px; opacity: .8; margin-top: -4px; }
+.ld-text { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ld-pct { font-variant-numeric: tabular-nums; }
+.loader.ready .ld-bar, .loader.ready .ld-label, .loader.ready .ld-cell { display: none; }
+.ld-go { margin-top: 6px; padding: 12px 34px; border: none; border-radius: 999px; cursor: pointer; font-family: var(--font-head); font-size: 20px; font-weight: 600;
+  color: #2a2410; background: linear-gradient(180deg, #f3e3b3, #d9bc72); box-shadow: 0 3px 0 #8f7533, 0 0 26px rgba(232,196,104,.45);
+  animation: ld-pulse 1.6s ease-in-out infinite; }
+@keyframes ld-pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+.ld-skip { margin-top: 2px; padding: 6px 16px; border-radius: 999px; border: 1px solid rgba(232,196,104,.5); background: rgba(12,17,36,.6);
+  color: var(--cream); font-family: var(--font); font-size: 14px; cursor: pointer; }
+.ld-tip { position: absolute; left: 50%; bottom: calc(18px + var(--sb, 0px)); transform: translateX(-50%); width: min(760px, 88vw);
+  font-size: clamp(13px, 2.6vmin, 16px); line-height: 1.55; opacity: .88; background: rgba(12,17,36,.55); padding: 8px 16px; border-radius: 12px; }
+.ld-tip b { color: var(--gold); }
+.ld-rotate { display: none; font-size: 15px; color: var(--cryo); }
+@media (orientation: portrait) and (pointer: coarse) {
+  .ld-rotate { display: block; position: absolute; top: calc(18px + var(--st, 0px)); left: 0; right: 0; }
+}
+@media (max-height: 380px) { .ld-tip { bottom: 8px; padding: 5px 12px; } .ld-sub { display: none; } }
+@media (prefers-reduced-motion: reduce) { .ld-cell::before, .ld-cell i, .ld-go { animation-duration: 6s; } }
+
+/* phones: blurring what's behind a panel re-renders it every frame on top of the 3D view; a denser fill looks the same */
+body.touch .panel { backdrop-filter: none; background-color: rgba(20, 27, 52, 0.94); }
+body.touch .hud-keys .keychips > span, body.touch .hud-keys .keyall { backdrop-filter: none; }

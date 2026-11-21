@@ -50,8 +50,22 @@ export async function exitFullscreen() {
   } catch { /* ignore */ }
 }
 
+let autoFs = isTouch;
+/** the player left fullscreen with a ⛶ button: don't pull them back in until they ask again */
+let userExited = false;
+
 export function toggleFullscreen() {
-  return (document as FsDoc).fullscreenElement || (document as FsDoc).webkitFullscreenElement ? exitFullscreen() : enterFullscreen();
+  const on = !!((document as FsDoc).fullscreenElement || (document as FsDoc).webkitFullscreenElement);
+  userExited = on;
+  return on ? exitFullscreen() : enterFullscreen();
+}
+
+/** Settings → "เต็มจออัตโนมัติ": go fullscreen on the first tap, and again after the system took it away. */
+export function setAutoFullscreen(on: boolean) { autoFs = on; }
+
+/** Call from a tap/click handler: enters fullscreen if auto-fullscreen is on and the player didn't opt out. */
+export function autoFullscreen() {
+  if (autoFs && !userExited && !isFullscreen() && canFullscreen()) void enterFullscreen();
 }
 
 /**
@@ -83,5 +97,9 @@ export function installDevice() {
     document.addEventListener('gesturestart', block);
     document.addEventListener('dblclick', block);
     document.addEventListener('contextmenu', block);
+    // Android drops fullscreen on the back gesture, app switches and screen-off: the next tap puts it back
+    document.addEventListener('touchend', (e) => {
+      if (!(e.target as HTMLElement)?.closest?.('input,textarea,select,.tc-fs,[data-a="fs"],#t-fs')) autoFullscreen();
+    }, { passive: true });
   }
 }

@@ -4,6 +4,7 @@ import { clone as skeletonClone } from 'three/examples/jsm/utils/SkeletonUtils.j
 import { LOOK } from '../render/Look';
 import { VRMLoaderPlugin, VRMUtils, type MToonMaterial, type VRM } from '@pixiv/three-vrm';
 import { toonGradient } from '../world/Materials';
+import { isTouch } from '../core/Device';
 
 /**
  * Real 3D models (VRoid .vrm for characters, AI image-to-3D .glb for enemies/props).
@@ -31,11 +32,63 @@ export function debugRegisterModel(rel: string, url: string) { overrides.set(rel
 export function hasModel(rel: string) { return available.has(rel); }
 export function modelUrl(rel: string) { return overrides.get(rel) ?? `assets/models/${rel}`; }
 
+/**
+ * Phones: model textures are capped at these sizes. VRoid exports ship a dozen 2048² maps per character; at a
+ * phone's render resolution 1024² looks the same and takes a quarter of the GPU memory (and uploads 4× faster).
+ * Scenery, props and enemies (.glb, ~300 maps in the world) are seen smaller still, so they get 512².
+ */
+const MAX_TEX_VRM = isTouch ? 1024 : 0;
+const MAX_TEX_GLB = isTouch ? 512 : 0;
+type ModelImage = ImageBitmap | HTMLImageElement | HTMLCanvasElement;
+const shrunk = new WeakMap<object, Promise<ModelImage | null>>();
+
+async function shrinkImage(img: ModelImage, max: number): Promise<ModelImage | null> {
+  const k = max / Math.max(img.width, img.height);
+  const w = Math.max(1, Math.round(img.width * k)), h = Math.max(1, Math.round(img.height * k));
+  // createImageBitmap keeps the colours of fully transparent texels (a 2D canvas would turn them black and give
+  // cut-out hair dark fringes); the canvas is only the fallback for browsers that ignore the resize options
+  try {
+    const bmp = await createImageBitmap(img, { resizeWidth: w, resizeHeight: h, resizeQuality: 'high', premultiplyAlpha: 'none' });
+    if (bmp.width === w) return bmp;
+    bmp.close();
+  } catch { /* fall through */ }
+  const c = document.createElement('canvas');
+  c.width = w; c.height = h;
+  c.getContext('2d')?.drawImage(img, 0, 0, w, h);
+  return c;
+}
+
+/** Downsizes every oversized texture under `root` (before it is first drawn, so the big version never reaches the GPU). */
+async function shrinkTextures(root: THREE.Object3D, max: number) {
+  if (!max) return;
+  const jobs: Promise<void>[] = [];
+  const visit = (t: unknown) => {
+    const tex = t as THREE.Texture | null;
+    if (!tex?.isTexture) return;
+    const img = tex.image as ModelImage | null;
+    if (!img?.width || Math.max(img.width, img.height) <= max) return;
+    let p = shrunk.get(img);
+    if (!p) { p = shrinkImage(img, max); shrunk.set(img, p); }
+    jobs.push(p.then((small) => { if (small && tex.image === img) { tex.image = small; tex.needsUpdate = true; } }));
+  };
+  root.traverse((o) => {
+    const mats = (o as THREE.Mesh).material;
+    if (!mats) return;
+    for (const m of Array.isArray(mats) ? mats : [mats]) {
+      for (const v of Object.values(m)) visit(v);
+      const u = (m as THREE.ShaderMaterial).uniforms;
+      if (u) for (const k in u) visit(u[k]?.value);
+    }
+  });
+  await Promise.all(jobs);
+}
+
 export async function loadVRM(rel: string): Promise<VRM | null> {
   try {
     const gltf = await loader.loadAsync(modelUrl(rel));
     const vrm = gltf.userData.vrm as VRM | undefined;
     if (!vrm) return null;
+    await shrinkTextures(gltf.scene, MAX_TEX_VRM);
     VRMUtils.removeUnnecessaryVertices(gltf.scene);
     VRMUtils.combineSkeletons(gltf.scene);
     VRMUtils.rotateVRM0(vrm); // VRM 0.x faces -Z; turn it to +Z like our models
@@ -71,7 +124,7 @@ export async function loadGLB(rel: string): Promise<THREE.Object3D | null> {
 /** Like loadGLB, but also returns the file's animation clips (rigged downloads walk/attack with them). */
 export async function loadGLBAnimated(rel: string): Promise<{ obj: THREE.Object3D; clips: THREE.AnimationClip[] } | null> {
   try {
-    if (!glbCache.has(rel)) glbCache.set(rel, loader.loadAsync(modelUrl(rel)));
+    if (!glbCache.has(rel)) glbCache.set(rel, loader.loadAsync(modelUrl(rel)).then(async (g) => { await shrinkTextures(g.scene, MAX_TEX_GLB); return g; }));
     const gltf = await glbCache.get(rel)!;
     return { obj: skeletonClone(gltf.scene), clips: gltf.animations };
   } catch (e) {

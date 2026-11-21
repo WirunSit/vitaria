@@ -36,7 +36,11 @@ import { PlayerController } from './player/PlayerController';
 import { AmoebyModel, type CharModel } from './player/CharacterModel';
 import { createCharacterModel } from './models/CharacterModels';
 import { charArtName, skillArtName } from './core/Assets';
-import { isTouch } from './core/Device';
+import { isTouch, setAutoFullscreen } from './core/Device';
+import { AdaptiveRes } from './render/AdaptiveRes';
+import { DetailCuller } from './render/DetailCuller';
+import { waitForLoads } from './core/LoadTracker';
+import { showLoader } from './ui/Loading';
 import { TouchControls } from './ui/TouchControls';
 import { PartyMember, expToNext, levelCap } from './player/Party';
 import { QuestManager, type QuestApi } from './quest/QuestManager';
@@ -108,7 +112,11 @@ const WORLD_BOSSES = [
   { tag: 'WB_GOLEM', quest: 'MQ_1_06', loc: 'LOC_SPIRE', enemy: 'EN_BOSS_GOLEM', level: 22, hint: 'บลายต์ยังหลงเหลือในหอคอย โกเลมมะเร็งก่อตัวขึ้นใหม่! ปราบเพื่อรับแกนโกเลมและ Bio-Relic' },
 ];
 
-interface NpcRuntime { id: string; model: CharModel | null; root: THREE.Group; pos: THREE.Vector3; visible: boolean }
+/** `make` builds the NPC's body the first time the player comes near (each VRoid NPC is a 20–35 MB download). */
+interface NpcRuntime { id: string; model: CharModel | null; root: THREE.Group; pos: THREE.Vector3; visible: boolean; make: (() => CharModel) | null }
+/** NPC bodies are created inside this radius, and animated only inside the smaller one. */
+const NPC_LOAD_DIST = 85;
+const NPC_ANIM_DIST = 60;
 
 export class Game {
   renderer: THREE.WebGLRenderer;
@@ -157,7 +165,7 @@ export class Game {
 
   constructor(private canvas: HTMLCanvasElement) {
     this.renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
-    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+    this.renderer.setPixelRatio(this.basePixelRatio());
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = THREE.PCFShadowMap;
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -165,6 +173,8 @@ export class Game {
     this.renderer.toneMapping = LOOK.v2 ? THREE.NeutralToneMapping : THREE.ACESFilmicToneMapping;
     this.renderer.toneMappingExposure = LOOK.v2 ? 1.45 : 1.05; // v2 value measured against Genshin meadow shots (lit grass ≈ #8bc274)
     if (LOOK.v2) this.renderer.domElement.style.filter = 'saturate(1.0) contrast(1.02)';
+    // phones: a CSS filter on the canvas costs the browser an extra full-screen pass every frame
+    if (isTouch) this.renderer.domElement.style.filter = 'none';
     this.input = new Input(canvas);
     if (isTouch) {
       this.touch = new TouchControls(this.input, canvas);
@@ -197,6 +207,23 @@ export class Game {
   private guide!: QuestGuide;
   /** look v3 soft shadow under the active character's feet */
   private contact: ContactShadow | null = null;
+
+  /** Highest pixel ratio the quality setting allows; dynamic resolution scales below it. */
+  private basePixelRatio() {
+    const gq = this.save?.settings.graphics ?? (isTouch ? 'low' : 'high');
+    return Math.min(window.devicePixelRatio, gq === 'low' ? 1 : isTouch && gq === 'medium' ? 1.25 : 1.5);
+  }
+  private applyPixelRatio() {
+    const pr = this.basePixelRatio() * (this.autoRes.enabled ? this.autoRes.scale : 1);
+    if (Math.abs(this.renderer.getPixelRatio() - pr) < 0.01) return;
+    this.renderer.setPixelRatio(pr);
+    this.resize();
+  }
+  /** phones: small set dressing stops drawing past a size-based distance */
+  private culler: DetailCuller | null = null;
+  private autoRes = Object.assign(new AdaptiveRes(() => this.applyPixelRatio(), isTouch ? 0.6 : 0.7), { enabled: isTouch });
+  /** time of the last drawn frame (FPS cap) */
+  private lastFrameT = 0;
 
   resize() {
     const w = window.innerWidth, hgt = window.innerHeight;
@@ -242,6 +269,7 @@ export class Game {
     this.guide = new QuestGuide();
     this.scene.add(this.guide.root);
     if (LOOK.v3) { this.contact = new ContactShadow(); this.scene.add(this.contact.mesh); }
+    if (isTouch) this.culler = new DetailCuller(this.scene);
     this.resize();
     this.mapImage = HUD.buildMapImage(this.world, 512);
     this.loop();
@@ -254,12 +282,34 @@ export class Game {
     ambience.silence();
     document.getElementById('hud')!.innerHTML = '';
     showTitle(
-      () => { const s = loadSave(); if (s) this.start(s); },
-      (name, gender) => { deleteSave(); this.start(newSave(name, gender)); },
+      () => { const s = loadSave(); if (s) this.enterWorld(s); },
+      (name, gender) => { deleteSave(); this.enterWorld(newSave(name, gender)); },
     );
   }
 
   // ================================================================== start / load
+  /**
+   * Starts a save behind a loading veil: the party's and nearby NPCs' models (20–35 MB each) stream in first,
+   * so the player doesn't walk around placeholder bodies. A slow connection can skip ahead after a few seconds.
+   */
+  private async enterWorld(save: SaveData) {
+    const veil = showLoader('กำลังเข้าสู่โลก…');
+    veil.set(0.03, 'กำลังเตรียมตัวละคร…');
+    await new Promise((r) => setTimeout(r, 50));
+    this.start(save);
+    // NPC bodies are created on the first frames near them (updateNpcs): let a few frames run before counting
+    await new Promise((r) => setTimeout(r, 250));
+    let skipTimer = 0;
+    const skip = new Promise<void>((r) => { skipTimer = window.setTimeout(() => veil.offerSkip('เข้าเกมเลย (โหลดต่อระหว่างเล่น)', r), 6000); });
+    await Promise.race([
+      waitForLoads((p, n, total) => veil.set(0.08 + p * 0.9, total ? `กำลังโหลดตัวละครและโลกรอบตัว ${n}/${total}` : undefined), isTouch ? 40000 : 25000, 800),
+      skip,
+    ]);
+    clearTimeout(skipTimer);
+    veil.set(1, 'พร้อมแล้ว!');
+    veil.close();
+  }
+
   start(save: SaveData) {
     this.save = save;
     setPlayerIdentity(save.playerName, save.gender);
@@ -408,24 +458,24 @@ export class Game {
       const loc = data.locations.get(def.location);
       if (!loc) continue;
       const root = new THREE.Group();
-      let model: CharModel | null = null;
+      let make: (() => CharModel) | null = null;
       if (def.model === 'char' && def.charId) {
         const c = data.characters.get(def.charId)!;
-        model = createCharacterModel(`characters/CHR_${charArtName(def.charId, this.save.gender)}.vrm`, c.appearance, c.element, c.weapon);
+        const file = `characters/CHR_${charArtName(def.charId, this.save.gender)}.vrm`;
+        make = () => createCharacterModel(file, c.appearance, c.element, c.weapon);
       } else if (def.model === 'human' && def.appearance) {
-        model = createCharacterModel(def.art ? `npcs/NPC_${def.art}.vrm` : null, def.appearance, 'PHYSICAL', 'CATALYST');
+        const app = def.appearance;
+        make = () => createCharacterModel(def.art ? `npcs/NPC_${def.art}.vrm` : null, app, 'PHYSICAL', 'CATALYST');
       } else if (def.model === 'amoeby') {
         root.add(new AmoebyModel().root);
       }
-      if (model) root.add(model.root);
-      if (model && def.wear) model.wearOnHead?.(def.wear);
       // NPCs at the same location stand side by side
       const sameLoc = this.npcs.filter((n) => data.npcs.get(n.id)?.location === def.location).length;
       const pos = new THREE.Vector3(loc.x + sameLoc * 2.2, 0, loc.z + (def.id === 'NPC_ALVI' ? 0 : 0));
       pos.y = this.world.h(pos.x, pos.z);
       root.position.copy(pos);
       this.scene.add(root);
-      this.npcs.push({ id: def.id, model, root, pos, visible: false });
+      this.npcs.push({ id: def.id, model: null, root, pos, visible: false, make });
     }
   }
 
@@ -447,8 +497,19 @@ export class Game {
     this.world.ground.enabled.value = grass > 0 ? 1 : 0; // dirt paths + livelier greens go with the new grass
     this.grass.setDensity(grass);
     if (this.world.tufts) this.world.tufts.visible = grass === 0;
-    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, gq === 'low' ? 1 : 1.5));
+    setAutoFullscreen(this.save.settings.autoFullscreen ?? isTouch);
+    this.autoRes.enabled = this.save.settings.autoRes ?? isTouch;
+    if (this.culler) this.culler.distK = gq === 'high' ? 1.8 : gq === 'medium' ? 1.35 : 1;
+    this.autoRes.reset();
+    this.renderer.setPixelRatio(this.basePixelRatio());
     this.resize();
+    // phones: a 1024² shadow map is plenty at their resolution (a quarter of the fill cost of 2048²)
+    const shadowRes = isTouch ? 1024 : 2048;
+    if (this.world.sun.shadow.mapSize.x !== shadowRes) {
+      this.world.sun.shadow.mapSize.set(shadowRes, shadowRes);
+      this.world.sun.shadow.map?.dispose();
+      this.world.sun.shadow.map = null;
+    }
     this.renderer.shadowMap.enabled = this.save.settings.shadows;
     this.perf.enabled = !!this.save.settings.showFps;
     this.world.sun.castShadow = this.save.settings.shadows;
@@ -900,9 +961,19 @@ export class Game {
   }
 
   // ================================================================== main loop
-  private loop = () => {
+  private loop = (now = performance.now()) => {
     requestAnimationFrame(this.loop);
-    const dt = Math.min(0.05, this.clock.getDelta());
+    // FPS cap: 120 Hz phones would otherwise draw twice as many frames as needed and throttle from the heat;
+    // a steady 30/60 feels smoother than a rate that jumps around
+    const cap = this.save?.settings.fpsCap ?? (isTouch ? 60 : 0);
+    if (cap) {
+      const step = 1000 / cap, since = now - this.lastFrameT;
+      if (since < step - 2) return;
+      this.lastFrameT = since > step * 3 ? now : now - (since % step);
+    }
+    const raw = this.clock.getDelta();
+    const dt = Math.min(0.05, raw);
+    this.autoRes.frame(raw, cap ? 1 / cap : 1 / 60);
     if (this.inTitle || !this.running) {
       this.titleT += dt * 0.05;
       const c = new THREE.Vector3(Math.sin(this.titleT) * 60, 0, Math.cos(this.titleT) * 60 - 20);
@@ -962,6 +1033,7 @@ export class Game {
     this.world.update(dt, this.player.pos);
     WIND.time.value += dt;
     this.grass.update(this.player.pos);
+    this.culler?.update(dt, this.camera.position);
     this.contact?.update(this.player.pos, this.world.groundH(this.player.pos.x, this.player.pos.z), !this.scanning);
     const sunUp = Math.sin(((s.timeOfDay - 6) / 24) * Math.PI * 2);
     this.updateAudio(dt, THREE.MathUtils.smoothstep(sunUp, -0.15, 0.25));
@@ -1226,11 +1298,17 @@ export class Game {
       const def = data.npcs.get(n.id)!;
       if (!vis) { this.wui.npcTag(n.id, null, '', '', false); continue; }
       const d = n.pos.distanceTo(this.player.pos);
+      if (n.make && d < NPC_LOAD_DIST) {
+        n.model = n.make();
+        n.make = null;
+        n.root.add(n.model.root);
+        if (def.wear) n.model.wearOnHead?.(def.wear);
+      }
       if (d < 25) {
         const to = this.player.pos.clone().sub(n.pos);
         n.root.rotation.y = Math.atan2(to.x, to.z);
       }
-      n.model?.update(dt, { speed: 0, air: false, glide: false, attackT: -1, attackKind: 'normal', dashing: false });
+      if (d < NPC_ANIM_DIST) n.model?.update(dt, { speed: 0, air: false, glide: false, attackT: -1, attackKind: 'normal', dashing: false });
       const tagPos = d < 35 ? n.pos.clone().setY(n.pos.y + 2.25) : null;
       this.wui.npcTag(n.id, tagPos, def.name.th, def.title?.th ?? '', objectives.has(n.id));
       // simple collision

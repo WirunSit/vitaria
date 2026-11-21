@@ -1,12 +1,12 @@
 import { avatarPlaceholder, img } from '../core/Assets';
 import { sfx } from '../core/Audio';
 import { hasSave, importSave, loadSave, pickSaveFile, saveSummary } from '../core/Save';
-import { canFullscreen, enterFullscreen, isFullscreen, isIOS, isStandalone, isTouch } from '../core/Device';
+import { autoFullscreen, canFullscreen, isFullscreen, isIOS, isStandalone, isTouch, toggleFullscreen } from '../core/Device';
 import { esc, h, openModal, toast } from './UI';
 
 /** On phones, starting the game also goes fullscreen (needs the tap that started it). */
 function phoneFullscreen() {
-  if (isTouch && !isFullscreen() && canFullscreen()) void enterFullscreen();
+  autoFullscreen();
 }
 
 export function showTitle(onContinue: () => void, onNew: (name: string, gender: 'M' | 'F') => void) {
@@ -24,7 +24,7 @@ export function showTitle(onContinue: () => void, onNew: (name: string, gender: 
     ${saved ? `<div class="title-save">💾 ${esc(saveSummary(saved))}</div>` : ''}
     <div class="title-tools">
       <button class="btn secondary small" id="t-import">📥 นำเข้าเซฟจากไฟล์</button>
-      ${isTouch && canFullscreen() ? '<button class="btn secondary small" id="t-fs">⛶ เต็มจอ</button>' : ''}
+      ${canFullscreen() && !isStandalone() ? `<button class="btn secondary small" id="t-fs">⛶ ${isFullscreen() ? 'ออกจากเต็มจอ' : 'เต็มจอ'}</button>` : ''}
     </div>
     ${iosHint ? '<div class="title-hint">📱 เล่นเต็มจอบน iPhone: กดปุ่ม <b>แชร์</b> ⬆️ แล้วเลือก <b>"เพิ่มไปยังหน้าจอโฮม"</b> จากนั้นเปิดเกมจากไอคอนบนหน้าจอ</div>' : ''}
     <div class="title-foot">v0.18.0 · ภาพประกอบสร้างด้วย AI ตามแนวทางใน GPT_IMAGE_PROMPTS.md</div>
@@ -48,7 +48,11 @@ export function showTitle(onContinue: () => void, onNew: (name: string, gender: 
     if (!saved) return go();
     confirmBox('เริ่มเกมใหม่จะ <b>ลบข้อมูลที่บันทึกไว้</b> ทั้งหมด ต้องการดำเนินการต่อหรือไม่?<br><span style="font-size:15px;opacity:.8">(ถ้าอยากเก็บไว้ ให้กด "ส่งออกเซฟ" ในเมนูเกมก่อน)</span>', go);
   };
-  (root.querySelector('#t-fs') as HTMLButtonElement | null)?.addEventListener('click', () => { sfx.ui(); void enterFullscreen(); });
+  const fsBtn = root.querySelector('#t-fs') as HTMLButtonElement | null;
+  fsBtn?.addEventListener('click', () => {
+    sfx.ui();
+    void toggleFullscreen().then(() => { fsBtn.textContent = `⛶ ${isFullscreen() ? 'ออกจากเต็มจอ' : 'เต็มจอ'}`; });
+  });
   (root.querySelector('#t-import') as HTMLButtonElement).onclick = async () => {
     sfx.ui();
     const s = await pickSaveFile();

@@ -66,7 +66,7 @@ export interface SaveData {
   gacha: GachaSave;
   gear: GearSave;
   atp: AtpState;
-  settings: { mouseSens: number; invertY: boolean; shadows: boolean; playReminderMin: number; gachaEnabled: boolean; camMode: 'drag' | 'lock'; graphics: 'high' | 'medium' | 'low'; showFps?: boolean; oldGrass?: boolean; lookV2?: boolean; lookV3?: boolean; musicVol?: number; sfxVol?: number };
+  settings: { mouseSens: number; invertY: boolean; shadows: boolean; playReminderMin: number; gachaEnabled: boolean; camMode: 'drag' | 'lock'; graphics: 'high' | 'medium' | 'low'; showFps?: boolean; oldGrass?: boolean; lookV2?: boolean; lookV3?: boolean; musicVol?: number; sfxVol?: number; fpsCap?: 0 | 30 | 60; autoRes?: boolean; autoFullscreen?: boolean };
 }
 
 const KEY = 'vitaria_save_v1';
@@ -104,7 +104,7 @@ export function newSave(playerName: string, gender: 'M' | 'F'): SaveData {
     gear: newGear(),
     atp: newAtp(),
     // phones/tablets start on lighter graphics; players can raise it in the menu
-    settings: { mouseSens: 1, invertY: false, shadows: !isTouch, playReminderMin: 60, gachaEnabled: true, camMode: 'drag', graphics: isTouch ? 'low' : 'high' },
+    settings: { mouseSens: 1, invertY: false, shadows: !isTouch, playReminderMin: 60, gachaEnabled: true, camMode: 'drag', graphics: isTouch ? 'low' : 'high', fpsCap: isTouch ? 60 : 0, autoRes: isTouch, autoFullscreen: isTouch },
   };
 }
 

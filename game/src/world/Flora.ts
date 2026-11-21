@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { hasModel, loadGLB, toonify } from '../models/ModelLibrary';
 import { WIND } from './Nature';
+import { isTouch } from '../core/Device';
 
 /**
  * Downloaded trees, bushes and rocks (assets/models/nature/NAT_*.glb) drawn as instanced meshes that keep their
@@ -37,6 +38,9 @@ export interface FloraSet {
 
 const CELL = 40;
 const SHADOW_DIST = 50; // the sun's shadow box only reaches ~45 m around the player
+/** Phones: flora thins out and swaps to low detail sooner (the fog already softens that distance). */
+const FAR_K = isTouch ? 0.65 : 1;
+const LOD_K = isTouch ? 0.6 : 1;
 
 /** The hand-painted tree pack (TE-01); its "5" variants read blue-teal so they are left out. */
 export const PAINTED_TREES: FloraSet = { file: 'NAT_TreesPainted', split: true, only: /^TR[SWT][1-4]_/, sway: 0.035, far: 300 };
@@ -225,10 +229,10 @@ export function updateFlora(viewer: THREE.Vector3) {
     const c = cells[cursor = (cursor + 1) % cells.length];
     tmp.copy(c.center).applyMatrix4(c.obj.matrixWorld);
     const d = Math.hypot(tmp.x - viewer.x, tmp.z - viewer.z) - CELL * 0.7; // distance to the tile's near edge
-    const show = d < c.far;
+    const show = d < c.far * FAR_K;
     c.obj.visible = show;
     if (!show) continue;
-    const useLo = !!c.lo && d > c.lodDist;
+    const useLo = !!c.lo && d > c.lodDist * LOD_K;
     c.hi.visible = !useLo;
     if (c.lo) c.lo.visible = useLo;
     const shadow = c.castsShadow !== false && d < SHADOW_DIST;

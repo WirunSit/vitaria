@@ -402,6 +402,16 @@ export function openEscMenu(host: MenuHost, actions: { codex: () => void; quests
         <option value="medium" ${host.save.settings.graphics === 'medium' ? 'selected' : ''}>กลาง</option>
         <option value="low" ${host.save.settings.graphics === 'low' ? 'selected' : ''}>ต่ำ (เครื่องช้า)</option>
       </select></label>
+    <div class="row" style="justify-content:space-between;flex-wrap:wrap;gap:8px">
+      <label style="font-size:15px">จำกัดเฟรมเรต
+        <select id="fpscap">
+          <option value="0" ${(host.save.settings.fpsCap ?? 0) === 0 ? 'selected' : ''}>ไม่จำกัด</option>
+          <option value="60" ${host.save.settings.fpsCap === 60 ? 'selected' : ''}>60 FPS</option>
+          <option value="30" ${host.save.settings.fpsCap === 30 ? 'selected' : ''}>30 FPS (ประหยัดแบต · เครื่องไม่ร้อน)</option>
+        </select></label>
+      <label style="font-size:15px"><input type="checkbox" id="autores" ${host.save.settings.autoRes ? 'checked' : ''}> ปรับความละเอียดอัตโนมัติให้ลื่น</label>
+      ${isTouch && canFullscreen() ? `<label style="font-size:15px"><input type="checkbox" id="autofs" ${host.save.settings.autoFullscreen !== false ? 'checked' : ''}> เต็มจออัตโนมัติ</label>` : ''}
+    </div>
     <label style="font-size:14px;opacity:.85"><input type="checkbox" id="gacha" ${host.save.settings.gachaEnabled ? 'checked' : ''}> เปิดระบบสุ่ม Gene Wish <span style="opacity:.7">(ปิด = แลกตัวละครด้วยราคาคงที่ · โหมดห้องเรียน)</span></label>
     <div class="row" style="justify-content:space-between;flex-wrap:wrap;gap:8px">
       <button class="btn secondary small" data-a="save">💾 บันทึก</button>
@@ -455,6 +465,9 @@ export function openEscMenu(host: MenuHost, actions: { codex: () => void; quests
   (root.querySelector('#newgrass') as HTMLInputElement).onchange = (e) => { host.save.settings.oldGrass = !(e.target as HTMLInputElement).checked; host.settingsChanged(); host.saveNow(); };
   (root.querySelector('#showfps') as HTMLInputElement).onchange = (e) => { host.save.settings.showFps = (e.target as HTMLInputElement).checked; host.settingsChanged(); host.saveNow(); };
   (root.querySelector('#shadows') as HTMLInputElement).onchange = (e) => { host.save.settings.shadows = (e.target as HTMLInputElement).checked; host.settingsChanged(); };
+  (root.querySelector('#fpscap') as HTMLSelectElement).onchange = (e) => { host.save.settings.fpsCap = Number((e.target as HTMLSelectElement).value) as 0 | 30 | 60; host.settingsChanged(); host.saveNow(); };
+  (root.querySelector('#autores') as HTMLInputElement).onchange = (e) => { host.save.settings.autoRes = (e.target as HTMLInputElement).checked; host.settingsChanged(); host.saveNow(); };
+  (root.querySelector('#autofs') as HTMLInputElement | null)?.addEventListener('change', (e) => { host.save.settings.autoFullscreen = (e.target as HTMLInputElement).checked; host.settingsChanged(); host.saveNow(); });
   (root.querySelector('#gacha') as HTMLInputElement).onchange = (e) => { host.save.settings.gachaEnabled = (e.target as HTMLInputElement).checked; host.saveNow(); };
 }
 

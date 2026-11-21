@@ -14,9 +14,10 @@
     <title>VITARIA: ตำนานธาตุแห่งชีวิต</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- fonts load without blocking the first paint (slow phone connections see the loading screen at once) -->
     <link
       href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;600;700&family=Noto+Sans+Thai:wght@400;500;700&display=swap"
-      rel="stylesheet"
+      rel="stylesheet" media="print" onload="this.media='all'"
     />
     <link rel="stylesheet" href="/src/ui/styles.css" />
   </head>
@@ -28,6 +29,16 @@
       <div id="hud"></div>
       <div id="overlay"></div>
       <div id="rotate-hint"><div>📱↻</div><div>หมุนโทรศัพท์เป็นแนวนอนเพื่อเล่น</div></div>
+    </div>
+    <!-- boot loading screen: drawn before any script runs; src/ui/Loading.ts takes it over -->
+    <div id="boot" class="loader">
+      <div class="ld-center">
+        <div class="ld-logo">VITARIA</div>
+        <div class="ld-sub">ตำนานธาตุแห่งชีวิต</div>
+        <div class="ld-cell"><i></i><i></i><i></i></div>
+        <div class="ld-bar"><div class="ld-fill"></div></div>
+        <div class="ld-label"><span class="ld-text">กำลังโหลด…</span><span class="ld-pct">0%</span></div>
+      </div>
     </div>
     <script type="module" src="/src/main.ts"></script>
   </body>
