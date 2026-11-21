@@ -194,7 +194,11 @@ export class ElementFX {
     const n = (x: number) => Math.max(1, Math.round(x * k));
     switch (el) {
       case 'PYRO':
-        this.sys({ tex: 'fx_flame', count: n(16), life: [0.35, 0.75], speed: [1.5, 4 * k], size: [0.6 * k, 1.3 * k], color: new QV4(2.4, 1.6, 0.8, 1), colorLife: FLAME, sizeLife: POP, gravity: -4, radius: 0.4 * k }, at);
+        // many small upright tongues licking upward (a few huge flat-coloured puffs read as orange clay), with a hot
+        // additive core inside them
+        this.sys({ tex: 'fx_flame', count: n(22), life: [0.3, 0.6], speed: [1.2, 3.8 * k], size: [0.35 * k, 0.8 * k], color: new QV4(1.5, 0.72, 0.28, 0.9), colorLife: FLAME, sizeLife: POP, gravity: -4.5, radius: 0.45 * k }, at);
+        this.sys({ tex: 'fx_flame', add: true, count: n(12), life: [0.25, 0.45], speed: [0.8, 2.5 * k], size: [0.3 * k, 0.6 * k], color: new QV4(1.3, 0.7, 0.25, 1), colorLife: FLAME, sizeLife: POP, gravity: -4, radius: 0.3 * k }, at);
+        this.sys({ tex: 'light_01', add: true, shape: 'point', count: 1, life: [0.35, 0.45], speed: [0, 0], size: [2.2 * k, 2.6 * k], color: new QV4(1.6, 0.7, 0.2, 1), colorLife: FADE, sizeLife: GROW }, at);
         this.sys({ tex: 'circle_05', count: n(26), life: [0.5, 1.1], speed: [3, 9 * k], size: [0.07, 0.16], color: new QV4(3, 1.4, 0.4, 1), gravity: -1.5, noise: 1.5, radius: 0.3 }, at);
         this.sys({ tex: 'smoke_03', count: n(5), life: [0.8, 1.4], speed: [0.6, 1.4], size: [1 * k, 1.8 * k], color: new QV4(0.25, 0.2, 0.2, 0.45), colorLife: ZERO_ONE_ZERO, sizeLife: GROW, gravity: -1.2, radius: 0.5 * k }, at);
         break;
@@ -293,7 +297,10 @@ export class ElementFX {
       add({ tex: 'circle_05', rate: 16, life: [0.3, 0.6], speed: [0.1, 0.6], size: [0.05, 0.11], color: v4(c, 2.8), radius: 0.15, noise: 0.5 });
     } else if (kind === 'field') {
       const area = Math.max(1, radius * radius / 9);
-      if (el === 'PYRO') add({ tex: 'fx_flame', shape: 'disc', radius, rate: 18 * area, life: [0.5, 1], speed: [0.1, 0.4], size: [0.5, 1.1], color: new QV4(2.2, 1.4, 0.7, 1), colorLife: FLAME, sizeLife: POP, gravity: -2.5 });
+      if (el === 'PYRO') {
+        add({ tex: 'fx_flame', add: true, shape: 'disc', radius, rate: 26 * area, life: [0.45, 0.9], speed: [0.1, 0.4], size: [0.35, 0.8], color: new QV4(2.4, 1.3, 0.5, 1), colorLife: FLAME, sizeLife: POP, gravity: -2.5 });
+        add({ tex: 'circle_05', add: true, shape: 'disc', radius, rate: 14 * area, life: [0.8, 1.6], speed: [0.4, 1.4], size: [0.04, 0.09], color: new QV4(3, 1.5, 0.4, 1), gravity: -1.5, noise: 1.2 }); // embers
+      }
       add({ tex: motifTex[el], shape: 'disc', radius, rate: 10 * area, life: [1, 2], speed: [0.1, 0.5], size: el === 'DENDRO' ? [0.2, 0.35] : [0.08, 0.18], color: el === 'DENDRO' ? new QV4(0.5, 0.9, 0.3, 1) : v4(c, 2.4), colorLife: ZERO_ONE_ZERO, gravity: el === 'CRYO' ? 0.4 : -0.8, noise: 0.5, spin: [-2, 2] });
       add({ tex: 'circle_05', shape: 'disc', radius, rate: 8 * area, life: [1, 1.8], speed: [0.1, 0.3], size: [0.06, 0.12], color: v4(c, 2.8), colorLife: ZERO_ONE_ZERO, gravity: -0.6, noise: 0.4 });
     } else {

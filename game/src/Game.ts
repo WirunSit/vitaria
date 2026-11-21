@@ -39,6 +39,7 @@ import { charArtName, skillArtName } from './core/Assets';
 import { isTouch, setAutoFullscreen } from './core/Device';
 import { AdaptiveRes } from './render/AdaptiveRes';
 import { DetailCuller } from './render/DetailCuller';
+import { tickMagic } from './render/MagicMaterials';
 import { waitForLoads } from './core/LoadTracker';
 import { showLoader } from './ui/Loading';
 import { TouchControls } from './ui/TouchControls';
@@ -988,6 +989,7 @@ export class Game {
     }
     const paused = isModalOpen();
     this.fx.update(paused ? 0 : dt);
+    tickMagic(paused ? 0 : dt);
     let simDt = dt;
     if (this.hitStopT > 0) { this.hitStopT -= dt; simDt = dt * 0.06; }
     if (!paused) this.tick(simDt);
@@ -1000,7 +1002,7 @@ export class Game {
   /** Debug helper: advance the simulation manually (used for automated testing when the tab is hidden). */
   debugStep(frames = 1, dt = 1 / 30) {
     for (let i = 0; i < frames; i++) {
-      if (!isModalOpen() && this.running) { this.tick(dt); this.fx.update(dt); }
+      if (!isModalOpen() && this.running) { this.tick(dt); this.fx.update(dt); tickMagic(dt); }
       this.input.endFrame();
     }
     this.postfx ? this.postfx.render(this.scene, this.camera) : this.renderer.render(this.scene, this.camera);

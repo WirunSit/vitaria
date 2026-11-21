@@ -6,12 +6,15 @@ import { sfx } from '../core/Audio';
 import { talentBonus, type PartyMember } from '../player/Party';
 import type { World } from '../world/World';
 import { Combat, type HitParams } from './Combat';
-import { Blast, RingPulse, SlashArc, Timed, orbMesh, type Effect } from './Effects';
+import { Blast, RingPulse, SlashArc, Timed, type Effect } from './Effects';
 import { GeoCrystals } from './GeoCrystal';
 import type { Enemy } from '../enemies/Enemy';
-import { glow, toon } from '../world/Materials';
+import { toon } from '../world/Materials';
 import { efx } from '../render/ElementFX';
 import { CharacterModel } from '../player/CharacterModel';
+import { floraPieces } from '../world/Flora';
+import { crystalMaterial, edgeGlow, energyMaterial, groundDecal, haloSprite } from '../render/MagicMaterials';
+import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import { skillGearBonus } from '../gear/GearEffects';
 
 export interface KitCtx {
@@ -38,11 +41,47 @@ const burstBonus = (m: PartyMember) => (m.cons >= (SKILL_AT_C5.has(m.id) ? 3 : 5
 /** Characters whose C3 boosts the burst and C5 the skill (doc 03). */
 const SKILL_AT_C5 = new Set(['NEUROS']);
 
-const ICE_SHARD = new THREE.OctahedronGeometry(0.2, 0);
-const ICE_MAT_A = new THREE.MeshToonMaterial({ color: 0xbfefff, emissive: 0x3a8ab0, emissiveIntensity: 0.6, transparent: true, opacity: 0.88 });
-const ICE_MAT_B = new THREE.MeshToonMaterial({ color: 0xeafcff, emissive: 0x5aa8d0, emissiveIntensity: 0.6, transparent: true, opacity: 0.88 });
+/** Helix's ice: a long hexagonal shard pointed at both ends (y = 0..1 for the crystal gradient), lit edges. */
+const ICE_SHARD = (() => {
+  const body = new THREE.CylinderGeometry(0.11, 0.13, 0.5, 6, 1).translate(0, 0.42, 0);
+  const top = new THREE.ConeGeometry(0.11, 0.3, 6, 1).translate(0, 0.82, 0);
+  const bottom = new THREE.ConeGeometry(0.13, 0.17, 6, 1).rotateX(Math.PI).translate(0, 0.085, 0);
+  const g = mergeGeometries([bottom.toNonIndexed(), body.toNonIndexed(), top.toNonIndexed()])!;
+  g.translate(0, -0.48, 0); // spin about the middle
+  g.computeVertexNormals();
+  return g;
+})();
+const ICE_MAT_A = crystalMaterial({ root: '#3a86c0', mid: '#9fe3ff', tip: '#f2fdff', rim: '#7fd8ff', glint: 2, opacity: 0.92 });
+const ICE_MAT_B = crystalMaterial({ root: '#5aa0d8', mid: '#c8f2ff', tip: '#ffffff', rim: '#a6e8ff', glint: 2, opacity: 0.92 });
 
-/** A small flower for Chloren's garden: stem, two leaves, a ring of petals around a golden centre. */
+/** Chloren's garden blooms: single flowers from the downloaded flower pack (loaded on her first skill). */
+type Bloom = { name: string; radius: number; parts: { geo: THREE.BufferGeometry; mat: THREE.Material }[] };
+let blooms: Bloom[] | null = null;
+function loadBlooms() {
+  if (blooms) return;
+  blooms = [];
+  // upright flowers only (dandelions, yellow flower clumps) — the pack's wide flat blossoms look like plates
+  void floraPieces('NAT_Flowers').then((v) => { blooms = v.filter((b) => b.radius < 0.8 && !/evil|leaves/i.test(b.name)); });
+}
+function bloom(i: number): THREE.Object3D {
+  if (!blooms?.length) return gardenFlower(i);
+  const b = blooms[i % blooms.length];
+  const g = new THREE.Group();
+  for (const p of b.parts) g.add(new THREE.Mesh(p.geo, p.mat));
+  g.scale.setScalar(0.7 + (i % 3) * 0.14);
+  return g;
+}
+
+/** Projectile core (unit radius, scaled per shot). */
+const ORB = new THREE.SphereGeometry(1, 16, 12);
+
+/** Hema's oxygen bubble. */
+const BUBBLE = new THREE.SphereGeometry(0.28, 20, 14);
+
+/** Thylakoid disc for Chloren's granum totem. */
+const GRANUM_DISC = new THREE.CylinderGeometry(0.42, 0.42, 0.12, 24);
+
+/** Fallback flower (no flower pack): stem, two leaves, a ring of petals around a golden centre. */
 const PETAL_COLORS = ['#ffd1e6', '#fff3b0', '#ffffff', '#d9c8ff'];
 function gardenFlower(i: number): THREE.Group {
   const f = new THREE.Group();
@@ -93,18 +132,18 @@ class Projectile implements Effect {
     if (hit.element === 'PYRO') this.fire = efx()?.flameBall(g, size) ?? null;
     else if (hit.element === 'ANEMO') this.fire = efx()?.windBall(g, size) ?? null;
     if (!this.fire) {
-      const core = orbMesh(opts.color, size);
-      g.add(core);
-      const trail = new THREE.Mesh(new THREE.ConeGeometry(size * 0.9, size * 4, 8), glow(opts.color, 1.2, 0.5));
-      trail.rotation.x = -Math.PI / 2;
-      trail.position.z = -size * 2;
-      g.add(trail);
+      // a bright core in a halo of light, leaving the element's particles behind it
+      const core = new THREE.Mesh(ORB, energyMaterial({ color: opts.color, core: 1.2, rim: 1.8 }));
+      core.scale.setScalar(size);
+      g.add(core, haloSprite(opts.color, size * 7, 1.5));
+      this.trail = efx()?.attach(g, hit.element, 'trail', 1, 0.8) ?? null;
     }
     g.position.copy(from);
     this.obj = g;
   }
   private fire: { stop(): void } | null = null;
-  dispose() { this.fire?.stop(); }
+  private trail: { stop(): void } | null = null;
+  dispose() { this.fire?.stop(); this.trail?.stop(); }
   update(dt: number) {
     if (this.dead) return false;
     this.t += dt;
@@ -392,13 +431,13 @@ export const KITS: Record<string, Kit> = {
       ctx.combat.addEffect(new Blast(at, 7, ELEMENT_COLOR.PYRO, 0.6));
       ctx.combat.addEffect(new RingPulse(at.clone().setY(at.y - 1), 8, '#ffcf5a', 0.6));
       if (m.cons < 6) m.atpStacks = 0;
-      const field = new THREE.Mesh(new THREE.CircleGeometry(5, 32).rotateX(-Math.PI / 2), glow('#ff7a3a', 1.2, 0.35));
+      const field = groundDecal(5, 'scorch'); // glowing cracks and embers instead of a flat orange disc
       field.position.copy(at).setY(at.y - 0.9);
       let tick = 0;
       const combat = ctx.combat;
       const flames = efx()?.attach(field, 'PYRO', 'field', 4.5); // dancing flames over the burning ground
       combat.addEffect(new Timed(field, 6, (dt, t) => {
-        (field.material as THREE.MeshBasicMaterial).opacity = 0.35 * (1 - t / 6) + Math.sin(t * 12) * 0.05;
+        (field.material as THREE.MeshBasicMaterial).opacity = Math.min(1, t * 4) * (1 - Math.pow(t / 6, 3)) * (0.85 + Math.sin(t * 9) * 0.15);
         tick -= dt;
         if (tick <= 0) {
           tick = 1;
@@ -515,13 +554,20 @@ export const KITS: Record<string, Kit> = {
     skill(ctx) {
       const at = ctx.pos.clone().addScaledVector(fwd(ctx.yaw), 2.5);
       at.y = ctx.world.h(at.x, at.z);
+      loadBlooms(); // flowers for her burst
       const g = new THREE.Group();
+      // a granum: a stack of glowing thylakoid membranes (translucent, lit rims) under a little sun of light
+      const discs: THREE.Mesh[] = [];
       for (let i = 0; i < 4; i++) {
-        const disc = new THREE.Mesh(new THREE.CylinderGeometry(0.4, 0.4, 0.18, 14), toon(i % 2 ? '#5fae3a' : '#8bd25a'));
+        const disc = new THREE.Mesh(GRANUM_DISC, energyMaterial({ color: i % 2 ? '#5fdc3a' : '#9dff5e', core: 0.28, rim: 1.4 }));
+        disc.add(edgeGlow(GRANUM_DISC, '#d9ffa6', 1.5, 0.8, 40));
         disc.position.y = 0.4 + i * 0.25;
         g.add(disc);
+        discs.push(disc);
       }
-      const sun = orbMesh('#fff2a0', 0.25);
+      const sun = new THREE.Group();
+      sun.add(new THREE.Mesh(new THREE.SphereGeometry(0.16, 16, 12), energyMaterial({ color: '#fff6b0', core: 1.2, rim: 1.6 })));
+      sun.add(haloSprite('#fff1a0', 1.5, 1.6));
       sun.position.y = 1.7;
       g.add(sun);
       g.position.copy(at);
@@ -532,6 +578,7 @@ export const KITS: Record<string, Kit> = {
       const glowFx = efx()?.attach(sun, 'DENDRO', 'trail', 1, 0.5); // light motes drifting off the sun totem
       combat.addEffect(new Timed(g, 12, (dt, t) => {
         sun.position.y = 1.7 + Math.sin(t * 3) * 0.1;
+        discs.forEach((d, i) => { d.position.y = 0.4 + i * 0.25 + Math.sin(t * 2 + i * 0.8) * 0.03; d.rotation.y = t * (i % 2 ? 0.6 : -0.6); });
         tick -= dt;
         if (tick <= 0) {
           tick = interval;
@@ -539,7 +586,7 @@ export const KITS: Record<string, Kit> = {
           const target = combat.nearestEnemy(from, 12);
           if (target) {
             const to = target.center(new THREE.Vector3());
-            const beam = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.06, from.distanceTo(to), 6), glow('#c6ff7a', 1.6, 0.9));
+            const beam = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.05, from.distanceTo(to), 8), energyMaterial({ color: '#c6ff7a', core: 1.4, rim: 1 }));
             beam.position.copy(from).add(to).multiplyScalar(0.5);
             beam.lookAt(to);
             beam.rotateX(Math.PI / 2);
@@ -557,14 +604,18 @@ export const KITS: Record<string, Kit> = {
       const at = ctx.pos.clone();
       at.y = ctx.world.h(at.x, at.z);
       const g = new THREE.Group();
-      const ground = new THREE.Mesh(new THREE.CircleGeometry(6, 40).rotateX(-Math.PI / 2), glow('#8bd25a', 1, 0.3));
-      ground.position.y = 0.12;
+      loadBlooms();
+      const ground = groundDecal(6, 'garden');
+      ground.position.y = 0.08;
       g.add(ground);
+      const flowers: { o: THREE.Object3D; s: number; d: number }[] = [];
       for (let i = 0; i < 14; i++) {
         const a = (i / 14) * Math.PI * 2;
-        const flower = gardenFlower(i);
-        flower.position.set(Math.cos(a) * 5.6, 0.05, Math.sin(a) * 5.6);
-        flower.rotation.y = -a;
+        const flower = bloom(i);
+        flower.position.set(Math.cos(a) * 5.6, 0.02, Math.sin(a) * 5.6);
+        flower.rotation.y = -a + i;
+        flowers.push({ o: flower, s: flower.scale.x, d: i * 0.04 });
+        flower.scale.setScalar(0.001);
         g.add(flower);
       }
       g.position.copy(at);
@@ -574,8 +625,11 @@ export const KITS: Record<string, Kit> = {
       const bonus = burstBonus(member) + (member.cons >= 2 ? 0.2 : 0);
       let tick = 0;
       const garden = efx()?.attach(g, 'DENDRO', 'field', 5.5); // leaves and motes floating up in the garden
-      combat.addEffect(new Timed(g, life, (dt) => {
+      combat.addEffect(new Timed(g, life, (dt, t) => {
         g.rotation.y += dt * 0.4;
+        // the garden blooms out of the ground, and folds away at the end
+        for (const f of flowers) f.o.scale.setScalar(Math.max(0.001, f.s * Math.min(1, Math.max(0, (t - f.d) / 0.5)) * Math.min(1, (life - t) / 0.4)));
+        (ground.material as THREE.MeshBasicMaterial).opacity = Math.min(1, t * 3) * Math.min(1, (life - t) / 0.5);
         tick -= dt;
         if (tick <= 0) {
           tick = 2;
@@ -619,7 +673,11 @@ export const KITS: Record<string, Kit> = {
       for (let i = 0; i < n; i++) {
         const p = start.clone().lerp(end, (i + 0.5) / n).add(new THREE.Vector3((Math.random() - 0.5) * 2, 0, (Math.random() - 0.5) * 2));
         p.y = ctx.world.groundH(p.x, p.z) + 1;
-        const bubble = new THREE.Mesh(new THREE.SphereGeometry(0.28, 12, 10), new THREE.MeshBasicMaterial({ color: 0xbfe8ff, transparent: true, opacity: 0.6 }));
+        // soap-film bubble: clear in the middle, a bright rainbow rim and a highlight
+        const bubble = new THREE.Mesh(BUBBLE, energyMaterial({ color: '#cfeeff', core: 0.06, rim: 1.5, power: 2.6, iridescent: true }));
+        const shine = haloSprite('#ffffff', 0.22, 1.4);
+        shine.position.set(-0.1, 0.1, 0.12);
+        bubble.add(shine);
         bubble.position.copy(p);
         const baseY = p.y;
         const fx = new Timed(bubble, 12, (_dt, t, self) => {
@@ -642,9 +700,10 @@ export const KITS: Record<string, Kit> = {
     burst(ctx) {
       const m = ctx.member, combat = ctx.combat, pos = ctx.pos;
       const g = new THREE.Group();
-      const ring = new THREE.Mesh(new THREE.TorusGeometry(2.2, 0.12, 8, 48), glow(ELEMENT_COLOR.HYDRO, 1.3, 0.8));
+      // two currents circling her — water and blood — as flowing bands of light, not solid tubes
+      const ring = new THREE.Mesh(new THREE.TorusGeometry(2.2, 0.08, 10, 120), energyMaterial({ color: '#4fb8ff', core: 0.7, rim: 1.2, bands: 7, flow: 1.4 }));
       ring.rotation.x = Math.PI / 2;
-      const ring2 = new THREE.Mesh(new THREE.TorusGeometry(2.0, 0.06, 6, 48), glow('#ff6a6a', 1.2, 0.7));
+      const ring2 = new THREE.Mesh(new THREE.TorusGeometry(2.0, 0.045, 8, 120), energyMaterial({ color: '#ff5a6e', core: 0.8, rim: 1.1, bands: 5, flow: -1.8 }));
       ring2.rotation.x = Math.PI / 2;
       ring2.position.y = 0.3;
       g.add(ring, ring2);
@@ -761,7 +820,8 @@ export const KITS: Record<string, Kit> = {
       for (let s = 0; s < 2; s++) {
         for (let i = 0; i < 10; i++) {
           const b = new THREE.Mesh(ICE_SHARD, s ? ICE_MAT_A : ICE_MAT_B); // ice crystals spiralling as a double helix
-          b.scale.set(1, 1.8 + (i % 3) * 0.4, 1);
+          b.add(edgeGlow(ICE_SHARD, '#dff8ff', 1.5, 0.6));
+          b.scale.set(1.3, 0.6 + (i % 3) * 0.15, 1.3);
           g.add(b);
           strands.push(b);
         }

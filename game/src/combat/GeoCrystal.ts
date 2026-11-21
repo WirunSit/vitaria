@@ -1,39 +1,26 @@
 import * as THREE from 'three';
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import { toonGradient } from '../world/Materials';
+import { crystalMaterial, edgeGlow, type CrystalLook } from '../render/MagicMaterials';
 
 /**
  * The Traveler's Geo constructs as natural amber crystal clusters instead of plain hex posts:
  * faceted hexagonal crystals (pointed tips, slight taper, random height and outward lean) growing out of a heap of
- * broken rock. Crystal shading: dark amber at the root → pale gold at the tip, a glowing fresnel rim and a slow
- * inner pulse (shared uniform). `grow(t)` animates the eruption (staggered, overshooting) and `sink(t)` the retreat.
+ * broken rock. Shading (render/MagicMaterials crystalMaterial): dark amber root → pale gold tip, facets that each
+ * catch the light, glints, a glowing rim and lit edges. `grow(t)` animates the eruption (staggered, overshooting)
+ * and `sink(t)` the retreat.
  */
-const pulse = { value: 0 };
 let crystalMat: THREE.MeshToonMaterial | null = null;
 let rockMat: THREE.MeshToonMaterial | null = null;
 let crystalGeo: THREE.BufferGeometry | null = null;
 let rockGeo: THREE.BufferGeometry | null = null;
 
+/** Amber gem: deep root, honey body, pale gold tip; facets, glints and lit edges come from crystalMaterial. */
+const AMBER: CrystalLook = { root: '#4a1804', mid: '#e8820e', tip: '#ffd57e', rim: '#ffab38', glint: 1.8 };
+
 function materials() {
   if (!crystalMat) {
-    crystalMat = new THREE.MeshToonMaterial({ color: '#f2b84b', gradientMap: toonGradient(), emissive: new THREE.Color('#8a3f05'), emissiveIntensity: 0.3 });
-    crystalMat.onBeforeCompile = (sh) => {
-      sh.uniforms.uPulse = pulse;
-      sh.vertexShader = sh.vertexShader
-        .replace('#include <common>', '#include <common>\nvarying float vCH;')
-        .replace('#include <begin_vertex>', '#include <begin_vertex>\nvCH = position.y;');
-      sh.fragmentShader = sh.fragmentShader
-        .replace('#include <common>', '#include <common>\nvarying float vCH;\nuniform float uPulse;')
-        .replace('#include <color_fragment>', `#include <color_fragment>
-          // dark amber root → honey → pale gold tip
-          vec3 root = vec3(0.42, 0.17, 0.03), mid = vec3(0.93, 0.5, 0.08), tip = vec3(1.0, 0.8, 0.38);
-          float h = clamp(vCH, 0.0, 1.0);
-          diffuseColor.rgb = mix(mix(root, mid, smoothstep(0.0, 0.55, h)), tip, smoothstep(0.55, 1.0, h));`)
-        .replace('#include <emissivemap_fragment>', `#include <emissivemap_fragment>
-          // glowing facet edges facing away from the camera + a slow breathing glow inside
-          float rim = pow(1.0 - abs(dot(normalize(vNormal), normalize(vViewPosition))), 2.2);
-          totalEmissiveRadiance += vec3(1.0, 0.55, 0.12) * (rim * 0.45 + (0.08 + 0.07 * sin(uPulse * 2.4 + vCH * 3.0)) * smoothstep(0.2, 1.0, vCH));`);
-    };
+    crystalMat = crystalMaterial(AMBER);
     rockMat = new THREE.MeshToonMaterial({ color: '#8a7a66', gradientMap: toonGradient() });
   }
   return { crystalMat: crystalMat!, rockMat: rockMat! };
@@ -42,12 +29,12 @@ function materials() {
 /** One crystal of unit height: tapered hexagonal body + pyramid tip, y = 0..1 (used by the gradient). */
 function geometries() {
   if (!crystalGeo) {
-    const body = new THREE.CylinderGeometry(0.82, 1, 0.74, 6, 1);
-    body.translate(0, 0.37, 0);
-    const tip = new THREE.ConeGeometry(0.82, 0.26, 6, 1);
-    tip.translate(0, 0.74 + 0.13, 0);
+    const body = new THREE.CylinderGeometry(0.78, 1, 0.68, 6, 1);
+    body.translate(0, 0.34, 0);
+    const tip = new THREE.ConeGeometry(0.78, 0.4, 6, 1);
+    tip.translate(0, 0.68 + 0.2, 0);
     const g = mergeGeometries([body.toNonIndexed(), tip.toNonIndexed()])!;
-    g.scale(1, 1 / 0.87, 1);
+    g.scale(1, 1 / 0.88, 1);
     g.computeVertexNormals(); // non-indexed → flat crystal facets
     crystalGeo = g;
     const r = new THREE.IcosahedronGeometry(1, 0);
@@ -79,6 +66,7 @@ export class GeoCrystals {
       const out = Math.atan2(s.x, s.z);
       m.rotation.set(Math.cos(out) * (s.lean ?? 0.18), rnd() * Math.PI, Math.sin(out) * -(s.lean ?? 0.18));
       m.castShadow = true;
+      m.add(edgeGlow(crystalGeo, '#ffd27a', 1.4, 0.55)); // lit facet edges
       const sc = new THREE.Vector3(s.w, s.h, s.w);
       m.scale.set(sc.x, 0.001, sc.z);
       this.group.add(m);
@@ -97,7 +85,6 @@ export class GeoCrystals {
 
   /** Eruption: each piece shoots up with an overshoot after its own small delay. */
   grow(t: number) {
-    pulse.value = performance.now() / 1000;
     for (const p of this.pieces) {
       const k = backOut(THREE.MathUtils.clamp((t - p.delay) / 0.32, 0, 1));
       p.mesh.scale.set(p.scale.x * Math.min(1, 0.4 + k * 0.6), Math.max(0.001, p.scale.y * k), p.scale.z * Math.min(1, 0.4 + k * 0.6));

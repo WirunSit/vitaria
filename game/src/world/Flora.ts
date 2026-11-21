@@ -49,6 +49,11 @@ const cache = new Map<string, Promise<Variant[]>>();
 
 export function hasFlora(file: string) { return hasModel(`nature/${file}.glb`); }
 
+/** The single pieces of a nature pack (each normalised to height 1 standing on y = 0), e.g. flowers for a skill. */
+export function floraPieces(file: string): Promise<Variant[]> {
+  return hasFlora(file) ? loadVariants({ file, split: true }) : Promise.resolve([]);
+}
+
 function pieceName(o: THREE.Object3D) {
   // a multi-material mesh loads as a group "Name" holding "Name_1", "Name_2"…: they are one piece
   const p0 = o.parent && o.name.startsWith(`${o.parent.name}_`) ? o.parent : o;
