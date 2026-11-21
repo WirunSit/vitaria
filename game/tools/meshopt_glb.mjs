@@ -2,7 +2,8 @@
 //   node tools/meshopt_glb.mjs <file.glb|file.vrm> ...
 // Only the binary data of each bufferView is re-encoded: every node, mesh, accessor, material and image keeps its
 // index, so the VRM extension (bones, expressions, spring bones by index) stays valid. The game decodes it with
-// three.js's MeshoptDecoder (models/ModelLibrary.ts). Called by tools/compress_models.py after the texture pass.
+// three.js's MeshoptDecoder (models/ModelLibrary.ts). Lossless: decoding gives back the exact original bytes.
+// Called by tools/compress_models.py.
 import { readFileSync, writeFileSync } from 'node:fs';
 import { MeshoptEncoder } from 'meshoptimizer';
 

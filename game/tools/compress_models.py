@@ -1,12 +1,17 @@
 """
-Shrinks the game's 3D models (public/assets/models/**/*.vrm, *.glb) so they download faster, in place:
-  1. textures: PNG / JPEG inside the file -> WebP (alpha kept losslessly, capped at 2048 px)
-  2. vertex / index data -> EXT_meshopt_compression (tools/meshopt_glb.mjs, needs `npm install`)
-Nothing else in the file moves: every node, mesh, material, texture and image keeps its index, so VRM bone /
-expression / spring-bone data stays valid. Files already done are skipped, so it is safe to run again.
+Makes the game's 3D models (public/assets/models/**/*.vrm, *.glb) download faster, in two sets:
 
-    python tools/compress_models.py            # every model
-    python tools/compress_models.py a.vrm ...  # just these
+  assets/models/    PC: original textures untouched; vertex / index data packed with EXT_meshopt_compression,
+                    which is lossless (decodes to the exact same bytes), so the quality is the original's.
+  assets/models_m/  phones: the same file with its textures shrunk (VRoid characters 1024 px, everything else
+                    512 px, the sizes the game used to cut them to after downloading anyway) and stored as WebP.
+
+Only bufferView bytes change: every node, mesh, material, texture and image keeps its index, so VRM bone /
+expression / spring-bone data stays valid. Work already done is skipped, so it is safe to run again.
+Geometry packing is tools/meshopt_glb.mjs (needs `npm install`).
+
+    python tools/compress_models.py                       # every model
+    python tools/compress_models.py public/.../a.vrm ...  # just these
 
 import_assets.py runs it on models it copies in.
 """
@@ -21,8 +26,10 @@ from PIL import Image
 
 GAME = Path(__file__).resolve().parent.parent
 MODELS = GAME / "public" / "assets" / "models"
-MAX_SIDE = 2048
-QUALITY = 90
+MOBILE = GAME / "public" / "assets" / "models_m"
+MOBILE_SIDE = {".vrm": 1024, ".glb": 512}
+QUALITY = 88
+EXT = "EXT_meshopt_compression"
 
 
 def align(n: int, a: int = 8) -> int:
@@ -48,11 +55,11 @@ def write_glb(j: dict, bin_: bytes) -> bytes:
             + struct.pack("<I", len(bin_)) + b"BIN\0" + bin_)
 
 
-def to_webp(raw: bytes) -> bytes | None:
+def to_webp(raw: bytes, max_side: int) -> bytes:
     im = Image.open(io.BytesIO(raw))
     im.load()
-    if max(im.size) > MAX_SIDE:
-        k = MAX_SIDE / max(im.size)
+    if max(im.size) > max_side:
+        k = max_side / max(im.size)
         im = im.resize((max(1, round(im.width * k)), max(1, round(im.height * k))), Image.LANCZOS)
     alpha = im.mode in ("RGBA", "LA", "PA") or (im.mode == "P" and "transparency" in im.info)
     im = im.convert("RGBA" if alpha else "RGB")
@@ -64,76 +71,117 @@ def to_webp(raw: bytes) -> bytes | None:
     return out.getvalue()
 
 
-def webp_pass(path: Path) -> tuple[int, int, int]:
-    """Re-encodes the file's PNG/JPEG images; returns (bytes before, bytes after, images changed)."""
-    data = path.read_bytes()
+def image_size(raw: bytes) -> int:
+    try:
+        return max(Image.open(io.BytesIO(raw)).size)
+    except Exception:
+        return 0
+
+
+def shrink_textures(data: bytes, max_side: int) -> tuple[bytes, int]:
+    """Phone copy: images bigger than max_side (or still PNG/JPEG) become smaller WebPs. Works on files whose
+    geometry is already meshopt-packed too (those blocks are carried over and re-pointed)."""
     j, bin_ = read_glb(data)
-    if "EXT_meshopt_compression" in j.get("extensionsUsed", []) or len(j.get("buffers", [])) != 1:
-        return len(data), len(data), 0
+    if len(j.get("buffers", [])) > 2:
+        return data, 0
     views = j.get("bufferViews", [])
     new_bytes: dict[int, bytes] = {}
     for im in j.get("images", []):
         v = im.get("bufferView")
-        if v is None or im.get("mimeType") not in ("image/png", "image/jpeg") or v in new_bytes:
+        if v is None or v in new_bytes or im.get("mimeType") not in ("image/png", "image/jpeg", "image/webp"):
             continue
         bv = views[v]
         raw = bin_[bv.get("byteOffset", 0):bv.get("byteOffset", 0) + bv["byteLength"]]
-        try:
-            webp = to_webp(raw)
-        except Exception as e:  # unreadable image: leave it alone
-            print(f"    ! {path.name}: image {v} kept ({e})")
+        if im.get("mimeType") == "image/webp" and image_size(raw) <= max_side:
             continue
-        if webp and len(webp) < len(raw) * 0.9:
+        try:
+            webp = to_webp(raw, max_side)
+        except Exception as e:  # unreadable image: leave it alone
+            print(f"    ! image {v} kept ({e})")
+            continue
+        if len(webp) < len(raw):
             new_bytes[v] = webp
             for other in j["images"]:
                 if other.get("bufferView") == v:
                     other["mimeType"] = "image/webp"
     if not new_bytes:
-        return len(data), len(data), 0
+        return data, 0
     parts, size = [], 0
-    for i, bv in enumerate(views):
-        chunk = new_bytes.get(i) or bin_[bv.get("byteOffset", 0):bv.get("byteOffset", 0) + bv["byteLength"]]
+
+    def put(chunk: bytes) -> int:
+        nonlocal size
         off = align(size)
         parts.append(b"\0" * (off - size))
         parts.append(chunk)
-        bv["byteOffset"], bv["byteLength"] = off, len(chunk)
         size = off + len(chunk)
+        return off
+
+    for i, bv in enumerate(views):
+        ext = bv.get("extensions", {}).get(EXT)
+        if ext:  # meshopt block lives in buffer 0; the view itself points at the data-less fallback buffer
+            ext["byteOffset"] = put(bin_[ext["byteOffset"]:ext["byteOffset"] + ext["byteLength"]])
+            continue
+        chunk = new_bytes.get(i) or bin_[bv.get("byteOffset", 0):bv.get("byteOffset", 0) + bv["byteLength"]]
+        bv["byteOffset"], bv["byteLength"] = put(chunk), len(chunk)
     j["buffers"][0]["byteLength"] = size
-    out = write_glb(j, b"".join(parts))
-    path.write_bytes(out)
-    return len(data), len(out), len(new_bytes)
+    return write_glb(j, b"".join(parts)), len(new_bytes)
 
 
-def rel(f: Path) -> str:
-    return str(f.relative_to(MODELS)) if f.is_relative_to(MODELS) else f.name
+def rel(f: Path) -> Path:
+    return f.relative_to(MODELS)
 
 
-def compress(files: list[Path]):
-    files = [f for f in files if f.suffix.lower() in (".vrm", ".glb")]
-    if not files:
-        return
-    before = sum(f.stat().st_size for f in files)
-    for f in files:
-        a, b, n = webp_pass(f)
-        if n:
-            print(f"  webp  {rel(f)}: {a / 1e6:.1f} -> {b / 1e6:.1f} MB ({n} images)")
-    # geometry: one node process for all files (the command line is split to stay under Windows' length limit)
+def has_meshopt(f: Path) -> bool:
+    with f.open("rb") as fh:
+        head = fh.read(20)
+        return EXT.encode() in fh.read(struct.unpack_from("<I", head, 12)[0])
+
+
+def meshopt(files: list[Path]):
+    # one node process per 40 files (keeps the command line under Windows' length limit)
     for i in range(0, len(files), 40):
         r = subprocess.run(["node", str(GAME / "tools" / "meshopt_glb.mjs"), *map(str, files[i:i + 40])],
                            cwd=GAME, capture_output=True, text=True, encoding="utf-8", errors="replace")
         for line in r.stdout.splitlines():
-            if "->" in line or "FAILED" in line:
-                print("  mesh ", line.replace(str(MODELS) + "\\", "").replace(str(MODELS) + "/", ""))
+            if "FAILED" in line:
+                print("  !", line)
         if r.returncode:
             print(r.stderr[-2000:])
-    after = sum(f.stat().st_size for f in files)
-    print(f"โมเดล {len(files)} ไฟล์: {before / 1e6:.0f} MB -> {after / 1e6:.0f} MB")
+
+
+def compress(files: list[Path]):
+    files = [f for f in files if f.suffix.lower() in (".vrm", ".glb") and f.is_relative_to(MODELS)]
+    if not files:
+        return
+    # 1. PC set: lossless geometry packing in place
+    todo = [f for f in files if not has_meshopt(f)]
+    before = sum(f.stat().st_size for f in todo)
+    meshopt(todo)
+    if todo:
+        print(f"  PC: {len(todo)} ไฟล์ {before / 1e6:.0f} -> {sum(f.stat().st_size for f in todo) / 1e6:.0f} MB (เท็กซ์เจอร์เดิม)")
+    # 2. phone set: the PC file with smaller WebP textures
+    made, pc_mb, m_mb = 0, 0, 0
+    for f in files:
+        m = MOBILE / rel(f)
+        if m.exists() and m.stat().st_mtime >= f.stat().st_mtime:
+            continue
+        data = f.read_bytes()
+        out, n = shrink_textures(data, MOBILE_SIDE[f.suffix.lower()])
+        m.parent.mkdir(parents=True, exist_ok=True)
+        m.write_bytes(out)
+        made, pc_mb, m_mb = made + 1, pc_mb + len(data), m_mb + len(out)
+    if made:
+        print(f"  มือถือ: {made} ไฟล์ {pc_mb / 1e6:.0f} -> {m_mb / 1e6:.0f} MB")
 
 
 def main():
     sys.stdout.reconfigure(encoding="utf-8")
     args = [Path(a).resolve() for a in sys.argv[1:]]
     compress(args or sorted(p for p in MODELS.rglob("*") if p.suffix.lower() in (".vrm", ".glb")))
+    # phone copies of models that were removed from the game
+    for m in [p for p in MOBILE.rglob("*") if p.is_file()] if not args and MOBILE.exists() else []:
+        if not (MODELS / m.relative_to(MOBILE)).exists():
+            m.unlink()
 
 
 if __name__ == "__main__":

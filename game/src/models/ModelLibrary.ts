@@ -36,9 +36,21 @@ export function hasModel(rel: string) { return available.has(rel); }
 export function modelUrl(rel: string) { return overrides.get(rel) ?? `assets/models/${rel}`; }
 
 /**
+ * Phones load the copy in assets/models_m/ (same file with smaller WebP textures, made by
+ * tools/compress_models.py); PCs load the original-quality one. A missing phone copy falls back to the PC file.
+ */
+async function loadModelFile(rel: string): Promise<GLTF> {
+  if (isTouch && !overrides.has(rel)) {
+    try { return await loader.loadAsync(`assets/models_m/${rel}`); } catch { /* not made yet: use the PC file */ }
+  }
+  return loader.loadAsync(modelUrl(rel));
+}
+
+/**
  * Phones: model textures are capped at these sizes. VRoid exports ship a dozen 2048² maps per character; at a
  * phone's render resolution 1024² looks the same and takes a quarter of the GPU memory (and uploads 4× faster).
  * Scenery, props and enemies (.glb, ~300 maps in the world) are seen smaller still, so they get 512².
+ * The phone copies in assets/models_m/ are already this size; this only catches a PC file used as a fallback.
  */
 const MAX_TEX_VRM = isTouch ? 1024 : 0;
 const MAX_TEX_GLB = isTouch ? 512 : 0;
@@ -88,7 +100,7 @@ async function shrinkTextures(root: THREE.Object3D, max: number) {
 
 export async function loadVRM(rel: string): Promise<VRM | null> {
   try {
-    const gltf = await loader.loadAsync(modelUrl(rel));
+    const gltf = await loadModelFile(rel);
     const vrm = gltf.userData.vrm as VRM | undefined;
     if (!vrm) return null;
     await shrinkTextures(gltf.scene, MAX_TEX_VRM);
@@ -127,7 +139,7 @@ export async function loadGLB(rel: string): Promise<THREE.Object3D | null> {
 /** Like loadGLB, but also returns the file's animation clips (rigged downloads walk/attack with them). */
 export async function loadGLBAnimated(rel: string): Promise<{ obj: THREE.Object3D; clips: THREE.AnimationClip[] } | null> {
   try {
-    if (!glbCache.has(rel)) glbCache.set(rel, loader.loadAsync(modelUrl(rel)).then(async (g) => { await shrinkTextures(g.scene, MAX_TEX_GLB); return g; }));
+    if (!glbCache.has(rel)) glbCache.set(rel, loadModelFile(rel).then(async (g) => { await shrinkTextures(g.scene, MAX_TEX_GLB); return g; }));
     const gltf = await glbCache.get(rel)!;
     return { obj: skeletonClone(gltf.scene), clips: gltf.animations };
   } catch (e) {
