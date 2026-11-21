@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { GLTFLoader, type GLTF } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { clone as skeletonClone } from 'three/examples/jsm/utils/SkeletonUtils.js';
+import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js';
 import { LOOK } from '../render/Look';
 import { VRMLoaderPlugin, VRMUtils, type MToonMaterial, type VRM } from '@pixiv/three-vrm';
 import { toonGradient } from '../world/Materials';
@@ -15,6 +16,8 @@ const available = new Set<string>();
 const glbCache = new Map<string, Promise<GLTF>>();
 const loader = new GLTFLoader();
 loader.register((parser) => new VRMLoaderPlugin(parser));
+// tools/compress_models.py packs vertex data with EXT_meshopt_compression (and textures as WebP)
+loader.setMeshoptDecoder(MeshoptDecoder);
 
 export async function loadModelManifest() {
   try {

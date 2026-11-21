@@ -522,6 +522,7 @@ def models():
     src = ART.parent / "Models"
     dst = OUT / "models"
     found = []
+    copied: list[Path] = []
     if src.exists():
         for f in sorted(src.rglob("*")):
             if f.suffix.lower() not in (".vrm", ".glb"):
@@ -538,6 +539,7 @@ def models():
             target.parent.mkdir(parents=True, exist_ok=True)
             if not target.exists() or target.stat().st_mtime < f.stat().st_mtime:
                 shutil.copy2(f, target)
+                copied.append(target)
             size = f.stat().st_size / 1024 / 1024
             if size > 30:
                 report.append(f"  ! {f.name} ใหญ่ {size:.0f} MB — แนะนำลดจำนวนโพลีกอน/ขนาด texture ใน VRoid (Export: ลด texture เป็น 1024)")
@@ -554,6 +556,9 @@ def models():
             im.save(t, "WEBP", quality=88)
             found.append(f"textures/{f.stem}.webp")
             report.append(str(t.relative_to(ROOT)))
+    if copied:  # new / updated models: WebP textures + meshopt geometry (several times smaller to download)
+        from compress_models import compress
+        compress(copied)
     dst.mkdir(parents=True, exist_ok=True)
     (dst / "models.json").write_text(json.dumps(found, ensure_ascii=False, indent=1), encoding="utf-8")
     print(f"โมเดล 3 มิติ: {len(found)} ไฟล์")
